@@ -1,0 +1,7 @@
+{
+    "common": {
+        "title": "Template React + Vitejs + Typescript",
+        "yes": "oui",
+        "no": "non"
+    }
+}

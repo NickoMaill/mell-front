@@ -1,0 +1,90 @@
+.scroll-parent {
+    position: relative;
+    width: 100%;
+    height: 20rem;
+    overflow-x: hidden;
+}
+
+.scroll-element {
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.scroll-element a {
+    width: 15%;
+    margin-inline: 1.3rem;
+}
+
+.primary {
+    animation: primary 45s linear infinite;
+}
+
+.secondary {
+    animation: secondary 45s linear infinite;
+}
+
+@keyframes primary {
+    from {
+        left: 0%;
+    }
+    to {
+        left: -100%;
+    }
+}
+
+@keyframes secondary {
+    from {
+        left: 100%;
+    }
+    to {
+        left: 0%;
+    }
+}
+
+.drag-base {
+    padding: 0.5rem;
+    background-color: #d0e2ff;
+    height: 250px;
+}
+
+.drag-on {
+    animation: dragon;
+    animation-duration: 200ms;
+    padding: 1rem;
+    background-color: #ffffff;
+}
+
+.drag-off {
+    animation: dragoff;
+    animation-duration: 200ms;
+    padding: 0.5rem;
+    background-color: #d0e2ff;
+}
+
+@keyframes dragoff {
+    from {
+        padding: 1rem;
+        background-color: #ffffff;
+    }
+    to {
+        padding: 0.5rem;
+        background-color: #d0e2ff;
+    }
+}
+
+@keyframes dragon {
+    from {
+        padding: 0.5rem;
+        background-color: #d0e2ff;
+    }
+    to {
+        padding: 1rem;
+        background-color: #ffffff;
+    }
+}
