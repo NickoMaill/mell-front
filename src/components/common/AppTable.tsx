@@ -31,6 +31,8 @@ import { ChangeEvent, EventHandler, MouseEvent, useContext, useEffect, useState 
 import useNavigation from '~/hooks/useNavigation';
 import useStorage from '~/hooks/useStorage';
 import AppIcon, { IconNameType } from './AppIcon';
+import NavigationResource from '~/resources/navigationResources';
+import SearchContext from '~/context/searchContext';
 // #endregion IMPORTS -> //////////////////////////////////
 
 //#region Types
@@ -63,7 +65,7 @@ export type AppGridColDef<T = object, F = any> = {
     minWidth?: number;
     defaultSorted?: boolean;
     defaultSortedOrder?: 'desc' | 'asc';
-    valueFormatter?: (e: GridValueFormatter<F>) => F;
+    valueFormatter?: (e: never) => F;
     actions?: (e: GridRowParams<T>) => React.ReactElement<GridActionsCellItemProps>[];
 };
 
@@ -71,7 +73,7 @@ export type ActionsType = 'view' | 'delete' | 'update';
 //#endregion
 
 //#region Main Function
-export default function AppTable<T>({ columns, rows, isTableLoading = true, isRowsCheckable = false, onSort, rowsPerPage = 50, onPaginationChange, onPageChange, currentPage, actions, onExportClick, entity, onAllRowSelect, isAllRowSelected, onRowSelect }: IAppTable<T>) {
+export default function AppTable<T>({ columns, rows, isTableLoading = true, isRowsCheckable = false, onSort, rowsPerPage = 50, onPaginationChange, onPageChange, currentPage = 0, actions, onExportClick, entity, onAllRowSelect, isAllRowSelected, onRowSelect }: IAppTable<T>) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 
@@ -94,6 +96,7 @@ export default function AppTable<T>({ columns, rows, isTableLoading = true, isRo
     // #region HOOKS --> ///////////////////////////////////////
     const Nav = useNavigation();
     const Storage = useStorage();
+    const Search = useContext(SearchContext);
     // #endregion HOOKS --> ////////////////////////////////////
 
     // #region METHODS --> /////////////////////////////////////
@@ -113,7 +116,7 @@ export default function AppTable<T>({ columns, rows, isTableLoading = true, isRo
                 headerAlign: col.headerAlign ? col.headerAlign : 'left',
                 editable: col.isEditable,
                 renderHeader: () => <strong>{col.headerLabel}</strong>,
-                //getActions: col.actions,
+                // getActions: col.actions,
                 valueFormatter: (e) => {
                     if (col.valueFormatter) {
                         if (col.type === 'date' && new Date(e).getFullYear() === 1) {
@@ -166,11 +169,11 @@ export default function AppTable<T>({ columns, rows, isTableLoading = true, isRo
 
     // #region USEEFFECT --> ///////////////////////////////////
     useEffect(() => {
-        // if (columns.defaultSort) {
-        //     const index = columns.colStruct.findIndex((x) => x.defaultSorted);
-        //     Search.setSortedBy({ sortField: columns.defaultSort.field as string, sortLabel: columns.colStruct[index].headerLabel, order: columns.defaultSort.sort });
-        // }
-        // return () => Search.setSortedBy(null);
+        if (columns.defaultSort) {
+            const index = columns.colStruct.findIndex((x) => x.defaultSorted);
+            Search.setSortedBy({ sortField: columns.defaultSort.field as string, sortLabel: columns.colStruct[index].headerLabel, order: columns.defaultSort.sort });
+        }
+        return () => Search.setSortedBy(null);
     }, []);
     // #endregion USEEFFECT --> ////////////////////////////////
 
@@ -202,24 +205,24 @@ export default function AppTable<T>({ columns, rows, isTableLoading = true, isRo
                     },
                     padding: 0,
                 }}
-                rows={!isTableLoading ? rows.results : []}
+                rows={!isTableLoading ? rows.records : []}
                 //onCellEditStop={(e) => console.log(e)}
                 columns={mapToGridColDef(columns.colStruct)}
-                rowCount={!isTableLoading ? rows.totalRecords : 0}
+                rowCount={0}
                 loading={isTableLoading}
-                onRowClick={(e) => (actions.length === 1 && actions[0] === 'view' ? Nav.navigateByPath(`/center?Table=${entity}&ID=${e.id}&action=view`) : Nav.navigateByPath(`/center?Table=${entity}&ID=${e.id}&action=update`))}
+                onRowClick={(e) => (actions.length === 1 && actions[0] === 'view' ? Nav.navigateByPath(`${NavigationResource.routesPath.center}?Table=${entity}&ID=${e.id}&action=view`) : Nav.navigateByPath(`${NavigationResource.routesPath.center}?Table=${entity}&ID=${e.id}&action=update`))}
                 sortingMode="server"
                 sortingOrder={['asc', 'desc']}
-                // onSortModelChange={(e) => {
-                //     if (e.length > 0) {
-                //         onSort(e[0].field + ' ' + e[0].sort.toUpperCase());
-                //         columns.colStruct.forEach((col) => {
-                //             if ((col.headerField as string).toLocaleLowerCase() === e[0].field.toLocaleLowerCase()) Search.setSortedBy({ sortField: e[0].field, sortLabel: col.headerLabel, order: e[0].sort });
-                //         });
-                //     }
-                // }}
+                onSortModelChange={(e) => {
+                    if (e.length > 0) {
+                        onSort(e[0].field + ' ' + e[0].sort.toUpperCase());
+                        columns.colStruct.forEach((col) => {
+                            if ((col.headerField as string).toLocaleLowerCase() === e[0].field.toLocaleLowerCase()) Search.setSortedBy({ sortField: e[0].field, sortLabel: col.headerLabel, order: e[0].sort });
+                        });
+                    }
+                }}
                 slots={{
-                    pagination: (props) => CustomPagination({ props, onPageChange, currentPage, rowsPerPage }),
+                    pagination: (props) => CustomPagination({ props, onPageChange, currentPage, rowsPerPage, totalRows: rows.totalRecords }),
                     noRowsOverlay: CustomNoRowsOverlay,
                     toolbar: () => CustomToolBar({ onExportClick }),
                 }}
@@ -247,6 +250,7 @@ export default function AppTable<T>({ columns, rows, isTableLoading = true, isRo
                         },
                     },
                 }}
+                paginationMode='server'
                 pageSizeOptions={[5, 10, 25, 50]}
                 onPaginationModelChange={onPaginationChange}
                 checkboxSelection={isRowsCheckable}
@@ -289,7 +293,7 @@ function CustomNoRowsOverlay() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '100%',
+        // height: '100%',
         '& .ant-empty-img-1': {
             fill: theme.palette.mode === 'light' ? '#aeb8c2' : '#262626',
         },
@@ -346,7 +350,7 @@ function ActionTable({ type, id, entity }: IActionTable) {
     };
     return (
         <Tooltip title={getLabel().label}>
-            <GridActionsCellItem icon={<AppIcon name={getLabel().icon} />} label={getLabel().label} onClick={() => Navigation.navigateByPath(`/center?Table=${entity}&ID=${id}&action=${type}`)} color="inherit" />
+            <GridActionsCellItem icon={<AppIcon name={getLabel().icon} />} label={getLabel().label} onClick={() => Navigation.navigateByPath(`${NavigationResource.routesPath.center}?Table=${entity}&ID=${id}&action=${type}`)} color="inherit" />
         </Tooltip>
     );
 }
@@ -372,15 +376,15 @@ interface ICustomToolBar {
     onExportClick: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 //#region Pagination
-function Pagination({ currentPage, onPageChange, className, rowsPerPage }: IPagination) {
+function Pagination({ currentPage, onPageChange, className, rowsPerPage, totalRows }: IPagination) {
     const apiRef = useGridApiContext();
-
+    console.log(apiRef.current.getRowsCount());
     //const pageCount = useGridSelector(apiRef, gridPageCountSelector);
     return (
         <MuiPagination
             color="primary"
             className={className}
-            count={Math.round(apiRef.current.getRowsCount() / rowsPerPage)}
+            count={Math.round(totalRows / rowsPerPage)}
             page={currentPage + 1}
             onChange={(_e, newPage) => {
                 window.scrollTo({
@@ -394,8 +398,8 @@ function Pagination({ currentPage, onPageChange, className, rowsPerPage }: IPagi
     );
 }
 
-function CustomPagination({ props, currentPage, onPageChange, rowsPerPage }) {
-    return <GridPagination ActionsComponent={(p) => Pagination({ currentPage, onPageChange, className: p.className, rowsPerPage })} {...props} />;
+function CustomPagination({ props, currentPage, onPageChange, rowsPerPage, totalRows }) {
+    return <GridPagination ActionsComponent={(p) => Pagination({ currentPage, onPageChange, className: p.className, rowsPerPage, totalRows })} {...props} />;
 }
 
 interface IPagination {
@@ -403,5 +407,6 @@ interface IPagination {
     className: string;
     onPageChange: (newPage: number) => void;
     rowsPerPage: number;
+    totalRows: number;
 }
 //#endregion

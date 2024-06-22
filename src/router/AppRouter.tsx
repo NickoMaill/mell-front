@@ -2,7 +2,7 @@
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 import navigationResources from '~/resources/navigationResources';
 import AuthMiddleware from './AuthMiddleware';
-import Layout from '~/components/Layout/Layout';
+import Layout from '~/components/layout/Layout';
 import { useEffect } from 'react';
 import useNavigation from '~/hooks/useNavigation';
 // #endregion IMPORTS -> //////////////////////////////////

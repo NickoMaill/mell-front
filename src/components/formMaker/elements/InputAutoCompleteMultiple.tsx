@@ -43,7 +43,7 @@ export default function InputAutoCompleteMultiple({ disabled, required, options,
                 renderTags={(tagValue, getTagProps) => tagValue.map((option, index) => <Chip label={option.label} {...getTagProps({ index })} disabled={disabled} />)}
                 renderInput={(params) => <TextField disabled={disabled} sx={{ backgroundColor: disabled ? '#e8e5e5' : 'transparent', borderRadius: 1 }} /*required={required}*/ {...params} />}
             />
-            <input type="hidden" id={id} name={id} value={multiple ? multiple : ''} onChange={onChange} />
+            <input type="hidden" id={id as string} name={id as string} value={multiple ? multiple : ''} onChange={onChange} />
         </InputBase>
     );
     // #endregion RENDER --> ///////////////////////////////////

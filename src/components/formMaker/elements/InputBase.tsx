@@ -28,10 +28,10 @@ export default function InputBase({ disabled, children, label, helpText, error, 
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <Grid item sx={sx} lg={size} md={size} xs={12} className={`divForm_${id}`}>
+        <Grid item sx={sx} lg={size} md={size} xs={12} className={`divForm_${id as string}`}>
             <FormControl disabled={disabled} margin="dense" fullWidth error={error}>
                 {showLabel && (
-                    <FormLabel required={required && label ? true : false} sx={{ display: 'flex', fontWeight: 'bold', '.MuiFormLabel-asterisk': { color: stylesResources.theme.palette.error.main } }} error={error} htmlFor={id} style={{ color: warning ? '#FEA726' : success ? '#43a047' : null }}>
+                    <FormLabel required={required && label ? true : false} sx={{ display: 'flex', fontWeight: 'bold', '.MuiFormLabel-asterisk': { color: stylesResources.theme.palette.error.main } }} error={error} htmlFor={id as string} style={{ color: warning ? '#FEA726' : success ? '#43a047' : null }}>
                         {label}
                         {helpText && <ToolTips textContent={helpText} />}
                     </FormLabel>

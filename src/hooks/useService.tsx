@@ -1,14 +1,15 @@
 // #region IMPORTS -> /////////////////////////////////////
 import { useContext } from 'react';
-
 import useStorage from './useStorage';
 import useModal from './useModal';
 import { AppError, ErrorTypeEnum } from '~/core/appError';
+import configManager from '~/managers/configManager';
+import SessionContext from '~/context/sessionContext';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
 // export const apiHost = 'http://localhost:5155';
-export const apiHost = 'http://localhost:5156';
+export const apiHost = configManager.getConfig.API_BASEURL;
 const HTTP_TIMEOUT = 50000;
 const currentUrl = window.location.href;
 // #endregion SINGLETON --> /////////////////////////////////
@@ -20,6 +21,7 @@ export default function useService(): IUseServiceApi {
     // #region HOOKS --> ///////////////////////////////////////
     const Storage = useStorage();
     const Modal = useModal();
+    const Session = useContext(SessionContext);
     // #endregion HOOKS --> ////////////////////////////////////
 
     // #region METHODS --> /////////////////////////////////////
@@ -32,7 +34,7 @@ export default function useService(): IUseServiceApi {
      */
     const get = async <T,>(route: string, headersRequest?: HeadersInit): Promise<T> => {
         const headers = new Headers();
-        //headers.set('Authorization', `Bearer ${Context.token}`);
+        headers.set('Authorization', `Bearer ${Session.token}`);
         headers.set('X-Client-URL', currentUrl);
         headers.set('X-Client-Annonces', Storage.getSessionItem('annonces') ?? '');
         for (const header in headersRequest) {
@@ -47,6 +49,11 @@ export default function useService(): IUseServiceApi {
 
         const url = `${apiHost}/${route}`;
         const request = await fetch(url, options);
+        if (request.redirected) {
+            console.log(request.url);
+            // window.location.href = request.url;
+            return;
+        }
         const response = await request.json();
 
         if (response.code && response.code.toLowerCase() === 'error_happened') {
@@ -65,7 +72,7 @@ export default function useService(): IUseServiceApi {
      */
     const getFile = async (route: string, headersRequest?: HeadersInit): Promise<Blob> => {
         const headers = new Headers();
-        //headers.set('Authorization', `Bearer ${Context.token}`);
+        headers.set('Authorization', `Bearer ${Session.token}`);
         headers.set('X-Client-URL', currentUrl);
         headers.set('X-Client-Annonces', Storage.getSessionItem('annonces') ?? '');
         for (const header in headersRequest) {
@@ -81,13 +88,17 @@ export default function useService(): IUseServiceApi {
         const url = `${route}`;
 
         const request = await fetch(url, options);
+        if (request.redirected) {
+            window.location.href = request.url;
+            return;
+        }
         const response = await request.blob();
         return response;
     };
 
     const downloadFile = async (route: string, name: string, headersRequest?: HeadersInit) => {
         const headers = new Headers();
-        //headers.set('Authorization', `Bearer ${Context.token}`);
+        headers.set('Authorization', `Bearer ${Session.token}`);
         headers.set('X-Client-URL', currentUrl);
         headers.set('X-Client-Annonces', Storage.getSessionItem('annonces') ?? '');
         for (const header in headersRequest) {
@@ -103,6 +114,10 @@ export default function useService(): IUseServiceApi {
         const url = `${apiHost}/${route}`;
 
         const request = await fetch(url, options);
+        if (request.redirected) {
+            window.location.href = request.url;
+            return;
+        }
         const contentType = request.headers.get('content-type');
         if (contentType.indexOf('application/json') !== -1) {
             const response = await request.json();
@@ -131,14 +146,14 @@ export default function useService(): IUseServiceApi {
      */
     const post = async <T, B>(route: string, body: B, formData?: FormData, headersRequest?: object): Promise<T> => {
         const headers = new Headers();
-        //headers.set('Authorization', `Bearer ${Context.token}`);
+        headers.set('Authorization', `Bearer ${Session.token}`);
         headers.set('X-Client-URL', currentUrl);
         headers.set('X-Client-Annonces', Storage.getSessionItem('annonces') ?? '');
         for (const header in headersRequest) {
             headers.set(header, headersRequest[header]);
         }
 
-        // headers.set('Content-Type', formData ? 'multipart/form-data' : 'application/json');
+        headers.set('Content-Type', formData ? 'multipart/form-data' : 'application/json');
         headers.set('Accept', 'application/json');
 
         const options: RequestInit = {
@@ -150,6 +165,10 @@ export default function useService(): IUseServiceApi {
         };
         const url = `${apiHost}/${route}`;
         const request = await fetch(url, options);
+        if (request.redirected) {
+            window.location.href = request.url;
+            return;
+        }
         const response = await request.json();
         if (response.code && response.code.toLowerCase() === 'error_happened') {
             //Modal.openModal('Erreur', <StandardError error={response} />);
@@ -168,14 +187,14 @@ export default function useService(): IUseServiceApi {
      */
     const put = async <T, B>(route: string, body: B, formData?: FormData, headersRequest?: object): Promise<T> => {
         const headers = new Headers();
-        //headers.set('Authorization', `Bearer ${Context.token}`);
+        headers.set('Authorization', `Bearer ${Session.token}`);
         headers.set('X-Client-URL', currentUrl);
         headers.set('X-Client-Annonces', Storage.getSessionItem('annonces') ?? '');
         for (const header in headersRequest) {
             headers.set(header, headersRequest[header]);
         }
 
-        // headers.set('Content-Type', formData ? 'multipart/form-data' : 'application/json');
+        headers.set('Content-Type', formData ? 'multipart/form-data' : 'application/json');
         headers.set('Accept', 'application/json');
 
         const options: RequestInit = {
@@ -188,7 +207,10 @@ export default function useService(): IUseServiceApi {
 
         const url = `${apiHost}/${route}`;
         const request = await fetch(url, options);
-
+        if (request.redirected) {
+            window.location.href = request.url;
+            return;
+        }
         const response = await request.json();
         if (response.code && response.code.toLowerCase() === 'error_happened') {
             //Modal.openModal('Erreur', <StandardError error={response} />, 'xl');
@@ -206,7 +228,7 @@ export default function useService(): IUseServiceApi {
      */
     const del = async <T, B>(route: string, body?: B, headersRequest?: object): Promise<T> => {
         const headers = new Headers();
-        //headers.set('Authorization', `Bearer ${Context.token}`);
+        headers.set('Authorization', `Bearer ${Session.token}`);
         headers.set('X-Client-URL', currentUrl);
         headers.set('X-Client-Annonces', Storage.getSessionItem('annonces') ?? '');
         for (const header in headersRequest) {
@@ -226,7 +248,10 @@ export default function useService(): IUseServiceApi {
 
         const url = `${apiHost}/${route}`;
         const request = await fetch(url, options);
-
+        if (request.redirected) {
+            window.location.href = request.url;
+            return;
+        }
         const response = await request.json();
         if (response.code && response.code.toLowerCase() === 'error_happened') {
             //Modal.openModal('Erreur', <StandardError error={response} />);

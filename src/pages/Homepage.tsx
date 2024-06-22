@@ -1,5 +1,7 @@
 // #region IMPORTS -> /////////////////////////////////////
 import { Box } from '@mui/material';
+import Instagram from '~/components/home/Instagram';
+import LandingPic from '~/components/home/LandingPic';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -19,7 +21,13 @@ export default function Homepage() {
     // #endregion USEEFFECT --> ////////////////////////////////
 
     // #region RENDER --> //////////////////////////////////////
-    return <Box><p>Je suis un developpeur</p></Box>;
+    return (
+        <Box>
+            <Box component="section">
+            <Instagram/>
+            </Box>
+        </Box>
+    );
     // #endregion RENDER --> ///////////////////////////////////
 }
 

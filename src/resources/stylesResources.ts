@@ -46,6 +46,18 @@ class StylesResources {
                         root: {
                             fontWeight: 'bold',
                             letterSpacing: '1px',
+                            // textTransform: 'none',
+                        },
+                        containedPrimary: {
+                            "&:hover": {
+                                backgroundColor: "#b57f69"
+                            }
+                        },
+                        contained: {
+                            boxShadow: 'none',
+                            '&:active': {
+                                boxShadow: 'none',
+                            },
                         },
                     },
                 },
@@ -76,11 +88,15 @@ class StylesResources {
                 h1: { fontFamily: 'Montserrat' },
                 fontFamily: ['Roboto', 'sans-serif', 'Segoe UI', 'Arial', 'Helvetica Neue', 'system-ui', '-apple-system'].join(','),
                 fontSize: 12.5,
+                button: {
+                    color: 'white',
+                },
             },
             palette: {
                 mode: this.AppThemeMode,
                 primary: {
-                    main: '#25639B',
+                    main: '#CB9277',
+                    contrastText: 'white',
                 },
                 secondary: {
                     main: '#6C757D',

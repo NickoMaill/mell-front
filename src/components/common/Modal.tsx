@@ -1,13 +1,14 @@
 // #region IMPORTS -> /////////////////////////////////////
-import { Box, Breakpoint, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, IconButton, styled } from '@mui/material';
+import { Box, Breakpoint, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, IconButton, styled, SxProps } from '@mui/material';
 import { ReactNode } from 'react';
 import AppIcon from './AppIcon';
+import { Theme } from '@emotion/react';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function Modal({ children, modalTitle, isOpen, onClose, modalAction, closable, modalActionLabel, isModalActionLoading, dismissLabel, maxWidth = 'md', persistant = false, scroll = 'paper' }: IModal) {
+export default function Modal({ sxContent, children, modalTitle, isOpen, onClose, modalAction, closable, modalActionLabel, isModalActionLoading, dismissLabel, maxWidth = 'md', persistant = false, scroll = 'paper' }: IModal) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 
@@ -45,7 +46,7 @@ export default function Modal({ children, modalTitle, isOpen, onClose, modalActi
                         </IconButton>
                     )}
                 </Box>
-                <DialogContent dividers>{children}</DialogContent>
+                <DialogContent sx={sxContent} dividers>{children}</DialogContent>
                 {modalAction && (
                     <DialogActions>
                         <Button autoFocus color="secondary" onClick={onClose}>
@@ -76,5 +77,6 @@ interface IModal {
     maxWidth?: Breakpoint;
     persistant?: boolean;
     scroll?: DialogProps['scroll'];
+    sxContent?: SxProps<Theme>;
 }
 // #endregion IPROPS --> //////////////////////////////////

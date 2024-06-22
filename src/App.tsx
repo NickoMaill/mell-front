@@ -11,10 +11,12 @@ import moment from 'moment';
 import useStorage from './hooks/useStorage';
 import { LangType } from './core/types/i18nTypes';
 import { SnackbarProvider } from 'notistack';
-import ModalProvider from './components/Layout/ModalProvider';
+import ModalProvider from './components/layout/ModalProvider';
 import AppContext from './context/appContext';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '~/resources/i18n/i18n';
+import SearchContext, { SearchField, SortField } from './context/searchContext';
+import SessionContext from './context/sessionContext';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -23,6 +25,50 @@ import i18n from '~/resources/i18n/i18n';
 export default function App() {
     // #region STATE --> ///////////////////////////////////////
     const [lang, setLang] = useState<LangType>('fr');
+
+    const [username, setUsername] = useState<string>(null);
+    const [fullName, setFullName] = useState<string>(null);
+    const [id, setId] = useState<string>(null);
+    const [email, setEmail] = useState<string>(null);
+    const [phone, setPhone] = useState<string>(null);
+    const [ip, setIp] = useState<string>(null);
+    const [gear, setGear] = useState<string>(null);
+    const [token, setToken] = useState<string>(null);
+    const [tokenExpire, setTokenExpire] = useState<Date>(new Date(Date.now()));
+    const sessionValue = {
+        username,
+        setUsername,
+        fullName,
+        setFullName,
+        id,
+        setId,
+        email,
+        setEmail,
+        phone,
+        setPhone,
+        ip,
+        setIp,
+        gear,
+        setGear,
+        lang,
+        setLang,
+        token,
+        setToken,
+        tokenExpire,
+        setTokenExpire,
+    };
+    // #endregion /////////////////////////////////////////////
+
+    // #region SearchContext //////////////////////////////////
+    const [filters, setFilters] = useState<SearchField[]>(null);
+    const [sortedBy, setSortedBy] = useState<SortField>(null);
+    const searchValue = {
+        filters,
+        setFilters,
+        sortedBy,
+        setSortedBy,
+    };
+
     const [isNoAccess, setIsNoAccess] = useState<boolean>(false);
     const appValue = {
         isNoAccess,
@@ -47,18 +93,22 @@ export default function App() {
     // #region RENDER --> //////////////////////////////////////
     return (
         <I18nextProvider i18n={i18n}>
-            <AppContext.Provider value={appValue}>
-                <ModalProvider>
-                    <StyledEngineProvider injectFirst>
-                        <ThemeProvider theme={stylesResources.theme}>
-                            <CssBaseline />
-                            <SnackbarProvider>
-                                <AppRouter />
-                            </SnackbarProvider>
-                        </ThemeProvider>
-                    </StyledEngineProvider>
-                </ModalProvider>
-            </AppContext.Provider>
+            <SessionContext.Provider value={sessionValue}>
+                <SearchContext.Provider value={searchValue}>
+                    <AppContext.Provider value={appValue}>
+                        <ModalProvider>
+                            <StyledEngineProvider injectFirst>
+                                <ThemeProvider theme={stylesResources.theme}>
+                                    <CssBaseline />
+                                    <SnackbarProvider>
+                                        <AppRouter />
+                                    </SnackbarProvider>
+                                </ThemeProvider>
+                            </StyledEngineProvider>
+                        </ModalProvider>
+                    </AppContext.Provider>
+                </SearchContext.Provider>
+            </SessionContext.Provider>
         </I18nextProvider>
     );
     // #endregion RENDER --> ///////////////////////////////////

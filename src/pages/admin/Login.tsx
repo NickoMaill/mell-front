@@ -13,7 +13,6 @@ import useResources from '~/hooks/useResources';
 import { Bold, Regular } from '~/components/common/Text';
 import { useSearchParams } from 'react-router-dom';
 //import SessionContext from '~/context/sessionContext';
-import Logo from '~/assets/pictures/winch.png';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -85,7 +84,7 @@ export default function Login() {
                 <Container sx={{ display: 'flex', justifyContent: 'center' }} maxWidth={'lg'}>
                     <Box maxWidth={'400px'} sx={{ marginTop: { xs: 1, md: 8, sm: 3 } }}>
                         <Box display="flex" alignItems="end" justifyContent="start" marginBottom={2}>
-                            <Box component="img" sx={{ height: { xs: 60, sm: 80 }, width: { xs: 80, sm: 100 }, marginRight: 2 }} src={Logo} />
+                            {/* <Box component="img" sx={{ height: { xs: 60, sm: 80 }, width: { xs: 80, sm: 100 }, marginRight: 2 }} src={Logo} /> */}
                             <Bold component="h1" variant="h4" color="secondary">
                                 {title}
                             </Bold>

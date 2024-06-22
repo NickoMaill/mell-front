@@ -63,7 +63,7 @@ export type FormMakerContentType<T extends FormMakerPartEnum> = {
     /**
      * @description determine what part of formMaker content property will be
      */
-    type: T extends FormMakerPartEnum.TAB ? FormMakerPartEnum.TAB : T extends FormMakerPartEnum.PANEL ? FormMakerPartEnum.PANEL : FormMakerPartEnum.SEARCH;
+    type?: T extends FormMakerPartEnum.TAB ? FormMakerPartEnum.TAB : T extends FormMakerPartEnum.PANEL ? FormMakerPartEnum.PANEL : FormMakerPartEnum.SEARCH;
     /**
      * @description content of part
      */

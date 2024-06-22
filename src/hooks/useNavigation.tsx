@@ -18,6 +18,7 @@ export default function useNavigation(): IUseNavigation {
 
     const navigate = (name: RecursiveKeyOf<RouteNameReference>, params?: string, replace?: boolean): void => {
         const indexRoute: number = navigationResources.routes.findIndex((item) => item.name === name);
+        console.log(name);
         if (indexRoute > -1) {
             const routesData = navigationResources.routes[indexRoute];
             const isParamsCompatible = routesData.path.includes(':');

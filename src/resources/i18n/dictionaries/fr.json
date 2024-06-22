@@ -2,6 +2,85 @@
     "common": {
         "title": "Template React + Vitejs + Typescript",
         "yes": "oui",
-        "no": "non"
+        "no": "non",
+        "send": "envoyer",
+        "noResultDb": "Aucun résultat dans la base",
+        "changeLang": "Changer la langue",
+        "sendMessage": "Envoyer un message",
+        "openMenu": "Ouvrir le menu",
+        "search": "Rechercher",
+        "emailAddress": "Adresse email",
+        "password": "Mot de passe",
+        "welcome": "Bienvenue",
+        "resend": "Renvoyer",
+        "add": "Ajouter",
+        "update": "Modifier",
+        "dismiss": "Annuler",
+        "delete": "Supprimer",
+        "youAdd": "Ajoutez",
+        "youUpdate": "Modifiez",
+        "youDismiss": "Annulez",
+        "youDelete": "Supprimez",
+        "adding": "Création",
+        "updating": "Modification",
+        "deleting": "Suppression",
+        "back": "Retour",
+        "filter": "Filtre",
+        "filters": "Filtres",
+        "details": "Détails",
+        "table": {
+            "columns": {
+                "showAll": "Afficher tout",
+                "hideAll": "Masquer tout",
+                "placeholder": "Libellé",
+                "search": "Rechercher une colonne",
+                "singular": "Colonne",
+                "plural": "Colonnes",
+                "density": "Épaisseur",
+                "comfortable": "Espacé",
+                "skinny": "Compacte",
+                "regular": "Normal",
+                "selectedLines": "ligne{{isPlural}} sélectionnée"
+            },
+            "nav": {
+                "resultPerPage": "Résultats par pages"
+            },
+            "filter": {
+                "sortAsc": "Trier par order croissant",
+                "sortDesc": "Trier par order décroissant",
+                "hideColumns": "Masquer la colonne",
+                "manageColumns": "Gestion des colonnes",
+                "label": "Filtres"
+            }
+        }
+    },
+    "noAccess": {
+        "intro": "Vous n'avez pas accès à la page demandée.",
+        "please": "Merci d'utiliser les options disponibles dans le menu.",
+        "expired": "Il est également possible que votre session soit <b>expirée</b>.",
+        "login": "Dans ce cas, veuillez vous <link>identifier</link> à nouveau."
+    },
+    "center": {
+        "search": {
+            "newSearch": "Nouvelle recherche",
+            "updateSearch": "Changer les critères",
+            "filters": "Filtres",
+            "nothing": "Aucun (base entière).",
+            "orderBy": "Tri par"
+        },
+        "bulk": {
+            "bulkUpdate": "Modifications groupées",
+            "bulkAdd": "Ajouts groupés",
+            "downloadTemplate": "Télécharger le modèle",
+            "importXlsx": "Importer votre fichier .xlsx ici",
+            "bulkAddMessage": "{{action}} plusieurs {{grammar}} à la fois en chargeant un fichier CSV contenant les nouvelles informations des {{grammar}}. <br /><b>Vérifiez que les données du fichier soient correctes avant de le charger.</b><br /><br /> Pour plus d'informations sur le formatage correct du fichier CSV, cliquez sur le bouton <b>Télécharger le modèle</b>.",
+            "bulkTitle": "{{action}} des {{grammar}}"
+        },
+        "update": {
+            "success": "{{entity}} modifié{{fem}} avec succès"
+        },
+        "create": {
+            "success": "{{entity}} créé{{fem}} avec succès"
+        }
     }
 }

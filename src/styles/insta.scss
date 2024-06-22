@@ -1,0 +1,128 @@
+.postsSection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-inline: 3rem;
+}
+
+.gridContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 90%; // ---> add queries for 1920p screen
+}
+
+.postInfoContainer {
+    z-index: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: -15rem;
+    padding: 0.5rem;
+    width: 15rem;
+    height: 15rem;
+    color: var(--white);
+    opacity: 0%;
+    background-color: rgba(0, 0, 0, 0.693);
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        opacity: 100%;
+    }
+}
+
+.postContainer {
+    width: 15rem;
+    height: 15rem;
+}
+.postImage {
+    width: 15rem;
+    height: 15rem;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    transition: all 0.6s ease-out;
+}
+
+.videoContainer {
+    display: flex;
+    position: absolute;
+    margin-top: 0.2rem;
+    margin-left: 13.2rem;
+    z-index: 2;
+}
+
+.photoContainer {
+    display: flex;
+    z-index: 1;
+    position: relative;
+}
+
+.statsPosts {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 3rem;
+}
+
+.statPost {
+    display: flex;
+    align-items: center;
+}
+
+.postDetails {
+    text-align: center;
+}
+
+.buttonContainerPosts {
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.morePostButton {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    width: 17rem;
+    background-color: var(--anthracite);
+    border-radius: 0.3rem;
+    transition: 400ms;
+    &:hover {
+        background-color: var(--anthracite);
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.668);
+    }
+}
+
+.instaLogoContainer {
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-block: 1rem;
+}
+
+.borderDesign {
+    z-index: -1;
+    border-top: solid 1px #383e42;
+    width: 80%;
+    position: relative;
+    top: 3.4rem;
+}
+
+.instaLogo {
+    background-color: #fff;
+    padding-inline: 6rem;
+}
+
+.modal-insta {
+    iframe {
+        min-width: auto!important;
+        overflow: hidden!important;
+    }
+}

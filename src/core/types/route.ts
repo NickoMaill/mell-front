@@ -13,4 +13,15 @@ export type RouterDescription = {
 
 export type RouteNameReference = {
     Home;
+    Pro;
+    Bio;
+    Shows;
+    CGU;
+    LegalMentions;
+    MediaCredits;
+    PrivacyPolicy;
+    //----- ADMIN
+    Admin;
+    Center;
+    ShowsForm;
 };

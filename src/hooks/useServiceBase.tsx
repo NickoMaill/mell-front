@@ -1,12 +1,12 @@
 // #region IMPORTS -> /////////////////////////////////////
-import { Box, Typography } from '@mui/material';
-import { useContext } from 'react';
-import ModalContext from '~/context/modalContext';
 import { AppError, ErrorTypeEnum } from '~/core/appError';
 import { ApiErrorType } from '~/core/types/ApiError';
 import { ResultStatusEnum } from '~/core/types/serverCoreType';
 import useModal from './useModal';
 import useService from './useService';
+import { useContext } from 'react';
+import SessionContext from '~/context/sessionContext';
+import configManager from '~/managers/configManager';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -19,6 +19,7 @@ export default function useServiceBase(): IUseServiceBase {
     // #region HOOKS --> ///////////////////////////////////////
     const Modal = useModal();
     const Service = useService();
+    const Session = useContext(SessionContext);
     // const SessionService = useSessionService();
     // #endregion HOOKS --> ////////////////////////////////////
 
@@ -69,7 +70,11 @@ export default function useServiceBase(): IUseServiceBase {
         console.error('error', error);
         return Promise.reject(new AppError(type, apiError.message, apiError.code, apiError.data));
     };
-
+    /**
+     * @description method that return a fetch message error 
+     * @param {string} str
+     * @returns fetch error message
+     */
     const fetchDispatcher = (str: string): string => {
         switch (str) {
             case 'Failed to fetch':
@@ -88,34 +93,40 @@ export default function useServiceBase(): IUseServiceBase {
                 return 'unknow_error';
         }
     };
-
+    /**
+     * 
+     * @returns boolean true if got session or false if got no session
+     */
     const refreshSession = async (): Promise<boolean> => {
         if (!gotSession()) {
-            const request = await Service.get<{ access: string; expires: string } | ApiErrorType>('session/refresh');
+            const request = await Service.get<{ access: string; expires: string } | ApiErrorType>('login/refresh');
             if ((request as ApiErrorType).code) {
                 switch ((request as ApiErrorType).code) {
                     case 'no_session':
-                        return false;
                     case 'session_expired':
-                        return false;
+                        window.location.href = configManager.getConfig.API_BASEURL + "/" + "login"
+                        throw new AppError(ErrorTypeEnum.Technical, 'got no session or expired session', 'no_session');    
                     case 'need_mfa':
-                        throw new AppError(ErrorTypeEnum.Functional, 'Double authentification requise', 'need_mfa');
+                        window.location.href = configManager.getConfig.API_BASEURL + "/" + "login/mfa"
+                        throw new AppError(ErrorTypeEnum.Technical, 'need to re-auth mfa', 'need_mfa');
                     default:
                         throw new AppError(ErrorTypeEnum.Technical, 'an Error happened', 'error_happened');
                 }
             }
             const response = request as { access: string; expires: string };
-            //Context.setToken(response.access);
-            //Context.setTokenExpire(new Date(response.expires));
-            return true;
+            Session.setToken(response.access);
+            Session.setTokenExpire(new Date(response.expires));
         }
         return true;
     };
 
     const gotSession = (): boolean => {
-        // if (Context.token && Context.token !== '' && Context.tokenExpire.getTime() > Date.now()) {
-        //     return true;
-        // }
+        console.log( "expires", Session.tokenExpire);
+        if (!window.location.pathname.startsWith("/admin")) {
+            return true;
+        } else if (Session.token && Session.token !== '' && (Session.tokenExpire ?? new Date(Date.now())).getTime() > Date.now()) {
+            return true;
+        }
         return false;
     };
     // #endregion METHODS --> //////////////////////////////////

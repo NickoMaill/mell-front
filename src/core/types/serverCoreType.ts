@@ -22,7 +22,7 @@ export type ServiceResponse<T = null> = {
 };
 
 export type QueryResult<T> = {
-    results: T[];
+    records: T[];
     totalRecords: number;
     offset: number;
     limit: number;

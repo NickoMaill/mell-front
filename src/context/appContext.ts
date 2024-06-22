@@ -1,3 +1,4 @@
+import { AlertColor } from '@mui/material';
 import { Dispatch, SetStateAction, createContext } from 'react';
 
 interface IAppContext {
@@ -7,6 +8,12 @@ interface IAppContext {
 
 const initialContext: IAppContext = {
     isNoAccess: false,
+};
+
+export type AlertContextType = {
+    severity: AlertColor;
+    title: string;
+    subtitle?: string;
 };
 
 const AppContext = createContext<IAppContext>(initialContext);

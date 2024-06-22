@@ -1,4 +1,9 @@
-import { Box } from '@mui/material';
+import { AppBar, Box, Container, IconButton } from '@mui/material';
+import SocialMedia from './SocialMedia';
+import stylesResources from '~/resources/stylesResources';
+import AppIcon from '../common/AppIcon';
+import NavigationResource from '~/resources/navigationResources';
+import HeaderLink from '../common/HeaderLink';
 // singleton --> start region ////////////////////////////////////
 // singleton --> end region //////////////////////////////////////
 
@@ -16,7 +21,14 @@ export default function Footer() {
     // useEffect --> end region //////////////////////////////////
 
     // render --> start region ///////////////////////////////////
-    return <Box component="footer"></Box>;
+    return (
+        <Box display={{ md: "block", sm: "none" }} sx={{ backgroundColor: stylesResources.theme.palette.primary.main }} component="footer">
+            <Container className="p-3 d-flex justify-content-between align-items-center container">
+                {NavigationResource.footerLink.map((fl, i) => <HeaderLink key={i} {...fl} />)}
+                <SocialMedia />
+            </Container>
+        </Box>
+    );
     // render --> end region /////////////////////////////////////
 }
 
