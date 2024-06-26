@@ -20,7 +20,7 @@ export default function Layout({ children }: ILayout) {
 
     // #region HOOKS --> ///////////////////////////////////////
     const { pathname } = useLocation();
-    const { getPathDescription } = useNavigation();
+    const { getPathDescription, logCurrentRoute } = useNavigation();
     // #endregion HOOKS --> ////////////////////////////////////
 
     // #region METHODS --> /////////////////////////////////////
@@ -30,6 +30,7 @@ export default function Layout({ children }: ILayout) {
     useEffect(() => {
         window.scrollTo(0, 0);
         appTool.changeTitle(getPathDescription(pathname).title);
+        logCurrentRoute();
     }, [pathname]);
     // #endregion USEEFFECT --> ////////////////////////////////
 

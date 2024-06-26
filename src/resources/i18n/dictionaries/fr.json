@@ -54,6 +54,25 @@
             }
         }
     },
+    "login": {
+        "rememberMe": "Se souvenir de moi",
+        "forgotPassword": "Mot de passe oublié ?",
+        "pleaseConnect": "Veuillez vous connecter",
+        "connect": "Connexion",
+        "wrongCredentials": "Email ou mot de passe invalide",
+        "expiredSession": "Session expirée, veuillez vous reconnecter",
+        "expiredMfa": "Votre code a expiré, veuillez en renvoyer un autre",
+        "requiredEmail": "L'email est requis",
+        "requiredPassword": "Le mot de passe est requis",
+        "resetTitle": "Aide à la connexion",
+        "resetMessage": "Une fois votre compte identifié, un message vous sera envoyé afin de réinitialiser votre mot de passe.",
+        "resetDetails": "Veuillez saisir votre adresse électronique",
+        "resetLabel": "Réinitialiser le mot de passe",
+        "MfaTitle": "Accès sécurisé",
+        "MfaSubtitle": "Authentification multi-facteurs",
+        "MfaDetails": "Bienvenue <b>{{username}}</b>. Pour continuer, saisissez le code de vérification à 6 chiffres envoyé à votre numéro de téléphone se terminant par <b>{{phoneNumber}}</b>.",
+        "resendMfa": "Vous n’avez pas reçu de code ?"
+    },
     "noAccess": {
         "intro": "Vous n'avez pas accès à la page demandée.",
         "please": "Merci d'utiliser les options disponibles dans le menu.",
@@ -81,6 +100,38 @@
         },
         "create": {
             "success": "{{entity}} créé{{fem}} avec succès"
+        }
+    },
+    "error": {
+        "common": {
+            "error": "Une erreur est survenue"
+        },
+        "errorMessage": "Oups, une erreur est survenue... Veuillez recharger l'application",
+        "errorBoundary": {
+            "sorry": "Désolé, une erreur est survenue.",
+            "firstErrorMessage": "Merci d'utiliser le formulaire ci-dessous pour contacter le",
+            "supportEmail": "mailto:Winch%20%3csupport%40winch.fr%3e?Subject=Erreur%20Pilot&Body=Avec%20votre%20message,%20merci%20de%20copier%2fcoller%20le%20rapport%20d%27erreur%20ou%20attacher%20une%20copie%20d%27écran.",
+            "technicalStaff": "support technique",
+            "thanks": "Nous travaillerons à corriger le problème dès que possible. Veuillez nous excuser pour le dérangement causé.",
+            "toSendMessage": "Pour envoyer un message au support technique,",
+            "pleaseSend": "veuillez décrire brièvement le problème dans la zone ci-dessous,",
+            "thenClick": "puis cliquer sur :",
+            "errorReport": "Rapport d'erreur",
+            "diag": "Diagnostic",
+            "source": "Source",
+            "at": "à",
+            "trace": "Trace",
+            "page": "Page",
+            "clockDate": "Date/Heure",
+            "browser": "Navigateur",
+            "address": "Adresse",
+            "linkForward": " Lien depuis"
+        },
+        "noAccess": {
+            "intro": "Vous n'avez pas accès à la page demandée.",
+            "please": "Merci d'utiliser les options disponibles dans le menu.",
+            "expired": "Il est également possible que votre session soit <b>expirée</b>.",
+            "login": "Dans ce cas, veuillez vous <link>identifier</link> à nouveau."
         }
     }
 }

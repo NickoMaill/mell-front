@@ -1,5 +1,5 @@
 // #region IMPORTS -> /////////////////////////////////////
-import { Box, Container } from '@mui/material';
+import { Box, Button, Container } from '@mui/material';
 import { FormEvent, useEffect, useState } from 'react';
 import InputSubmit from './elements/InputSubmit';
 import { FormMakerContentType, FormMakerPartEnum, IFormMakerInput, IFormMakerPanel, InputBaseType } from '~/core/types/FormMakerCoreTypes';
@@ -21,12 +21,14 @@ import appTool from '~/helpers/appTool';
 import InputFileField from './elements/InputFileField';
 import { useSearchParams } from 'react-router-dom';
 import RangeInput from './elements/RangeInput';
+import InputAutoComplete from './elements/InputAutoComplete';
+import moment from 'moment';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function FormMaker<T>({ onSubmit, structure, data, outputType = 'formData', onBackPress, isSubmitLoading, focusOnError = [], grammar, action = 'Ajouter' }: IFormMaker<T>) {
+export default function FormMaker<T>({ onSubmit, structure, data, outputType = 'formData', onBackPress, isSubmitLoading, focusOnError = [], grammar, action = 'Ajouter', isView = false }: IFormMaker<T>) {
     // #region STATE --> ///////////////////////////////////////
     const [file, setFile] = useState<File>(null);
     const [fileField, setFileFields] = useState<string>(null);
@@ -203,12 +205,51 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
             autoComplete: element.autoComplete,
             autoCapitalize: element.autoCapitalize,
         };
+        if (isView) {
+            let founded = null;
+            switch(element.type) {
+                case "select":
+                    if (baseProps.value) {
+                        founded = element.selectOptions.find(e => e.value === baseProps.value);
+                        if (founded) {
+                            baseProps.value = founded.label;
+                        }
+                    }
+                    break;
+                case "radio":
+                    founded = null;
+                    if (baseProps.value) {
+                        founded = element.radioOptions.find(e => e.value === baseProps.value);
+                        if (founded) {
+                            baseProps.value = founded.label;
+                        }
+                    }
+                    break;
+                case "checkbox":
+                    founded = null;
+                    if (baseProps.value) {
+                        founded = element.checkboxOptions.find(e => e.value === baseProps.value);
+                        if (founded) {
+                            baseProps.value = founded.label;
+                        }
+                    }
+                    break;
+                case "date":
+                    const date = moment(baseProps.value).format("DD/MM/yyyy")
+                    baseProps.value = date;
+                    break;
+                default:
+                    break;
+            }
+            element.type = "value";
+        }
         switch (element.type) {
             case 'email':
             case 'number':
             case 'search':
             case 'url':
             case 'text':
+            case "value":
                 return <InputTextField {...baseProps} key={i} type={element.type} />;
             case 'checkbox':
                 return <InputCheckBoxField {...baseProps} key={i} options={element.checkboxOptions} />;
@@ -218,12 +259,16 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
                 return <InputTelephoneField {...baseProps} key={i} />;
             case 'tokenmultiple':
                 return <InputAutoCompleteMultiple {...baseProps} key={i} options={element.selectOptions} />;
+            case 'autocomplete':
+                return <InputAutoComplete {...baseProps} key={i} options={element.selectOptions} />;
             case 'radio':
                 return <InputRadioField {...baseProps} key={i} options={element.radioOptions} />;
             case 'textarea':
                 return <InputTextAreaField {...baseProps} key={i} limit={element.limit} rows={element.rows} />;
             case 'date':
                 return <InputDateField {...baseProps} key={i} format={element.dateFormat} views={element.dateViews} openTo={element.dateOpenTo} />;
+            case "dateTime":
+                return <InputDateField {...baseProps} key={i} mode="time" format={element.dateFormat} views={element.dateViews} openTo={element.dateOpenTo} />;
             case 'color':
                 return <InputColorField {...baseProps} key={i} />;
             case 'switch':
@@ -249,7 +294,11 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
     };
 
     const getActionLabel = (str: string) => {
-        switch (str) {
+        switch (str.toLowerCase()) {
+            case "update":
+                return "Modifier";
+            case "delete":
+                return "Supprimer";
             default:
                 return 'Ajouter';
         }
@@ -353,7 +402,7 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
         <Box encType="multipart/form-data" name="Form" id="Form" onSubmit={(e) => onSubmit(handleSubmit(e))} component="form" sx={{ width: '100%', flexGrow: 1, marginTop: 2 }}>
             {renderForm()}
             <Container component="div" sx={{ alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
-                <InputSubmit isLoading={isSubmitLoading} label={`${action} ${grammar}`} onBackPress={onBackPress} />
+                {!isView && <InputSubmit isLoading={isSubmitLoading} label={`${getActionLabel(action)} ${grammar}`} onBackPress={onBackPress} />}
             </Container>
         </Box>
     );
@@ -371,5 +420,6 @@ interface IFormMaker<T> {
     focusOnError?: string[];
     grammar?: string;
     action?: string;
+    isView?: boolean;
 }
 // #endregion IPROPS --> //////////////////////////////////

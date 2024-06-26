@@ -21,6 +21,7 @@ export type RouteNameReference = {
     MediaCredits;
     PrivacyPolicy;
     //----- ADMIN
+    Login;
     Admin;
     Center;
     ShowsForm;

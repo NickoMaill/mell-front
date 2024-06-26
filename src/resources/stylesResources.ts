@@ -61,6 +61,15 @@ class StylesResources {
                         },
                     },
                 },
+                MuiAutocomplete: {
+                    styleOverrides: {
+                        root: {
+                            "&.MuiOutlinedInput-root .MuiAutocomplete-input": {
+                                padding: "0px!important"
+                            }
+                        }
+                    }
+                },
                 MuiInput: {
                     styleOverrides: {
                         root: {

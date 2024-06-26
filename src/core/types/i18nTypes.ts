@@ -54,6 +54,25 @@ export type TranslationResourcesType = {
             };
         };
     };
+    login: {
+        rememberMe;
+        forgotPassword;
+        pleaseConnect;
+        connect;
+        wrongCredentials;
+        expiredSession;
+        expiredMfa;
+        requiredEmail;
+        requiredPassword;
+        resetTitle;
+        resetMessage;
+        resetDetails;
+        resetLabel;
+        MfaTitle;
+        MfaSubtitle;
+        MfaDetails;
+        resendMfa;
+    };
     noAccess: {
         intro;
         please;
@@ -81,6 +100,38 @@ export type TranslationResourcesType = {
         };
         create: {
             success;
+        };
+    };
+    error: {
+        common: {
+            error;
+        };
+        errorMessage;
+        errorBoundary: {
+            sorry;
+            firstErrorMessage;
+            supportEmail;
+            technicalStaff;
+            thanks;
+            toSendMessage;
+            pleaseSend;
+            thenClick;
+            errorReport;
+            diag;
+            source;
+            at;
+            trace;
+            page;
+            clockDate;
+            browser;
+            address;
+            linkForward;
+        };
+        noAccess: {
+            intro;
+            please;
+            expired;
+            login;
         };
     };
 };

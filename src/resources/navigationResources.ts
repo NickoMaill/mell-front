@@ -16,6 +16,7 @@ import SetupPic from "~/assets/pictures/configuration_management_header_h2avxw.w
 import LogPic from "~/assets/pictures/logs.jpg";
 import { ICardData } from '~/components/common/AppMiniCard';
 import Center from '~/pages/admin/Center';
+import Login from '~/pages/admin/Login';
 
 class NavigationResource {
     public static get routesPath() {
@@ -24,6 +25,7 @@ class NavigationResource {
             shows: "/shows",
             bio: "/bio",
             admin: "/admin",
+            login: "/admin/login",
             center: "/admin/center",
             showsForm: "/admin/shows/:id",
             pro: "/pro",
@@ -45,6 +47,7 @@ class NavigationResource {
             { name: "LegalMentions", element: LegalMentions, path: this.routesPath.legalMentions, isAuthRequired: false, title: 'Mentions Légales' },
             { name: "CGU", element: CGU, path: this.routesPath.cgu, isAuthRequired: false, title: 'Contrat Générale d\'utilisation' },
             { name: "PrivacyPolicy", element: PrivacyPolicy, path: this.routesPath.privacyPolicy, isAuthRequired: false, title: 'Politique de confidentialité' },
+            { name: "Login", element: Login, path: this.routesPath.login, isAuthRequired: false, title: 'Connexion' },
             // #endregion COMMON ROUTES -> ////////////////////////////////////////////////////
             
             // #region AUTH REQUIRED -> ///////////////////////////////////////////////////////
@@ -79,7 +82,7 @@ class NavigationResource {
                 subtitle: "Ajoutez ou modifiez vos spectacles", 
                 photo: ShowsPic,
                 btn1: "Gérer",
-                link1: "/admin/center?Table=Show" 
+                link1: "/admin/center?Table=Shows" 
             },
             { 
                 title: "Gestions du contenu", 

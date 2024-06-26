@@ -1,18 +1,17 @@
 import { Dispatch, SetStateAction, createContext } from 'react';
+import { UserAccessLevel } from '~/models/users';
 
 interface ISessionContext {
     id: string;
     setId?: Dispatch<SetStateAction<string>>;
-    username: string;
-    setUsername?: Dispatch<SetStateAction<string>>;
-    fullName: string;
-    setFullName?: Dispatch<SetStateAction<string>>;
+    name: string;
+    setName?: Dispatch<SetStateAction<string>>;
     email: string;
     setEmail?: Dispatch<SetStateAction<string>>;
-    phone?: string;
-    setPhone?: Dispatch<SetStateAction<string>>;
-    gear: string;
-    setGear?: Dispatch<SetStateAction<string>>;
+    mobile?: string;
+    setMobile?: Dispatch<SetStateAction<string>>;
+    level: UserAccessLevel;
+    setLevel?: Dispatch<SetStateAction<UserAccessLevel>>;
     ip: string;
     setIp?: Dispatch<SetStateAction<string>>;
     lang: 'fr' | 'en';
@@ -25,11 +24,10 @@ interface ISessionContext {
 
 const initialContext: ISessionContext = {
     id: null,
-    username: null,
-    fullName: null,
+    name: null,
     email: null,
-    phone: null,
-    gear: null,
+    mobile: null,
+    level: UserAccessLevel.VISITOR,
     ip: null,
     lang: 'fr',
     token: null,

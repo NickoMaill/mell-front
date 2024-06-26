@@ -1,6 +1,5 @@
 import { Box, Button, Container, Divider, Link, Typography } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
-import SessionContext from '~/context/sessionContext';
+import { useEffect, useState } from 'react';
 import { GenericActionEnum, ICenterBase } from '~/core/types/centerTypes';
 import appTool from '~/helpers/appTool';
 import useResources from '~/hooks/useResources';
@@ -22,7 +21,6 @@ import NavigationResource from '~/resources/navigationResources';
  * @returns Center layout
  */
 export default function CenterBase(props: ICenterBase) {
-    console.log(props.action);
     const [isBulkVisible, setIsBulkVisible] = useState<boolean>(false);
     const [bulkType, setBulkType] = useState<'new' | 'update'>(null);
     const [isTemplateDisabled, setIsTemplateDisabled] = useState<boolean>(false);
@@ -31,7 +29,6 @@ export default function CenterBase(props: ICenterBase) {
     const [alertMessage, setAlertMessage] = useState<string>('');
 
     const Resources = useResources();
-    const Ses = useContext(SessionContext);
 
     const onClickBulkNew = () => {
         setIsBulkVisible(!isBulkVisible);
@@ -73,11 +70,11 @@ export default function CenterBase(props: ICenterBase) {
     }, [isTemplateDisabled]);
 
     return (
-        <Container>
-            <Box display="flex" alignItems="center">
+        <Container className='my-4'>
+            <Box display="flex" alignItems="center" marginBottom={2}>
                 {props.icon && <AppIcon name={props.icon} sx={{ fontSize: '3.3rem' }} className="me-2" color="primary" />}
                 <Typography variant="h3" color={stylesResources.theme.palette.primary.main} component="h2">
-                    {props.prefix ? props.prefix + ' ' + props.grammar.plural : props.grammar.plural}
+                    {props.prefix ? props.prefix + ' ' + props.grammar.singular : props.grammar.plural}
                 </Typography>
             </Box>
             {props.action === GenericActionEnum.TABLE && (
@@ -129,12 +126,12 @@ export default function CenterBase(props: ICenterBase) {
                         <AppAlert title={alertMessage} onClose={() => setIsAlertVisible(false)} severity="error" isVisible={isAlertVisible} />
                         <InputImportFile onChange={(e) => setIsBulkValue(e)} dropzoneText={Resources.translate('center.bulk.importXlsx')} typeFile={['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']} filesLimit={4} />
                     </Modal>
+                    <Typography>
+                        <b>{props.totalCount}</b> {props.totalCount > 1 ? props.grammar.plural : props.grammar.singular}
+                    </Typography>
+                    <Divider />
                 </Box>
             )}
-            <Typography>
-                <b>{props.totalCount}</b> {props.totalCount > 1 ? props.grammar.plural : props.grammar.singular}
-            </Typography>
-            <Divider />
             <AppAlert onClose={props.onCloseAlert} isVisible={props.isAlertVisible} severity={props.alertContent?.severity ?? 'error'} title={props.alertContent?.title ?? ''} subtitle={props.alertContent?.subtitle ?? ''} />
             <Box>{props.children}</Box>
             {props.action === GenericActionEnum.VIEW && <SubmitSubFooter />}
@@ -151,7 +148,7 @@ function SubmitSubFooter() {
     return (
         <Box display="flex" justifyContent="center">
             <Button variant="contained" className="ms-3" color="secondary" onClick={() => navigation.goBack()}>
-                {Resources.translate('common.back')}
+                {Resources.translate("common.back")}
             </Button>
         </Box>
     );

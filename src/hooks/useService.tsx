@@ -56,9 +56,9 @@ export default function useService(): IUseServiceApi {
         }
         const response = await request.json();
 
-        if (response.code && response.code.toLowerCase() === 'error_happened') {
+        if (response.errorCode) {
             //Modal.openModal('Erreur', <StandardError error={response} />);
-            throw new AppError(ErrorTypeEnum.Functional, '', '');
+            throw new AppError(ErrorTypeEnum.Functional, response.message, response.errorCode);
         }
 
         return response as T;
@@ -89,7 +89,6 @@ export default function useService(): IUseServiceApi {
 
         const request = await fetch(url, options);
         if (request.redirected) {
-            window.location.href = request.url;
             return;
         }
         const response = await request.blob();
@@ -115,13 +114,12 @@ export default function useService(): IUseServiceApi {
 
         const request = await fetch(url, options);
         if (request.redirected) {
-            window.location.href = request.url;
             return;
         }
         const contentType = request.headers.get('content-type');
         if (contentType.indexOf('application/json') !== -1) {
             const response = await request.json();
-            if (response.code && response.code.toLowerCase() === 'error_happened') {
+            if (response.errorCode && response.errorCode.toLowerCase() === 'error_happened') {
                 //Modal.openModal('Erreur', <StandardError error={response} />);
                 throw new AppError(ErrorTypeEnum.Functional, '', '');
             }
@@ -152,27 +150,29 @@ export default function useService(): IUseServiceApi {
         for (const header in headersRequest) {
             headers.set(header, headersRequest[header]);
         }
-
-        headers.set('Content-Type', formData ? 'multipart/form-data' : 'application/json');
-        headers.set('Accept', 'application/json');
+        if (!formData) {
+            headers.set('Content-Type', 'application/json');
+        } else {
+            if (!formDataContainsFile(formData)) {
+                headers.set('Content-Type', 'application/x-www-form-urlencoded');
+            }
+        }
+        headers.set('Accept', '*/*');
 
         const options: RequestInit = {
             method: 'POST',
             credentials: 'include',
             signal: AbortSignal.timeout(HTTP_TIMEOUT * 10),
             headers,
-            body: formData ? formData : JSON.stringify(body),
+            body: formData ? formDataContainsFile(formData) ? formData : formDataToUrlEncoded(formData) : JSON.stringify(body),
         };
         const url = `${apiHost}/${route}`;
         const request = await fetch(url, options);
-        if (request.redirected) {
-            window.location.href = request.url;
-            return;
-        }
         const response = await request.json();
-        if (response.code && response.code.toLowerCase() === 'error_happened') {
+
+        if (response.errorCode) {
             //Modal.openModal('Erreur', <StandardError error={response} />);
-            throw new AppError(ErrorTypeEnum.Functional, '', '');
+            throw new AppError(ErrorTypeEnum.Functional, response.message, response.errorCode);
         }
         return response as T;
     };
@@ -194,15 +194,21 @@ export default function useService(): IUseServiceApi {
             headers.set(header, headersRequest[header]);
         }
 
-        headers.set('Content-Type', formData ? 'multipart/form-data' : 'application/json');
-        headers.set('Accept', 'application/json');
+        if (!formData) {
+            headers.set('Content-Type', 'application/json');
+        } else {
+            if (!formDataContainsFile(formData)) {
+                headers.set('Content-Type', 'application/x-www-form-urlencoded');
+            }
+        }
+        headers.set('Accept', '*/*');
 
         const options: RequestInit = {
             method: 'PUT',
             credentials: 'include',
             signal: AbortSignal.timeout(HTTP_TIMEOUT * 2),
             headers,
-            body: formData ? formData : JSON.stringify(body),
+            body: formData ? formDataContainsFile(formData) ? formData : formDataToUrlEncoded(formData) : JSON.stringify(body),
         };
 
         const url = `${apiHost}/${route}`;
@@ -212,9 +218,10 @@ export default function useService(): IUseServiceApi {
             return;
         }
         const response = await request.json();
-        if (response.code && response.code.toLowerCase() === 'error_happened') {
-            //Modal.openModal('Erreur', <StandardError error={response} />, 'xl');
-            throw new AppError(ErrorTypeEnum.Functional, '', '');
+
+        if (response.errorCode) {
+            //Modal.openModal('Erreur', <StandardError error={response} />);
+            throw new AppError(ErrorTypeEnum.Functional, response.message, response.errorCode);
         }
         return response as T;
     };
@@ -253,9 +260,9 @@ export default function useService(): IUseServiceApi {
             return;
         }
         const response = await request.json();
-        if (response.code && response.code.toLowerCase() === 'error_happened') {
+        if (response.errorCode) {
             //Modal.openModal('Erreur', <StandardError error={response} />);
-            throw new AppError(ErrorTypeEnum.Functional, '', '');
+            throw new AppError(ErrorTypeEnum.Functional, response.message, response.errorCode);
         }
         return response as T;
     };
@@ -268,7 +275,22 @@ export default function useService(): IUseServiceApi {
     return { get, getFile, downloadFile, post, put, del };
     // #endregion RENDER --> ///////////////////////////////////
 }
-
+const formDataContainsFile = (formData) => {
+    for (let entry of formData.entries()) {
+      const [key, value] = entry;
+      if (value instanceof File) {
+        return true;
+      }
+    }
+    return false;
+  };
+  const formDataToUrlEncoded = (formData) => {
+    const params = new URLSearchParams();
+    formData.forEach((value, key) => {
+      params.append(key, value);
+    });
+    return params.toString();
+  };
 // #region IPROPS -->  /////////////////////////////////////
 interface IUseServiceApi {
     get: <T>(url: string, headers?: HeadersInit) => Promise<T>;

@@ -17,6 +17,8 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from '~/resources/i18n/i18n';
 import SearchContext, { SearchField, SortField } from './context/searchContext';
 import SessionContext from './context/sessionContext';
+import { UserAccessLevel } from './models/users';
+import configManager from './managers/configManager';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -25,31 +27,27 @@ import SessionContext from './context/sessionContext';
 export default function App() {
     // #region STATE --> ///////////////////////////////////////
     const [lang, setLang] = useState<LangType>('fr');
-
-    const [username, setUsername] = useState<string>(null);
-    const [fullName, setFullName] = useState<string>(null);
+    const [name, setName] = useState<string>(null);
     const [id, setId] = useState<string>(null);
     const [email, setEmail] = useState<string>(null);
-    const [phone, setPhone] = useState<string>(null);
+    const [mobile, setMobile] = useState<string>(null);
     const [ip, setIp] = useState<string>(null);
-    const [gear, setGear] = useState<string>(null);
+    const [level, setLevel] = useState<UserAccessLevel>(UserAccessLevel.VISITOR);
     const [token, setToken] = useState<string>(null);
     const [tokenExpire, setTokenExpire] = useState<Date>(new Date(Date.now()));
     const sessionValue = {
-        username,
-        setUsername,
-        fullName,
-        setFullName,
+        name,
+        setName,
         id,
         setId,
         email,
         setEmail,
-        phone,
-        setPhone,
+        mobile,
+        setMobile,
+        level,
+        setLevel,
         ip,
         setIp,
-        gear,
-        setGear,
         lang,
         setLang,
         token,
@@ -86,7 +84,8 @@ export default function App() {
 
     // #region USEEFFECT --> ///////////////////////////////////
     useEffect(() => {
-        setLang(Storage.isItemExist('lang') ? (Storage.getItem('lang') as LangType) : 'fr');
+        // setLang(Storage.isItemExist('lang') ? (Storage.getItem('lang') as LangType) : 'fr');
+        console.log(configManager.getConfig);
     }, []);
     // #endregion USEEFFECT --> ////////////////////////////////
 

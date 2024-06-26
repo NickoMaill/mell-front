@@ -260,7 +260,7 @@ export default function AppCenter<T>(props: ICenter<T>) {
         await asServicePromise<QueryResult<T> | ApiErrorType>(Service.get(`${props.entity.toLowerCase()}/${props.id}`))
             .then((res: QueryResult<T>) => {
                 setData(res.records[0]);
-                props.getData(res.records[0]);
+                //props.getData(res.records[0]);
             })
             .finally(() => updateLoaders('isLoading', false));
     };
@@ -316,7 +316,7 @@ export default function AppCenter<T>(props: ICenter<T>) {
     };
 
     const renderUpdate = (): JSX.Element => {
-        if (is.isAccessGranted) {
+        if (!is.isAccessGranted) {
             App.setIsNoAccess(true);
             return;
         } else {
@@ -338,7 +338,7 @@ export default function AppCenter<T>(props: ICenter<T>) {
         } else {
             return (
                 <CenterBase {...centerBaseProps} prefix={Resources.translate('common.details')} grammar={props.grammar} article={props.specifiers.singular}>
-                    {props.viewComponent ? props.viewComponent(data) : <FormMaker<T> {...formMakerBaseProps} data={data} onBackPress={() => Nav.navigateByPath(`${centerBasePath}?Table=${props.entity}`)} onSubmit={() => null} />}
+                    {props.viewComponent ? props.viewComponent(data) : <FormMaker<T> {...formMakerBaseProps} data={data} onBackPress={() => Nav.navigateByPath(`${centerBasePath}?Table=${props.entity}`)} onSubmit={null} isView />}
                 </CenterBase>
             );
         }
@@ -358,7 +358,7 @@ export default function AppCenter<T>(props: ICenter<T>) {
                 return props.deleteComponent(data, props.onDelete);
             } else {
                 if (!props.viewComponent) {
-                    throw new AppError(ErrorTypeEnum.Functional, 'aucune vue disponible pour le mode "delete"', 'no_view');
+                    return renderView();
                 } else {
                     return props.viewComponent(data, true, props.onDelete);
                 }

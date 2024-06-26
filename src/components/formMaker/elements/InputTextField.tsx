@@ -1,5 +1,5 @@
 // #region IMPORTS -> /////////////////////////////////////
-import { Box, CircularProgress, InputAdornment, TextField } from '@mui/material';
+import { Box, CircularProgress, InputAdornment, TextField, Typography } from '@mui/material';
 import { CSSProperties, useEffect, useState } from 'react';
 import { AutoCapitalizeType, AutoCompleteType, InputBaseType, InputModeType, InputType } from '~/core/types/FormMakerCoreTypes';
 import InputBase from './InputBase';
@@ -56,39 +56,43 @@ export default function InputTextField({ sx, style, inputStyle, disabled, requir
     // #region RENDER --> //////////////////////////////////////
     return (
         <InputBase sx={sx} success={success} warning={warning} required={required} disabled={disabled} size={size} id={id} helpText={helpText} label={label} error={error} errorMessage={errorMessage}>
-            <TextField
-                disabled={disabled}
-                variant="outlined"
-                type={type}
-                inputMode={currentMode}
-                placeholder={placeholder}
-                defaultValue={value}
-                name={id}
-                id={id}
-                className={success ? 'text-field-success' : warning ? 'text-field-warning' : null}
-                //required={required}
-                margin="dense"
-                fullWidth
-                onChange={onChange}
-                error={error}
-                autoComplete={autoComplete}
-                autoCapitalize={autoCapitalize}
-                InputProps={{
-                    style: style,
-                    inputProps: { style: inputStyle },
-                    startAdornment: icon && (
-                        <InputAdornment position="start">
-                            <AppIcon name={icon} />
-                        </InputAdornment>
-                    ),
-                    endAdornment: isLoading && (
-                        <Box sx={{ display: 'flex' }}>
-                            <CircularProgress size={25} />
-                        </Box>
-                    ),
-                    sx: { backgroundColor: disabled ? '#e8e5e5' : 'transparent' },
-                }}
-            />
+            {type === 'value' ? (
+                <Typography sx={{ marginTop: 1, marginBottom: 2 }}>{value as string}</Typography>
+            ) : (
+                <TextField
+                    disabled={disabled}
+                    variant="outlined"
+                    type={type}
+                    inputMode={currentMode}
+                    placeholder={placeholder}
+                    defaultValue={value}
+                    name={id}
+                    id={id}
+                    className={success ? 'text-field-success' : warning ? 'text-field-warning' : null}
+                    //required={required}
+                    margin="dense"
+                    fullWidth
+                    onChange={onChange}
+                    error={error}
+                    autoComplete={autoComplete}
+                    autoCapitalize={autoCapitalize}
+                    InputProps={{
+                        style: style,
+                        inputProps: { style: inputStyle },
+                        startAdornment: icon && (
+                            <InputAdornment position="start">
+                                <AppIcon name={icon} />
+                            </InputAdornment>
+                        ),
+                        endAdornment: isLoading && (
+                            <Box sx={{ display: 'flex' }}>
+                                <CircularProgress size={25} />
+                            </Box>
+                        ),
+                        sx: { backgroundColor: disabled ? '#e8e5e5' : 'transparent' },
+                    }}
+                />
+            )}
         </InputBase>
     );
     // #endregion RENDER --> ///////////////////////////////////

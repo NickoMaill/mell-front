@@ -1,23 +1,22 @@
 import Box from '@mui/material/Box';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Button, Container, Divider, Typography } from '@mui/material';
 import { ArrowBack, PersonOff } from '@mui/icons-material';
 import navigationResources from '~/resources/navigationResources';
 import useNavigation from '~/hooks/useNavigation';
-
-// const wording = resources.admin.album;
+import useSessionService from '~/hooks/useSessionService';
+import { LoadingButton } from '@mui/lab';
 
 export default function AdminLayout({ children, title, subtitle = '' }: IAdminLayout) {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
     const router = useNavigation();
+    const Session = useSessionService();
 
-    // const navigate = async () => {
-    //     await router.navigate('AdminHome');
-    // };
-
-    // const disconnect = async () => {
-    //     Context.setIsAdminLogged(false);
-    //     await service.useServiceWithRedirect(authService.disconnectSession(), 'AdminLogin');
-    // };
+    const disconnect = async () => {
+        setIsLoading(true)
+        await Session.logout().then(res => router.goToHomePage()).finally(() => setIsLoading(false));
+    };
 
     return (
         <Box>
@@ -28,9 +27,9 @@ export default function AdminLayout({ children, title, subtitle = '' }: IAdminLa
                             Accueil
                         </Button>
                     ) : (
-                        <Button variant="outlined" startIcon={<PersonOff />} sx={{ marginLeft: 3 }}>
+                        <LoadingButton loading={isLoading} variant="outlined" onClick={disconnect} startIcon={<PersonOff />} sx={{ marginLeft: 3 }}>
                             Déconnexion
-                        </Button>
+                        </LoadingButton>
                     )}
                 </Box>
                 <Box textAlign="center" className="mb-2">

@@ -18,7 +18,6 @@ export default function useNavigation(): IUseNavigation {
 
     const navigate = (name: RecursiveKeyOf<RouteNameReference>, params?: string, replace?: boolean): void => {
         const indexRoute: number = navigationResources.routes.findIndex((item) => item.name === name);
-        console.log(name);
         if (indexRoute > -1) {
             const routesData = navigationResources.routes[indexRoute];
             const isParamsCompatible = routesData.path.includes(':');
@@ -27,6 +26,7 @@ export default function useNavigation(): IUseNavigation {
                 throw new AppError(ErrorTypeEnum.Functional, `navigation guard activate due to duplicate navigation to ${pathname}`, 'duplicate_navigation');
             }
             navigateTo(params && isParamsCompatible ? routesData.path.split(':')[0] + params : routesData.path, replace ? { replace } : null);
+            console.log("nav");
         } else {
             throw new AppError(ErrorTypeEnum.Functional, 'wrong routes', 'wrong_routes');
         }

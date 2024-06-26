@@ -1,5 +1,6 @@
 // #region IMPORTS -> /////////////////////////////////////
 import { Box } from '@mui/material';
+import CurrentShow from '~/components/home/CurrentShow';
 import Instagram from '~/components/home/Instagram';
 import LandingPic from '~/components/home/LandingPic';
 // #endregion IMPORTS -> //////////////////////////////////
@@ -23,6 +24,9 @@ export default function Homepage() {
     // #region RENDER --> //////////////////////////////////////
     return (
         <Box>
+            <Box component="section">
+                <CurrentShow/>
+            </Box>
             <Box component="section">
             <Instagram/>
             </Box>

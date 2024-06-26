@@ -123,7 +123,7 @@ export interface InputBaseType {
 
 export type AutoCompleteType = 'on' | 'off' | 'given-name' | 'family-name' | 'email' | 'address-line1' | 'country' | 'country-name' | 'bday';
 export type AutoCapitalizeType = 'off' | 'on' | 'words' | 'characters';
-export type InputType = 'button' | 'email' | 'hidden' | 'number' | 'password' | 'reset' | 'search' | 'tel' | 'text' | 'url' | 'select' | 'checkbox' | 'radio' | 'tokenmultiple' | 'textarea' | 'date' | 'color' | 'switch' | 'htmlContent' | 'file' | 'range';
+export type InputType = 'button' | 'email' | 'hidden' | 'number' | 'password' | 'reset' | 'search' | 'tel' | 'text' | 'url' | 'select' | 'checkbox' | 'radio' | 'tokenmultiple' | 'autocomplete' | 'textarea' | 'date' | 'color' | 'switch' | 'htmlContent' | 'file' | 'range' | 'value' | "dateTime";
 export type InputModeType = 'decimal' | 'email' | 'search' | 'tel' | 'text' | 'url' | 'none' | 'numeric';
 
 export type SelectOptionsType = {
@@ -134,5 +134,5 @@ export type SelectOptionsType = {
 export type RadioOptionsType = SelectOptionsType;
 
 export type CheckboxOptionType = SelectOptionsType & {
-    defaultChecked: boolean;
+    defaultChecked?: boolean;
 };

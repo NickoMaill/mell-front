@@ -50,7 +50,9 @@ export default function Header() {
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
             <Typography sx={{ my: 2 }}>
                 <Link to={'/'}>
-                    <img src={logo} width={50} className="logo-header" />
+                    <Button variant='text'>
+                        <img src={logo} width={50} className="logo-header" />
+                    </Button>
                 </Link>
             </Typography>
             <Divider />
@@ -78,7 +80,9 @@ export default function Header() {
                     </Typography>
                     <Box className="logo-header-container">
                         <Link to={'/'}>
-                            <img src={logo} width={50} className="logo-header" />
+                            <Button variant="text" color="secondary" sx={{ padding: 0.3 }}>
+                                <img src={logo} width={40} className="logo-header" />
+                            </Button>
                         </Link>
                     </Box>
                     <Box sx={{ display: { xs: 'none', md: 'block' } }}>
