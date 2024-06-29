@@ -1,7 +1,6 @@
-import { AppBar, Box, Container, IconButton } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import SocialMedia from './SocialMedia';
 import stylesResources from '~/resources/stylesResources';
-import AppIcon from '../common/AppIcon';
 import NavigationResource from '~/resources/navigationResources';
 import HeaderLink from '../common/HeaderLink';
 // singleton --> start region ////////////////////////////////////

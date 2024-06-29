@@ -2,8 +2,9 @@
 import AppCenter from '../center/AppCenter';
 import { AppTableStructure } from '../common/AppTable';
 import moment from 'moment';
-import { useState } from 'react';
+import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { FormMakerContentType, FormMakerPartEnum } from '~/core/types/FormMakerCoreTypes';
+import useMapService from '~/hooks/services/useMapService';
 import { ShowApiModel, ShowPayloadType } from '~/models/shows';
 // #endregion IMPORTS -> //////////////////////////////////
 
@@ -12,10 +13,12 @@ import { ShowApiModel, ShowPayloadType } from '~/models/shows';
 
 export default function Shows({ id, action }) {
     const [address, setAddress] = useState<string>(null);
+    const [postalCode, setPostalCode] = useState<string>(null);
     const [coordinate, setCoordinate] = useState<number[]>([]);
     const [city, setCity] = useState<string>(null);
     const [country, setCountry] = useState<string>(null);
     const [place, setPlace] = useState<string>(null);
+    const [options, setOptions] = useState<{ label: string; value: any }[]>([])
     // #region STATE --> ///////////////////////////////////////
     const col: AppTableStructure<ShowApiModel> = {
         defaultSort: { field: 'startDate', sort: 'desc' },
@@ -105,7 +108,10 @@ export default function Shows({ id, action }) {
                     type: 'text',
                     size: 12,
                     icon: 'Title',
-                    required: true
+                    required: true,
+                    onChange(e) {
+                        console.log(e);
+                    },
                 },
                 {
                     id: 'place',
@@ -123,7 +129,14 @@ export default function Shows({ id, action }) {
                     type: 'autocomplete',
                     size: 6,
                     icon: 'Place',
-                    selectOptions: [{ label: 'hello', value: 'h' }],
+                    value: address,
+                    onChange(e: ChangeEvent<HTMLInputElement>) {
+                        searchAddress(e);
+                    },
+                    onSelectAutocompleteInput(e, v) {
+                        onSelect(v);
+                    },
+                    selectOptions: options,
                 },
                 {
                     id: 'postalCode',
@@ -131,6 +144,7 @@ export default function Shows({ id, action }) {
                     index: 1,
                     type: 'text',
                     size: 2,
+                    value: postalCode,
                     icon: 'Place',
                 },
                 {
@@ -139,6 +153,7 @@ export default function Shows({ id, action }) {
                     index: 2,
                     type: 'text',
                     size: 2,
+                    value: city,
                     icon: 'LocationCity',
                 },
                 {
@@ -147,6 +162,7 @@ export default function Shows({ id, action }) {
                     index: 3,
                     type: 'text',
                     size: 2,
+                    value: country,
                     icon: 'Public',
                 },
                 {
@@ -210,15 +226,57 @@ export default function Shows({ id, action }) {
                     size: 3,
                     icon: 'Euro',
                 },
+                {
+                    id: "latitude",
+                    label: "",
+                    index: 1,
+                    type: "hidden",
+                    size: 1,
+                },
+                {
+                    id: "longitude",
+                    label: "",
+                    index: 1,
+                    type: "hidden",
+                    size: 1,
+                }
             ],
         },
     ];
     // #endregion STATE --> ////////////////////////////////////
 
     // #region HOOKS --> ///////////////////////////////////////
+    const MapService = useMapService();
     // #endregion HOOKS --> ////////////////////////////////////
 
     // #region METHODS --> /////////////////////////////////////
+    const searchAddress = async (e) => {
+        if (e.target.value.length > 4) {
+            await MapService.search(e.target.value)
+            .then(res => {
+                let list: { label: string; value: number }[] = res.map(data => {
+                    return { 
+                        label: `${data.properties.housenumber ?? ""} ${data.properties.street ?? ""}, ${data.properties.postcode ?? ""}, ${data.properties.city ?? ""}, ${data.properties.country ?? ""}, ${data.properties.countrycode ?? ""}`.trim(),
+                        value: data.properties.osm_id
+                    };
+                });
+                list = [...new Map(list.map(p => [p.label, p])).values()];
+                setOptions(list);
+            })
+        } else {
+            setOptions([]);
+        }
+    }
+
+    const onSelect = (value: string) => {
+        const values = value.split(",");
+        if (values.length === 5) {
+            (document.getElementById("address") as HTMLInputElement).value = values[0].trim();
+            (document.getElementById("postalCode") as HTMLInputElement).value = values[1].trim();
+            (document.getElementById("city") as HTMLInputElement).value = values[2].trim();
+            (document.getElementById("country") as HTMLInputElement).value = values[3].trim();
+        }
+    }
     // #endregion METHODS --> //////////////////////////////////
 
     // #region USEEFFECT --> ///////////////////////////////////

@@ -29,24 +29,21 @@ export default function AuthMiddleware({ children }: IAuthMiddleware) {
         try {
             const auth = await SessionService.refreshSession().catch((err: AppError) => {
                 if (err.code === 'no_session' || err.code === 'session_expired') {
-                    // Navigation.navigate('Login', `?target=${window.location.href}`);
-                    window.location.href = configManager.getConfig.APP_BASEURL + "/admin/login"
-                    console.log('redirect');
+                    Navigation.navigate('Login', `?target=${window.location.href}`);
+                    // window.location.href = configManager.getConfig.APP_BASEURL + "/admin/login"
                 }
             });
             if (!auth) {
                 Session.setToken(null);
-                // Navigation.navigate('Login', `?target=${window.location.href}`);
-                window.location.href = configManager.getConfig.APP_BASEURL + "/admin/login"
-                console.log('redirect');
+                Navigation.navigate('Login', `?target=${window.location.href}`);
+                // window.location.href = configManager.getConfig.APP_BASEURL + "/admin/login"
             } else {
                 setIsLoading(false);
             }
         } catch (error) {
             Session.setToken(null);
-            // Navigation.navigate('Login', `?target=${window.location.href}`);
-            window.location.href = configManager.getConfig.APP_BASEURL + "/admin/login"
-            console.log('error');
+            Navigation.navigate('Login', `?target=${window.location.href}`);
+            // window.location.href = configManager.getConfig.APP_BASEURL + "/admin/login"
         }
     };
     // #endregion METHODS --> //////////////////////////////////

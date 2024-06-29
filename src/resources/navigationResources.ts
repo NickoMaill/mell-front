@@ -17,6 +17,7 @@ import LogPic from "~/assets/pictures/logs.jpg";
 import { ICardData } from '~/components/common/AppMiniCard';
 import Center from '~/pages/admin/Center';
 import Login from '~/pages/admin/Login';
+import NotFound from '~/pages/ NotFound';
 
 class NavigationResource {
     public static get routesPath() {
@@ -33,6 +34,7 @@ class NavigationResource {
             mediaCredits: "/mediaCredits",
             legalMentions: "/legalMentions",
             cgu: "/cgu",
+            notFound: "*",
         };
     }
 
@@ -48,6 +50,7 @@ class NavigationResource {
             { name: "CGU", element: CGU, path: this.routesPath.cgu, isAuthRequired: false, title: 'Contrat Générale d\'utilisation' },
             { name: "PrivacyPolicy", element: PrivacyPolicy, path: this.routesPath.privacyPolicy, isAuthRequired: false, title: 'Politique de confidentialité' },
             { name: "Login", element: Login, path: this.routesPath.login, isAuthRequired: false, title: 'Connexion' },
+            // { name: "NotFound", element: NotFound, path: this.routesPath.notFound, isAuthRequired: false, title: 'Ressource introuvable' },
             // #endregion COMMON ROUTES -> ////////////////////////////////////////////////////
             
             // #region AUTH REQUIRED -> ///////////////////////////////////////////////////////

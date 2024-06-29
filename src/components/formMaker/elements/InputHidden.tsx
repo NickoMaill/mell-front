@@ -1,16 +1,14 @@
 // #region IMPORTS -> /////////////////////////////////////
-import { MuiColorInput } from 'mui-color-input';
-import { useEffect, useState } from 'react';
-import { InputBaseType } from '~/core/types/FormMakerCoreTypes';
+import React from 'react'
+import { IFormMakerInput, InputBaseType } from '~/core/types/FormMakerCoreTypes';
 import InputBase from './InputBase';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function InputColorField({ disabled, value = '', error, onChange, required, id, size }: IInputColorField) {
+export default function InputHidden ({ sx, style, disabled, required, onChange, error, id, icon, autoComplete, autoCapitalize, label, helpText, errorMessage, size = 3, value, isLoading, success, warning, placeholder }: IInputHidden) {
     // #region STATE --> ///////////////////////////////////////
-    const [color, setColor] = useState<string>(value as string);
     // #endregion STATE --> ////////////////////////////////////
 
     // #region HOOKS --> ///////////////////////////////////////
@@ -24,14 +22,11 @@ export default function InputColorField({ disabled, value = '', error, onChange,
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <InputBase required={required} disabled={disabled} id={id} label="Couleur" size={size}>
-            <MuiColorInput disabled={disabled} value={color} sx={{ marginTop: 1.95, backgroundColor: disabled ? '#e8e5e5' : 'transparent', borderRadius: 1 }} onChange={(v) => setColor(v)} error={error} format="hex" /*required={required}*/ />
-            <input id={id} name={id} disabled={disabled} type="hidden" value={color} onChange={onChange} />
-        </InputBase>
+            <input type="hidden" onChange={onChange} defaultValue={value as string | number} />
     );
     // #endregion RENDER --> ///////////////////////////////////
 }
 
 // #region IPROPS -->  /////////////////////////////////////
-interface IInputColorField extends InputBaseType {}
-// #endregion IPROPS --> //////////////////////////////////
+interface IInputHidden extends InputBaseType {}
+// #enderegion IPROPS --> //////////////////////////////////

@@ -139,8 +139,8 @@ export default function AppCenter<T>(props: ICenter<T>) {
      * @returns
      */
     const centerUpdate = async (e: FormData): Promise<void> => {
-        e.set('ID', props.id);
-        e.set('GenericAction', props.genericAction);
+        // e.set('ID', props.id);
+        // e.set('GenericAction', props.genericAction);
         updateLoaders('isSubmitLoading', true);
         updateIs('isAlertVisible', false);
 
@@ -171,7 +171,6 @@ export default function AppCenter<T>(props: ICenter<T>) {
         e.set('GenericAction', props.genericAction);
         updateLoaders('isSubmitLoading', true);
         updateIs('isAlertVisible', false);
-
         setFocusOnError([]);
         const request = await asServicePromise<{ success: boolean } | ApiErrorType>(Service.post(props.entity, null, e))
             .catch((err: AppError) => {
@@ -221,14 +220,14 @@ export default function AppCenter<T>(props: ICenter<T>) {
     const centerBulkUpdate = async (files: File[]) => {
         const form = new FormData();
         form.append('file', files[0]);
-        form.append('GenericAction', 'bulkUpdate');
+        // form.append('GenericAction', 'bulkUpdate');
         const query = bulkSelection.length > 0 ? `?ID=${bulkSelection.join(',')}` : is.gotQuery ? appTool.BuildSearchURL(Search.filters, '?') : '';
         await Service.post(`${props.entity.toLowerCase()}/bulkUpdate${query}`, null, form);
     };
     const centerBulkNew = async (files: File[]) => {
         const form = new FormData();
         form.append('file', files[0]);
-        form.append('GenericAction', 'bulkNew');
+        // form.append('GenericAction', 'bulkNew');
         await Service.post(`${props.entity.toLowerCase()}/bulkNew`, null, form);
     };
     /**
@@ -238,7 +237,6 @@ export default function AppCenter<T>(props: ICenter<T>) {
         if (!datas) {
             updateLoaders('isLoading', true);
         }
-        console.log(is);
         const query = is.gotQuery ? appTool.BuildSearchURL(filters ? filters : Search.filters) : '';
         await asServicePromise<QueryResult<T> | ApiErrorType>(Service.get(`${props.entity.toLowerCase()}?limit=${rowsPerPage}&offset=${rowsPerPage * currentPage}${query}&sort=${sort}`))
             .then((res) => {
@@ -272,7 +270,6 @@ export default function AppCenter<T>(props: ICenter<T>) {
             if (!Search.filters) {
                 const searchContent = appTool.ParseSearchUrl(props.searchFormStruct);
                 updateIs('gotQuery', true);
-                console.log(searchContent);
                 Search.setFilters(searchContent);
             } else {
                 await setList();
@@ -431,7 +428,6 @@ export default function AppCenter<T>(props: ICenter<T>) {
     // #region USEEFFECT --> ///////////////////////////////////
     useEffect(() => {
         load();
-        console.log(sort);
     }, [currentPage, rowsPerPage, sort, centerAction, is.gotQuery, Search.filters]);
 
     useEffect(() => {

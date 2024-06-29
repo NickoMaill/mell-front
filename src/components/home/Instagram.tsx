@@ -1,7 +1,7 @@
 // #region IMPORTS -> /////////////////////////////////////
 import '~/styles/insta.scss';
 import { InstagramEmbed } from 'react-social-media-embed';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Modal from '../common/Modal';
 import InstaString from '~/assets/svg/instaString.svg';
 import Video from '~/assets/svg/video.svg';
@@ -16,6 +16,8 @@ import { QueryResult } from '~/core/types/serverCoreType';
 import { PostApiModel } from '~/models/posts';
 import { CircularProgress, Divider } from '@mui/material';
 import AppFullPageLoader from '../common/AppFullPageLoader';
+import AppContext from '~/context/appContext';
+import { AppError, ErrorTypeEnum } from '~/core/appError';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -34,21 +36,21 @@ export default function Instagram({}: IInstagram) {
 
     // #region HOOKS --> ///////////////////////////////////////
     const SocialService = useSocialMediaService();
+    const AppCtx = useContext(AppContext);
     // #endregion HOOKS --> ////////////////////////////////////
 
     // #region METHODS --> /////////////////////////////////////
     const getPosts = async () => {
         setIsLoading(true);
-        await SocialService.getPosts(visible)
-            .then((res) => {
-                setPosts((prevState) => {
-                    return [...prevState, ...res.records];
-                });
-            })
-            .finally(() => {
-                setIsLoading(false);
-                setFirstLoading(false);
-            });
+        try {
+            const res = await SocialService.getPosts(visible);
+            setPosts((prevState) => [...prevState, ...res.records]);
+        } catch (error) {
+            AppCtx.setError(new AppError(ErrorTypeEnum.Functional, "un erreur est survenue", "error"))
+        } finally {
+            setIsLoading(false);
+            setFirstLoading(false);
+        }
     };
     const openCloseModal = (post?: string) => {
         setIsOpen(!isOpen);

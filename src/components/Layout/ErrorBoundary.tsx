@@ -1,16 +1,15 @@
 // #region IMPORTS -> /////////////////////////////////////
-import { MuiColorInput } from 'mui-color-input';
-import { useEffect, useState } from 'react';
-import { InputBaseType } from '~/core/types/FormMakerCoreTypes';
-import InputBase from './InputBase';
+import React, { ReactNode, useContext, useEffect } from 'react';
+import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
+import AppContext from '~/context/appContext';
+import Error from '~/pages/Error';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function InputColorField({ disabled, value = '', error, onChange, required, id, size }: IInputColorField) {
+export default function ErrorBoundary({ children }: IErrorBoundary) {
     // #region STATE --> ///////////////////////////////////////
-    const [color, setColor] = useState<string>(value as string);
     // #endregion STATE --> ////////////////////////////////////
 
     // #region HOOKS --> ///////////////////////////////////////
@@ -24,14 +23,31 @@ export default function InputColorField({ disabled, value = '', error, onChange,
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <InputBase required={required} disabled={disabled} id={id} label="Couleur" size={size}>
-            <MuiColorInput disabled={disabled} value={color} sx={{ marginTop: 1.95, backgroundColor: disabled ? '#e8e5e5' : 'transparent', borderRadius: 1 }} onChange={(v) => setColor(v)} error={error} format="hex" /*required={required}*/ />
-            <input id={id} name={id} disabled={disabled} type="hidden" value={color} onChange={onChange} />
-        </InputBase>
+        <ReactErrorBoundary
+            fallback={<Error />}
+            onReset={() => {
+                // Optionally reset any state here
+            }}
+        >
+            <ErrorHandler>{children}</ErrorHandler>
+        </ReactErrorBoundary>
     );
     // #endregion RENDER --> ///////////////////////////////////
 }
 
+function ErrorHandler({ children }) {
+    const AppCtx = useContext(AppContext);
+    useEffect(() => {
+        if (AppCtx.error) {
+            throw AppCtx.error;
+        }
+    }, [AppCtx.error]);
+
+    return children;
+}
+
 // #region IPROPS -->  /////////////////////////////////////
-interface IInputColorField extends InputBaseType {}
-// #endregion IPROPS --> //////////////////////////////////
+interface IErrorBoundary {
+    children: ReactNode;
+}
+// #enderegion IPROPS --> //////////////////////////////////

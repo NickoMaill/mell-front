@@ -1,6 +1,6 @@
 import { SelectChangeEvent, SxProps } from '@mui/material';
 import { DateView } from '@mui/x-date-pickers';
-import { CSSProperties, ChangeEvent } from 'react';
+import { CSSProperties, ChangeEvent, SyntheticEvent } from 'react';
 import { IconNameType } from '~/components/common/AppIcon';
 
 /**
@@ -100,7 +100,8 @@ export enum FormMakerPartEnum {
 export interface InputBaseType {
     label?: string;
     id: string;
-    onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<any> | File) => void;
+    onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<any> | File | SyntheticEvent | unknown) => void;
+    onSelectAutocompleteInput?: (e: any, v: any) => void;
     required?: boolean;
     error?: boolean;
     success?: boolean;

@@ -19,14 +19,6 @@ export default function InputSelectField({ disabled, size, id, value = '', onCha
     // #endregion METHODS --> //////////////////////////////////
 
     // #region USEEFFECT --> ///////////////////////////////////
-    // useEffect(() => {
-    //     if () === -1) {
-    //         setSelectOptions((prevState) => {
-    //             return [{ value: value, label: 'aucun' }, ...prevState];
-    //         });
-    //     }
-    //     console.log(selectOptions);
-    // }, [selectOptions]);
     // #endregion USEEFFECT --> ////////////////////////////////
 
     // #region RENDER --> //////////////////////////////////////

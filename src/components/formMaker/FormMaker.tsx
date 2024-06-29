@@ -23,6 +23,7 @@ import { useSearchParams } from 'react-router-dom';
 import RangeInput from './elements/RangeInput';
 import InputAutoComplete from './elements/InputAutoComplete';
 import moment from 'moment';
+import InputHidden from './elements/InputHidden';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -251,6 +252,8 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
             case 'text':
             case "value":
                 return <InputTextField {...baseProps} key={i} type={element.type} />;
+            case "hidden":
+                return <InputHidden {...baseProps} key={i} />
             case 'checkbox':
                 return <InputCheckBoxField {...baseProps} key={i} options={element.checkboxOptions} />;
             case 'select':
@@ -260,7 +263,7 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
             case 'tokenmultiple':
                 return <InputAutoCompleteMultiple {...baseProps} key={i} options={element.selectOptions} />;
             case 'autocomplete':
-                return <InputAutoComplete {...baseProps} key={i} options={element.selectOptions} />;
+                return <InputAutoComplete {...baseProps} key={i} onSelectAutocompleteInput={element.onSelectAutocompleteInput} options={element.selectOptions} />;
             case 'radio':
                 return <InputRadioField {...baseProps} key={i} options={element.radioOptions} />;
             case 'textarea':
@@ -365,7 +368,6 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
                 let tab = e.target;
                 while (!tab.id.startsWith('Form')) {
                     tab = tab.parentNode;
-                    console.log(tab);
                 }
 
                 showTab(parseInt(tab.id.replace('Form', '')));

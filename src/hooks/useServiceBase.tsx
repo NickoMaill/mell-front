@@ -121,7 +121,6 @@ export default function useServiceBase(): IUseServiceBase {
     };
 
     const gotSession = (): boolean => {
-        console.log( "expires", Session.tokenExpire);
         if (!window.location.pathname.startsWith("/admin")) {
             return true;
         } else if (Session.token && Session.token !== '' && (Session.tokenExpire ?? new Date(Date.now())).getTime() > Date.now()) {

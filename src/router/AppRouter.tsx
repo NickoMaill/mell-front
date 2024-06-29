@@ -1,10 +1,11 @@
 // #region IMPORTS -> /////////////////////////////////////
-import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import navigationResources from '~/resources/navigationResources';
 import AuthMiddleware from './AuthMiddleware';
 import Layout from '~/components/layout/Layout';
-import { useEffect } from 'react';
-import useNavigation from '~/hooks/useNavigation';
+import NotFound from '~/pages/ NotFound';
+import Error from '~/pages/Error';
+import ErrorBoundary from '~/components/layout/ErrorBoundary';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -15,10 +16,18 @@ export default function AppRouter() {
     // #endregion STATE --> ////////////////////////////////////
 
     // #region HOOKS --> ///////////////////////////////////////
+    // #endregion HOOKS --> ////////////////////////////////////
 
-    const router = createBrowserRouter(
-        createRoutesFromElements(
-            <Route>
+    // #region METHODS --> /////////////////////////////////////
+    // #endregion METHODS --> //////////////////////////////////
+
+    // #region USEEFFECT --> ///////////////////////////////////
+    // #endregion USEEFFECT --> ////////////////////////////////
+
+    // #region RENDER --> //////////////////////////////////////
+    return (
+        <ErrorBoundary>
+            <Routes>
                 {navigationResources.routes.map((route, i) => {
                     return (
                         <Route
@@ -41,41 +50,19 @@ export default function AppRouter() {
                         />
                     );
                 })}
-                <Route path="*" element={<p>Aucune page trouvée</p>} />
-            </Route>
-        )
+                <Route
+                    path="*"
+                    element={
+                        <Layout primaryBg>
+                            <NotFound />
+                        </Layout>
+                    }
+                />
+            </Routes>
+        </ErrorBoundary>
     );
-    // #endregion HOOKS --> ////////////////////////////////////
-
-    // #region METHODS --> /////////////////////////////////////
-    // const getAuth = async () => {
-    //     const auth = await SessionService.refreshSession();
-    //     if (!auth) {
-    //         Session.setToken(null);
-    //         window.location.href = 'login';
-    //     } else {
-    //         return;
-    //     }
-    // };
-    // #endregion METHODS --> //////////////////////////////////
-
-    // #region USEEFFECT --> ///////////////////////////////////
-    // #endregion USEEFFECT --> ////////////////////////////////
-
-    // #region RENDER --> //////////////////////////////////////
-    return <RouterProvider router={router} />;
     // #endregion RENDER --> ///////////////////////////////////
 }
 
-// function CustomRoute({ path, element, index = false }: ICustomRouter) {
-//     return <Route path={path} index={index} element={<Layout>{element}</Layout>} />;
-// }
-
 // #region IPROPS -->  /////////////////////////////////////
-// interface IAppRouter {}
-// interface ICustomRouter {
-//     path: string;
-//     element: ReactNode;
-//     index?: boolean;
-// }
 // #endregion IPROPS --> //////////////////////////////////

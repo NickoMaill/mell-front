@@ -1,9 +1,8 @@
 // #region IMPORTS -> /////////////////////////////////////
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Box, IconButton, Paper } from '@mui/material';
 import AppIcon from '~/components/common/AppIcon';
 import { Regular } from '~/components/common/Text';
-import AppAlert from '~/components/common/AppAlert';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -52,9 +51,6 @@ export default function InputImportFile({ typeFile, filesLimit = 1, className, d
     // #endregion METHODS --> //////////////////////////////////
 
     // #region USEEFFECT --> ///////////////////////////////////
-    useEffect(() => {
-        console.log(isDrag);
-    }, [isDrag]);
     // #endregion USEEFFECT --> ////////////////////////////////
 
     // #region RENDER --> //////////////////////////////////////

@@ -9,7 +9,7 @@ import AppIcon from '~/components/common/AppIcon';
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function InputAutoComplete({ sx, style, disabled, required, onChange, error, id, icon, autoComplete, autoCapitalize, label, helpText, errorMessage, size = 3, value, isLoading, success, warning, placeholder, options, showLabel, ssr = false }: IInputAutoComplete) {
+export default function InputAutoComplete({ sx, style, disabled, required, onChange, onSelectAutocompleteInput, error, id, icon, autoComplete, autoCapitalize, label, helpText, errorMessage, size = 3, value, isLoading, success, warning, placeholder, options, showLabel, ssr = false }: IInputAutoComplete) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 
@@ -20,6 +20,9 @@ export default function InputAutoComplete({ sx, style, disabled, required, onCha
     // #endregion METHODS --> //////////////////////////////////
 
     // #region USEEFFECT --> ///////////////////////////////////
+    // useEffect(() => {
+    //     console.log(options);
+    // }, [options])
     // #endregion USEEFFECT --> ////////////////////////////////
 
     // #region RENDER --> //////////////////////////////////////
@@ -28,9 +31,9 @@ export default function InputAutoComplete({ sx, style, disabled, required, onCha
             <Autocomplete
                 freeSolo
                 disabled={disabled}
-                options={options}
+                options={options.map(o => o.label)}
                 defaultValue={value}
-                clearOnBlur
+                onChange={onSelectAutocompleteInput ? (e,v) => onSelectAutocompleteInput(e,v) : null}
                 fullWidth
                 className={error ? 'autocomplete-error' : success ? 'autocomplete-success' : warning ? 'autocomplete-warning' : null}
                 renderInput={(params) => (
@@ -38,9 +41,11 @@ export default function InputAutoComplete({ sx, style, disabled, required, onCha
                         margin="dense"
                         disabled={disabled}
                         variant="outlined"
+                        onChange={onChange}
                         sx={{ backgroundColor: disabled ? '#e8e5e5' : 'transparent', borderRadius: 1 }}
                         {...params}
                         InputProps={{
+                            ...params.InputProps,
                             className: "autocomplete-textfield-override",
                             style: style,
                             startAdornment: icon && (
@@ -48,11 +53,11 @@ export default function InputAutoComplete({ sx, style, disabled, required, onCha
                                     <AppIcon name={icon} />
                                 </InputAdornment>
                             ),
-                            endAdornment: isLoading && (
-                                <Box sx={{ display: 'flex' }}>
-                                    <CircularProgress size={25} />
-                                </Box>
-                            ),
+                            // endAdornment: isLoading && (
+                            //     <Box sx={{ display: 'flex' }}>
+                            //         <CircularProgress size={25} />
+                            //     </Box>
+                            // ),
                             sx: { 
                                 backgroundColor: disabled ? '#e8e5e5' : 'transparent' ,
                             },
@@ -60,7 +65,7 @@ export default function InputAutoComplete({ sx, style, disabled, required, onCha
                     />
                 )}
             />
-            <input type="hidden" id={id as string} name={id as string} value={value as string} onChange={onChange} />
+            <input type="hidden" id={id as string} name={id as string} defaultValue={value as string} />
         </InputBase>
     );
     // #endregion RENDER --> ///////////////////////////////////

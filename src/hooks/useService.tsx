@@ -49,11 +49,6 @@ export default function useService(): IUseServiceApi {
 
         const url = `${apiHost}/${route}`;
         const request = await fetch(url, options);
-        if (request.redirected) {
-            console.log(request.url);
-            // window.location.href = request.url;
-            return;
-        }
         const response = await request.json();
 
         if (response.errorCode) {

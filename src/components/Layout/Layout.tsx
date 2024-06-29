@@ -8,13 +8,14 @@ import appTool from '~/helpers/appTool';
 import useNavigation from '~/hooks/useNavigation';
 import NoAccessLayout from './NoAccessLayout';
 import LandingPic from '../home/LandingPic';
+import stylesResources from '~/resources/stylesResources';
 
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function Layout({ children }: ILayout) {
+export default function Layout({ children, primaryBg = false, error = false }: ILayout) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 
@@ -36,10 +37,10 @@ export default function Layout({ children }: ILayout) {
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <Box className="page-wrapper">
+        <Box sx={{ backgroundColor: primaryBg ? "#ce8b71" : "#ffffff" }} className="page-wrapper">
             <Header />
-            {pathname === '/' && <LandingPic />}
-            <Container id="mainContainer" className='container' component="main">
+            {(pathname === '/' && !error) && <LandingPic />}
+            <Container sx={{ backgroundColor: "transparent" }} id="mainContainer" className='container' component="main">
                 <NoAccessLayout>{children}</NoAccessLayout>
             </Container>
             <Footer />
@@ -51,5 +52,7 @@ export default function Layout({ children }: ILayout) {
 // #region IPROPS -->  /////////////////////////////////////
 interface ILayout {
     children: ReactNode;
+    primaryBg?: boolean;
+    error?: boolean;
 }
 // #endregion IPROPS --> //////////////////////////////////

@@ -20,6 +20,7 @@ export type RouteNameReference = {
     LegalMentions;
     MediaCredits;
     PrivacyPolicy;
+    NotFound;
     //----- ADMIN
     Login;
     Admin;

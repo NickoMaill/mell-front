@@ -19,6 +19,7 @@ import SearchContext, { SearchField, SortField } from './context/searchContext';
 import SessionContext from './context/sessionContext';
 import { UserAccessLevel } from './models/users';
 import configManager from './managers/configManager';
+import { AppError } from './core/appError';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -68,9 +69,12 @@ export default function App() {
     };
 
     const [isNoAccess, setIsNoAccess] = useState<boolean>(false);
+    const [error, setError] = useState<AppError>(null);
     const appValue = {
         isNoAccess,
         setIsNoAccess,
+        error,
+        setError
     };
     // #endregion STATE --> ////////////////////////////////////
 

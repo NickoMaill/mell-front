@@ -61,7 +61,6 @@ export default function Login() {
                 }
             })
             .catch((err: AppError) => {
-                console.log(err);
                 switch (err.code) {
                     case 'invalid_credentials':
                         setMessageError(Resources.translate('login.wrongCredentials'));
@@ -150,8 +149,7 @@ export default function Login() {
             SessionService.refreshSession()
                 .then((res) => {
                     if (res) {
-                        console.log("hello");
-                        Navigation.navigate("Admin");
+                        Navigation.navigateByPath("/admin");
                     }
                 })
                 .catch((err: AppError) => {

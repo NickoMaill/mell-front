@@ -206,7 +206,6 @@ export default function AppTable<T>({ columns, rows, isTableLoading = true, isRo
                     padding: 0,
                 }}
                 rows={!isTableLoading ? rows.records : []}
-                //onCellEditStop={(e) => console.log(e)}
                 columns={mapToGridColDef(columns.colStruct)}
                 rowCount={0}
                 loading={isTableLoading}
@@ -378,7 +377,6 @@ interface ICustomToolBar {
 //#region Pagination
 function Pagination({ currentPage, onPageChange, className, rowsPerPage, totalRows }: IPagination) {
     const apiRef = useGridApiContext();
-    console.log(apiRef.current.getRowsCount());
     //const pageCount = useGridSelector(apiRef, gridPageCountSelector);
     return (
         <MuiPagination

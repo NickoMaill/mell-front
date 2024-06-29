@@ -5,6 +5,7 @@ import { AppError, ErrorTypeEnum } from '~/core/appError';
 import navigationResources from '~/resources/navigationResources';
 import { RecursiveKeyOf } from '~/core/types/custom';
 import { RouteNameReference, RouterDescription } from '~/core/types/route';
+import NotFound from '~/pages/ NotFound';
 
 const urlRegex = /^(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)|http:\/\/localhost:\d+)$/i;
 
@@ -22,18 +23,17 @@ export default function useNavigation(): IUseNavigation {
             const routesData = navigationResources.routes[indexRoute];
             const isParamsCompatible = routesData.path.includes(':');
 
-            if (pathname === routesData.path) {
-                throw new AppError(ErrorTypeEnum.Functional, `navigation guard activate due to duplicate navigation to ${pathname}`, 'duplicate_navigation');
-            }
+            // if (pathname === routesData.path) {
+            //     throw new AppError(ErrorTypeEnum.Functional, `navigation guard activate due to duplicate navigation to ${pathname}`, 'duplicate_navigation');
+            // }
             navigateTo(params && isParamsCompatible ? routesData.path.split(':')[0] + params : routesData.path, replace ? { replace } : null);
-            console.log("nav");
         } else {
             throw new AppError(ErrorTypeEnum.Functional, 'wrong routes', 'wrong_routes');
         }
     };
 
     const navigateByPath = (path: string, replace?: boolean) => {
-        navigateTo(path, replace ? { replace } : null);
+        navigateTo(path, { replace, relative: "path" });
     };
 
     const externalNavigate = (url: string, blank?: boolean) => {
@@ -61,7 +61,8 @@ export default function useNavigation(): IUseNavigation {
         if (route) {
             return route;
         } else {
-            throw new AppError(ErrorTypeEnum.Functional, 'wrong routes', 'wrong_routes');
+            return { name: "NotFound", element: NotFound, path: "*", title: "Ressource introuvable", isAuthRequired: false } as RouterDescription
+            // throw new AppError(ErrorTypeEnum.Functional, 'wrong routes', 'wrong_routes');
         }
     };
 
