@@ -112,5 +112,5 @@ interface IInputImportFile {
 }
 
 export type AllowedFilesInput = FileExtension[];
-export type FileExtension = 'text/csv' | 'text/pdf' | 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' | 'application/xml' | 'application/vnd.ms-excel';
+export type FileExtension = 'text/csv' | 'text/pdf' | 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' | 'application/xml' | 'application/vnd.ms-excel' | "image/jpeg" | "image/webp" | "image/png";
 // #endregion IPROPS --> //////////////////////////////////

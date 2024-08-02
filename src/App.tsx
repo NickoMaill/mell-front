@@ -11,7 +11,7 @@ import moment from 'moment';
 import useStorage from './hooks/useStorage';
 import { LangType } from './core/types/i18nTypes';
 import { SnackbarProvider } from 'notistack';
-import ModalProvider from './components/layout/ModalProvider';
+import ModalProvider from './components/Layout/ModalProvider';
 import AppContext from './context/appContext';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '~/resources/i18n/i18n';
@@ -99,16 +99,16 @@ export default function App() {
             <SessionContext.Provider value={sessionValue}>
                 <SearchContext.Provider value={searchValue}>
                     <AppContext.Provider value={appValue}>
-                        <ModalProvider>
                             <StyledEngineProvider injectFirst>
                                 <ThemeProvider theme={stylesResources.theme}>
                                     <CssBaseline />
                                     <SnackbarProvider>
-                                        <AppRouter />
+                                        <ModalProvider>
+                                            <AppRouter />
+                                        </ModalProvider>
                                     </SnackbarProvider>
                                 </ThemeProvider>
                             </StyledEngineProvider>
-                        </ModalProvider>
                     </AppContext.Provider>
                 </SearchContext.Provider>
             </SessionContext.Provider>

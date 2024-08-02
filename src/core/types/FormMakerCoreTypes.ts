@@ -128,6 +128,7 @@ export interface InputBaseType {
     style?: CSSProperties;
     isLoading?: boolean;
     icon?: IconNameType;
+    containerSx?: SxProps;
 }
 
 export type AutoCompleteType = 'on' | 'off' | 'given-name' | 'family-name' | 'email' | 'address-line1' | 'country' | 'country-name' | 'bday';

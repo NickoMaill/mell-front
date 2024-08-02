@@ -2,7 +2,7 @@
 import { Box, Typography } from '@mui/material';
 import NotFoundPic from "~/assets/pictures/404.png";
 import React from 'react'
-import Layout from '~/components/layout/Layout';
+import Layout from '~/components/Layout/Layout';
 import stylesResources from '~/resources/stylesResources';
 // #endregion IMPORTS -> //////////////////////////////////
 

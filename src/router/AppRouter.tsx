@@ -2,10 +2,10 @@
 import { Route, Routes } from 'react-router-dom';
 import navigationResources from '~/resources/navigationResources';
 import AuthMiddleware from './AuthMiddleware';
-import Layout from '~/components/layout/Layout';
+import Layout from '~/components/Layout/Layout';
 import NotFound from '~/pages/ NotFound';
 import Error from '~/pages/Error';
-import ErrorBoundary from '~/components/layout/ErrorBoundary';
+import ErrorBoundary from '~/components/Layout/ErrorBoundary';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////

@@ -2,7 +2,7 @@
 // #endregion IMPORTS -> //////////////////////////////////
 import { Box, Typography } from "@mui/material";
 import ErrorPic from "~/assets/pictures/500.png";
-import Layout from "~/components/layout/Layout";
+import Layout from "~/components/Layout/Layout";
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 

@@ -10,7 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { Box } from '@mui/material';
-import AppIcon from './AppIcon';
+import AppIcon, { IconNameType } from './AppIcon';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -24,7 +24,7 @@ const Transition = forwardRef(function Transition(
 });
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function AppFullPageModal({ children, modalTitle, isOpen, onClose }: IAppFullPageModal) {
+export default function AppFullPageModal({ children, modalTitle, isOpen, onClose, titleIcon }: IAppFullPageModal) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 
@@ -50,7 +50,7 @@ export default function AppFullPageModal({ children, modalTitle, isOpen, onClose
                             <Typography sx={{ ml: 2, flex: 1, alignItems: 'center', mr: 1 }} variant="h6" component="h6">
                                 {modalTitle}
                             </Typography>
-                            <AppIcon name="Search" />
+                            {titleIcon && <AppIcon name={titleIcon} />}
                         </Box>
                     </Toolbar>
                 </AppBar>
@@ -67,5 +67,6 @@ interface IAppFullPageModal {
     modalTitle: string;
     isOpen: boolean;
     onClose: () => void;
+    titleIcon?: IconNameType;
 }
 // #endregion IPROPS --> //////////////////////////////////

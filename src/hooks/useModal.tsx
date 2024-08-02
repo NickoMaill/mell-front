@@ -16,11 +16,11 @@ export default function useModal(): IUseModal {
     // #endregion HOOKS --> ////////////////////////////////////
 
     // #region METHODS --> /////////////////////////////////////
-    const openModal = (title: string, content: ReactNode, size: Breakpoint = 'sm', scroll: DialogProps['scroll'] = 'body', persistant: boolean = false) => {
+    const openModal = (title: string, content: ReactNode, size: Breakpoint = 'sm', scroll: DialogProps['scroll'] = 'body', persistant: boolean = false, fullPage: boolean = false) => {
         ModalCxt.setContent(content);
         ModalCxt.setTitle(title);
         ModalCxt.setIsOpen(true);
-        ModalCxt.setOptions({ size, scroll, persistant });
+        ModalCxt.setOptions({ size, scroll, persistant, fullPage });
     };
     // #endregion METHODS --> //////////////////////////////////
 
@@ -34,6 +34,6 @@ export default function useModal(): IUseModal {
 
 // #region IPROPS -->  /////////////////////////////////////
 interface IUseModal {
-    openModal: (title: string, content: ReactNode, size?: Breakpoint, scroll?: DialogProps['scroll']) => void;
+    openModal: (title: string, content: ReactNode, size?: Breakpoint, scroll?: DialogProps['scroll'], persistant?: boolean, fullPage?: boolean) => void;
 }
 // #enderegion IPROPS --> //////////////////////////////////

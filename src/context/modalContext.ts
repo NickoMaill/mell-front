@@ -16,13 +16,14 @@ const initialContext: IModalContext = {
     isOpen: false,
     title: '',
     content: null,
-    options: { size: 'md', scroll: 'paper', persistant: false },
+    options: { size: 'md', scroll: 'paper', persistant: false }
 };
 
 export type AppModalProperty = {
     size?: Breakpoint;
     scroll?: DialogProps['scroll'];
     persistant?: boolean;
+    fullPage?: boolean;
 };
 
 const ModalContext = createContext<IModalContext>(initialContext);

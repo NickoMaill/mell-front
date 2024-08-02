@@ -281,7 +281,7 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
             case 'range':
                 return <RangeInput {...baseProps} key={i} />;
             case 'htmlContent':
-                return element.htmlContent;
+                return <Container sx={{ width: "100%" }} key={i}>{element.htmlContent}</Container>;
             case 'file':
                 return (
                     <InputFileField
@@ -316,48 +316,6 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
         const genericAction = params.has('action') ? params.get('action') : '';
 
         if (form && genericAction && (genericAction === 'update' || genericAction === 'new')) {
-            const storeInitialValues = () => {
-                const inputElements = [...form.querySelectorAll('input')];
-                const newInitialValues = {};
-
-                inputElements.forEach((input) => {
-                    if (input.type !== 'button' && (input.type !== 'hidden' || input.hasAttribute('check-change'))) {
-                        if (input.type === 'checkbox') {
-                            newInitialValues[input.id] = input.checked;
-                        } else {
-                            newInitialValues[input.id] = input.value;
-                        }
-                    }
-                });
-
-                setInitialValues(newInitialValues);
-            };
-
-            const compareWithInitialValues = (form) => {
-                const inputElements = [...form.querySelectorAll('input')];
-
-                let hasChanged = false;
-                inputElements.forEach((input) => {
-                    if (input.type !== 'button' && (input.type !== 'hidden' || input.hasAttribute('check-change'))) {
-                        if (input.type === 'checkbox' && input.checked.toString() !== initialValues[input.id].toString()) {
-                            hasChanged = true;
-                            // inputType = input.type;
-                            // oldValue = initialValues[input.id].toString();
-                            // newValue = input.checked.toString();
-                            // inputId = input.id;
-                        } else if (input.type !== 'checkbox' && input.value !== initialValues[input.id]) {
-                            hasChanged = true;
-                            // inputType = input.type;
-                            // oldValue = initialValues[input.id].toString();
-                            // newValue = input.value.toString();
-                            // inputId = input.id;
-                        }
-                    }
-                });
-
-                return hasChanged;
-            };
-
             const showTab = (tabId) => {
                 // Implement your showTab logic here
             };
@@ -371,30 +329,16 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
                 while (!tab.id.startsWith('Form')) {
                     tab = tab.parentNode;
                 }
-
                 showTab(parseInt(tab.id.replace('Form', '')));
             };
 
-            const handleBeforeUnload = (e) => {
-                if (!formSubmitted) {
-                    const hasChanged = compareWithInitialValues(form);
-                    if (hasChanged) {
-                        e.preventDefault();
-                    }
-                }
-            };
-
-            storeInitialValues();
-
             form.addEventListener('submit', handleFormSubmit);
             form.addEventListener('invalid', handleInvalidInput, true);
-            window.addEventListener('beforeunload', handleBeforeUnload);
 
             // Cleanup event listeners when component unmounts
             return () => {
                 form.removeEventListener('submit', handleFormSubmit);
                 form.removeEventListener('invalid', handleInvalidInput, true);
-                window.removeEventListener('beforeunload', handleBeforeUnload);
             };
         }
     }, []);

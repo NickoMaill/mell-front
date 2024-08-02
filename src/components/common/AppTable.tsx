@@ -73,7 +73,7 @@ export type ActionsType = 'view' | 'delete' | 'update';
 //#endregion
 
 //#region Main Function
-export default function AppTable<T>({ sx, columns, rows, isTableLoading = true, isRowsCheckable = false, onSort, rowsPerPage = 50, onPaginationChange, onPageChange, currentPage = 0, actions, onExportClick, entity, onAllRowSelect, isAllRowSelected, onRowSelect }: IAppTable<T>) {
+export default function AppTable<T>({ onRowClick = () => {}, sx, columns, rows, isTableLoading = true, isRowsCheckable = false, onSort, rowsPerPage = 50, onPaginationChange, onPageChange, currentPage = 0, actions, onExportClick, entity, onAllRowSelect = () => {}, isAllRowSelected, onRowSelect = () => {} }: IAppTable<T>) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 
@@ -180,7 +180,7 @@ export default function AppTable<T>({ sx, columns, rows, isTableLoading = true, 
     // #region RENDER --> //////////////////////////////////////
     // minWidth: { xs: '1400px', md: '1600px', lg: '100%' },
     return (
-        <Box sx={[{ mt: 2, overflowX: 'auto', width: "100%" }, isTableLoading || rows.totalRecords === 0 ? { height: 400 } : null]}>
+        <Box sx={{ mt: 2, overflowX: 'auto', width: "100%" }}>
             <DataGrid
                 sx={{
                     '.MuiDataGrid-cell:focus': {
@@ -209,8 +209,9 @@ export default function AppTable<T>({ sx, columns, rows, isTableLoading = true, 
                 rows={!isTableLoading ? rows.records : []}
                 columns={mapToGridColDef(columns.colStruct)}
                 rowCount={0}
+                autoHeight
                 loading={isTableLoading}
-                onRowClick={(e) => (actions.length === 1 && actions[0] === 'view' ? Nav.navigateByPath(`${NavigationResource.routesPath.center}?Table=${entity}&ID=${e.id}&action=view`) : Nav.navigateByPath(`${NavigationResource.routesPath.center}?Table=${entity}&ID=${e.id}&action=update`))}
+                onRowClick={(e) => onRowClick(e)}
                 sortingMode="server"
                 sortingOrder={['asc', 'desc']}
                 onSortModelChange={(e) => {
@@ -242,10 +243,12 @@ export default function AppTable<T>({ sx, columns, rows, isTableLoading = true, 
                     },
                     baseCheckbox: {
                         onClick: (e) => {
-                            if ((e.target as HTMLElement).ariaLabel === 'Select all rows') {
-                                onAllRowSelect(true);
-                            } else {
-                                onAllRowSelect(false);
+                            if (onAllRowSelect) {
+                                if ((e.target as HTMLElement).ariaLabel === 'Select all rows') {
+                                    onAllRowSelect(true);
+                                } else {
+                                    onAllRowSelect(false);
+                                }
                             }
                         },
                     },
@@ -275,6 +278,7 @@ interface IAppTable<T> {
     onExportClick?: () => void;
     onAllRowSelect?: (isAllSelected: boolean) => void;
     onRowSelect?: (ids: GridRowSelectionModel) => void;
+    onRowClick?: (e: GridRowParams<T>) => void;
     isAllRowSelected?: boolean;
     actions?: (ActionsType | CustomActionsDef)[];
     sx?: SxProps;
@@ -313,8 +317,8 @@ function CustomNoRowsOverlay() {
         },
     }));
     return (
-        <StyledGridOverlay>
-            <svg width="120" height="100" viewBox="0 0 184 152" aria-hidden focusable="false">
+        <StyledGridOverlay className='my-3'>
+            <svg width="120" height="70" viewBox="0 0 184 152" aria-hidden focusable="false">
                 <g fill="none" fillRule="evenodd">
                     <g transform="translate(24 31.67)">
                         <ellipse className="ant-empty-img-5" cx="67.797" cy="106.89" rx="67.797" ry="12.668" />

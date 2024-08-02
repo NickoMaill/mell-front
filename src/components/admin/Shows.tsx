@@ -2,16 +2,25 @@
 import AppCenter from '../center/AppCenter';
 import AppTable, { AppTableStructure } from '../common/AppTable';
 import moment from 'moment';
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, FormEventHandler, useEffect, useState } from 'react';
 import { FormMakerContentType, FormMakerPartEnum, SelectOptionsType } from '~/core/types/FormMakerCoreTypes';
 import useMapService from '~/hooks/services/useMapService';
 import { MapType } from '~/models/map';
-import { ShowApiModel, ShowPayloadType } from '~/models/shows';
-import { Regular } from '../common/Text';
-import AppBasicTable from '../common/AppBasicTable';
-import { GridColDef } from '@mui/x-data-grid';
+import { ShowApiModel } from '~/models/shows';
 import { QueryResult } from '~/core/types/serverCoreType';
-import { Box } from '@mui/material';
+import { Box, Button, Container, Grid, IconButton, Link, Paper, Typography } from '@mui/material';
+import { Bold, Italic } from '../common/Text';
+import AppFullPageModal from '../common/AppFullPageModal';
+import ImagePlaceHolder from '~/assets/pictures/image_placeholder.webp';
+import { MuiFileInput } from 'mui-file-input';
+import AppIcon from '../common/AppIcon';
+import { Media, MediaGroupEnum, MediaPayloadType, MediaStatus } from '~/models/medias';
+import InputSelectField from '../formMaker/elements/InputSelectField';
+import InputBase from '../formMaker/elements/InputBase';
+import useNotification from '~/hooks/useNotification';
+import { AppError, ErrorTypeEnum } from '~/core/appError';
+import useModal from '~/hooks/useModal';
+import useMediasService from '~/hooks/services/useMediasService';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -122,9 +131,6 @@ export default function Shows({ id, action }) {
                             size: 12,
                             icon: 'Title',
                             required: true,
-                            onChange(e) {
-                                console.log(e);
-                            },
                         },
                         {
                             id: 'place',
@@ -147,7 +153,6 @@ export default function Shows({ id, action }) {
                                 searchAddress(e);
                             },
                             onSelectAutocompleteInput(e, v) {
-                                console.log('values', v);
                                 onSelect(v.value);
                             },
                             selectOptions: options,
@@ -280,7 +285,7 @@ export default function Shows({ id, action }) {
                             id: 'picImport',
                             index: 1,
                             type: 'htmlContent',
-                            htmlContent: <PicturesImport id={id} />,
+                            htmlContent: <PicturesImport showId={id} />,
                         },
                     ],
                 },
@@ -359,12 +364,24 @@ export default function Shows({ id, action }) {
     // #endregion RENDER --> ///////////////////////////////////
 }
 
-function PicturesImport({ id }) {
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [rows, setRows] = useState<QueryResult<any>>({ totalRecords: 0, records: [], offset: 0, limit: 5 });
+function PicturesImport({ showId }: IPicturesImport) {
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [rows, setRows] = useState<QueryResult<Media>>({ totalRecords: 0, records: [], offset: 0, limit: 5 });
     const [currentPage, setCurrentPage] = useState<number>(1);
 
-    const fetchPhotos = () => {};
+    const Modal = useModal();
+    const MediaService = useMediasService();
+
+    const handleCloseOpen = (id?: number) => {
+        Modal.openModal("Ajouter un visuel", <PhotoForm showId={showId} id={id} />, "sm", "body", false, true);
+    };
+
+    const fetchPhotos = async () => {
+        setIsLoading(true);
+        await MediaService.getShowPic(showId)
+        .then((res) => setRows(res))
+        .finally(() => setIsLoading(false));
+    };
     const header: AppTableStructure<any, any> = {
         colStruct: [
             { headerField: 'id', headerLabel: 'ID', width: 90, type: 'number', sortable: false },
@@ -373,17 +390,19 @@ function PicturesImport({ id }) {
             { headerField: 'addedAt', headerLabel: 'Ajouté le', type: 'date', sortable: false },
         ],
     };
+
     useEffect(() => {
         fetchPhotos();
     }, []);
 
     return (
-        <Box sx={{ width: "100%", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', flexGrow: 1, alignItems: 'center' }}>
             <AppTable
                 entity="Medias"
                 // actions={props.listStruct.actions}
                 // onSort={(e) => setSort(e)}
                 // onPaginationChange={handleRowsPerPage}
+                
                 onPageChange={(e) => setCurrentPage(e)}
                 currentPage={currentPage}
                 rowsPerPage={5}
@@ -391,8 +410,158 @@ function PicturesImport({ id }) {
                 columns={header}
                 isTableLoading={isLoading}
                 onExportClick={() => null}
-                sx={{ width: "100%" }}
+                onRowClick={(e) => handleCloseOpen(e.row.id)}
+                
             />
-        </Box>
+            <Link component="a" onClick={() => handleCloseOpen()} role={'button'} sx={{ mt: 2, cursor: 'pointer' }}>
+                <Bold>Ajouter visuel</Bold>
+            </Link>
+            {/* <AppFullPageModal modalTitle="Ajouter un visuel" isOpen={isModalOpen} onClose={handleCloseOpen}>
+                <PhotoForm />
+            </AppFullPageModal> */}
+        </Container>
+    );
+}
+
+interface IPicturesImport {
+    showId: number;
+    id?: number;
+}
+
+function PhotoForm({ showId, id }: IPicturesImport) {
+    const [imageSrc, setImageSrc] = useState<string>(ImagePlaceHolder);
+    const [imageValue, setImageValue] = useState<File>(null);
+    const [isError, setIsError] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>(null);
+    const [isMain, setIsMain] = useState<boolean>(false);
+
+    const Notification = useNotification();
+    const MediaService = useMediasService();
+
+    const typeSelOptions: SelectOptionsType[] = [
+        { value: true, label: "Oui" },
+        { value: false, label: "Non" },
+    ]
+    const types = ["image/png", "image/jpg", "image/webp"];
+
+    const handleChangeInput = (e: File) => {
+        if (!types.includes(e.type.toLowerCase())) {
+            setIsError(true);
+            setErrorMessage("Votre fichier doit être au format .jpg, .jpeg, .png, ou .webp");
+        } else if (e.size > 2000000) {
+            setIsError(true);
+            setErrorMessage("Votre fichier doit faire moins de 2mo");
+        } else {
+            setImageValue(e);
+            setIsError(false);
+            setErrorMessage(null);
+        } 
+    };
+
+    const fetchVisu = async () => {
+        if (id) {
+            await MediaService.getPic(id)
+            .then(res => {
+                setImageSrc(res.records[0].url);
+                setIsMain(res.records[0].isMain);
+            })
+        }
+    }
+
+    const monitorImage = () => {
+        if (imageValue) {
+            const src = URL.createObjectURL(imageValue);
+            setImageSrc(src);
+        } else {
+            setImageSrc(ImagePlaceHolder);
+        }
+    };
+
+    const deleteImg = () => {
+        setImageValue(null);
+    };
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (isError || imageValue === null) {
+            Notification.error("Veuillez fournir une image valide pour continuer");
+            setIsError(true);
+            throw new AppError(ErrorTypeEnum.Functional, "Veuillez fournir une image valide pour continuer", "invalid_file");
+        }
+
+        const payload: MediaPayloadType = {
+            type: "image",
+            isVideo: false, 
+            status: MediaStatus.SHOWS,
+            sortOrder: 1,
+            mediaGroupId: showId,
+            mediaGroup: MediaGroupEnum.SHOWS,
+            name: ""
+        }
+        const form = new FormData(e.currentTarget);
+
+        for (const p in payload) {
+            form.append(p, payload[p])
+        }
+        await MediaService.addPic(form);
+    }
+
+    useEffect(() => {
+        monitorImage();
+        return () => {
+            if (imageSrc) {
+                URL.revokeObjectURL(imageSrc);
+            }
+        };
+    }, [imageValue]);
+
+    useEffect(() => {
+        fetchVisu();
+    }, []);
+
+    return (
+        <Container sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', position: "relative", height: "80vh" }}>
+            <Grid container spacing={2} alignItems="center" sx={{ margin: "auto" }}>
+                {/* Input Column */}
+                <Grid item lg={6}>
+                        <Container onSubmit={handleSubmit} component={"form"} id="visualForm" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: "column", width: "fit-content" }}>
+                            <InputSelectField value={isMain} size={12} sx={{ width: "100%" }} required options={typeSelOptions} label='Visuel principal ?' helpText='Si "Oui", ce visuel sera utilisé en tant que visuel de couverture' id='isMain' />
+                                <InputBase error={isError} errorMessage={errorMessage} id='pic' label='Importer votre visuel' size={12} helpText="pour importer votre visuel cliquez sur le champs ci-dessous">
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                        <MuiFileInput
+                                            value={imageValue}
+                                            onChange={handleChangeInput}
+                                            id="pic"
+                                            name='file'
+                                            multiple={false}
+                                            variant="outlined"
+                                            error={isError}
+                                            InputProps={{
+                                                inputProps: {
+                                                    accept: 'image/*',
+                                                },
+                                                startAdornment: <AppIcon name="AttachFile" />,
+                                            }}
+                                        />
+                                        {imageValue && (
+                                            <IconButton onClick={deleteImg} sx={{ marginLeft: 1 }}>
+                                                <AppIcon name="Close" />
+                                            </IconButton>
+                                        )}
+                                    </Box>
+                                </InputBase>
+                                <Italic fontSize={12} marginTop={2} textAlign="center">Votre visuel doit faire moins de 2mo<br/>Privilégiez le format <b>.webp</b> (optimisé pour le web),<br/> voici une <Link component="a" title="lien vers Online Image Tool" target='_blank' rel="noreferrer" href='https://www.onlineimagetool.com/fr/convert-png-jpg-webp-gif'>plateforme</Link> qui vous aidera convertir vos fichier</Italic>
+                            <Button type="submit" variant="contained" sx={{ marginTop: 2 }}>Enregistrer la photo</Button>
+                        </Container>
+                </Grid>
+
+                {/* Image Display Column */}
+                <Grid item lg={6}>
+                    <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Paper sx={{ width: 'fit-content' }}>{imageSrc && <Box component="img" src={imageSrc} alt="Selected" sx={{ maxWidth: '100%', maxHeight: '100%' }} />}</Paper>
+                    </Container>
+                </Grid>
+            </Grid>
+        </Container>
     );
 }

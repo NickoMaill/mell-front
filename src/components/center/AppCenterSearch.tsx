@@ -107,7 +107,7 @@ export default function AppCenterSearch<T>({ searchFormStruct, onSubmitSearchFor
                 )}
             </Box>
             {searchFormStruct && (
-                <AppFullPageModal modalTitle={`${Resources.translate('common.search')} ${grammar.plural}`} isOpen={isSearchFormVisible} onClose={() => openCloseModal(true)}>
+                <AppFullPageModal titleIcon="Search" modalTitle={`${Resources.translate('common.search')} ${grammar.plural}`} isOpen={isSearchFormVisible} onClose={() => openCloseModal(true)}>
                     <Box width={'100%'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
                         <Box width={{ md: '50%', xs: '100%' }}>
                             <FormMaker<T> grammar={grammar.plural} action={GenericActionEnum.TABLE} outputType="JSON" data={Search.filters && !isNew ? mapSearchFieldToObject() : null} structure={searchFormStruct} onBackPress={() => openCloseModal(true)} onSubmit={onSubmit} />

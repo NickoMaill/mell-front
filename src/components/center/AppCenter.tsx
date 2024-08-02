@@ -417,6 +417,7 @@ export default function AppCenter<T>(props: ICenter<T>) {
                     onAllRowSelect={(e) => updateIs('isAllRowSelected', e)}
                     onRowSelect={(e) => setBulkSelection(e)}
                     onExportClick={() => null}
+                    onRowClick={(e) => (props.listStruct.actions.length === 1 && props.listStruct.actions[0] === 'view' ? Nav.navigateByPath(`${NavigationResource.routesPath.center}?Table=${props.entity}&ID=${e.id}&action=view`) : Nav.navigateByPath(`${NavigationResource.routesPath.center}?Table=${props.entity}&ID=${e.id}&action=update`))}
                 />
             </CenterBase>
         );

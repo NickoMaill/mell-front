@@ -2,8 +2,8 @@
 import { ReactNode, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { Box, Container } from '@mui/material';
-import Header from '~/components/layout/Header';
-import Footer from '~/components/layout/Footer';
+import Header from '~/components/Layout/Header';
+import Footer from '~/components/Layout/Footer';
 import appTool from '~/helpers/appTool';
 import useNavigation from '~/hooks/useNavigation';
 import NoAccessLayout from './NoAccessLayout';

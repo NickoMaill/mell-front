@@ -20,9 +20,6 @@ export default function InputAutoComplete({ sx, style, disabled, required, onCha
     // #endregion METHODS --> //////////////////////////////////
 
     // #region USEEFFECT --> ///////////////////////////////////
-    useEffect(() => {
-        console.log(options);
-    }, [options])
     // #endregion USEEFFECT --> ////////////////////////////////
 
     // #region RENDER --> //////////////////////////////////////

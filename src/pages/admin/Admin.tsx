@@ -1,7 +1,7 @@
 // #region IMPORTS -> /////////////////////////////////////
 import { Box } from '@mui/material';
 import AppMiniCard from '~/components/common/AppMiniCard';
-import AdminLayout from '~/components/layout/AdminLayout';
+import AdminLayout from '~/components/Layout/AdminLayout';
 import NavigationResource from '~/resources/navigationResources';
 // #endregion IMPORTS -> //////////////////////////////////
 

@@ -8,7 +8,7 @@ import AppIcon from '~/components/common/AppIcon';
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function InputSelectField({ disabled, size, id, value = '', onChange, required, error, options, helpText, label, errorMessage, icon, isLoading, success, warning }: IInputSelectField) {
+export default function InputSelectField({ disabled, size, id, value = '', onChange, required, error, options, helpText, label, errorMessage, icon, isLoading, success, warning, sx }: IInputSelectField) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 
@@ -23,7 +23,7 @@ export default function InputSelectField({ disabled, size, id, value = '', onCha
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <InputBase size={size} disabled={disabled} id={id} helpText={helpText} label={label} error={error} errorMessage={errorMessage}>
+        <InputBase sx={sx} size={size} disabled={disabled} id={id} helpText={helpText} label={label} error={error} errorMessage={errorMessage}>
             {options && options.length > 0 ? (
                 <Select
                     disabled={disabled}

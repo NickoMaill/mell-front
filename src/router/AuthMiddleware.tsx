@@ -35,7 +35,6 @@ export default function AuthMiddleware({ children }: IAuthMiddleware) {
             });
             if (!auth) {
                 Session.setToken(null);
-                console.log("no auth");
                 Navigation.navigate('Login', `?target=${window.location.pathname}`);
             } else {
                 setIsLoading(false);
