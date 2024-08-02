@@ -53,6 +53,7 @@ export default function useService(): IUseServiceApi {
 
         if (response.errorCode) {
             //Modal.openModal('Erreur', <StandardError error={response} />);
+            console.log(response.errorCode);
             throw new AppError(ErrorTypeEnum.Functional, response.message, response.errorCode);
         }
 

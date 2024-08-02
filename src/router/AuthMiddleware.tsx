@@ -35,8 +35,8 @@ export default function AuthMiddleware({ children }: IAuthMiddleware) {
             });
             if (!auth) {
                 Session.setToken(null);
-                Navigation.navigate('Login', `?target=${window.location.href}`);
-                // window.location.href = configManager.getConfig.APP_BASEURL + "/admin/login"
+                console.log("no auth");
+                Navigation.navigate('Login', `?target=${window.location.pathname}`);
             } else {
                 setIsLoading(false);
             }

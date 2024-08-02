@@ -20,9 +20,9 @@ export default function InputAutoComplete({ sx, style, disabled, required, onCha
     // #endregion METHODS --> //////////////////////////////////
 
     // #region USEEFFECT --> ///////////////////////////////////
-    // useEffect(() => {
-    //     console.log(options);
-    // }, [options])
+    useEffect(() => {
+        console.log(options);
+    }, [options])
     // #endregion USEEFFECT --> ////////////////////////////////
 
     // #region RENDER --> //////////////////////////////////////
@@ -31,7 +31,7 @@ export default function InputAutoComplete({ sx, style, disabled, required, onCha
             <Autocomplete
                 freeSolo
                 disabled={disabled}
-                options={options.map(o => o.label)}
+                options={options}
                 defaultValue={value}
                 onChange={onSelectAutocompleteInput ? (e,v) => onSelectAutocompleteInput(e,v) : null}
                 fullWidth

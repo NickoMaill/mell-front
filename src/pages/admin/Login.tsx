@@ -86,58 +86,6 @@ export default function Login() {
             })
             .finally(() => setIsLoading(false));
     };
-
-    // const handleSubmitOtp = async (value: string) => {
-    //     const form = new FormData();
-    //     form.append('otp', value);
-    //     setIsLoading(true);
-    //     await SessionService.loginOpt(form)
-    //         .then((res) => {
-    //             if (res) {
-    //                 setIsError(false);
-    //                 setMessageError(null);
-    //                 if (params.has('target')) {
-    //                     Navigation.navigateByPath(params.get('target'));
-    //                 } else {
-    //                     Navigation.goToHomePage();
-    //                 }
-    //             } else {
-    //                 setIsError(true);
-    //                 setShowAlert(true);
-    //                 setMessageError('code invalide');
-    //             }
-    //         })
-    //         .catch((err: AppError) => {
-    //             setIsError(true);
-    //             switch (err.code) {
-    //                 case 'session_expired':
-    //                     setMfaMode(false);
-    //                     setIsError(false);
-    //                     setShowAlert(true);
-    //                     setMessageError(Resources.translate('login.expiredSession'));
-    //                     break;
-    //                 case 'expired_otp':
-    //                     setShowAlert(true);
-    //                     setMessageError(Resources.translate('login.expiredMfa'));
-    //                     break;
-    //             }
-    //         })
-    //         .finally(() => setIsLoading(false));
-    // };
-
-    // const onResendMfa = async () => {
-    //     SessionService.requestOtp();
-    //     let i = 0;
-    //     setResendCount(i);
-    //     const timer = setInterval(() => {
-    //         if (i === 11) {
-    //             clearInterval(timer);
-    //         } else {
-    //             i++;
-    //             setResendCount(i);
-    //         }
-    //     }, 1000);
-    // };
     // #endregion METHODS --> //////////////////////////////////
 
     // #region USEEFFECT --> ///////////////////////////////////
@@ -160,9 +108,6 @@ export default function Login() {
     }, []);
 
     useEffect(() => {
-        // if (mfaMode) {
-        //     setTitle(Resources.translate('login.MfaTitle'));
-        // } else 
         if (resetMode) {
             setTitle(Resources.translate('login.resetTitle'));
         } else {

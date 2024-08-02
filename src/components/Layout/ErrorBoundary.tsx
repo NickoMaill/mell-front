@@ -13,6 +13,7 @@ export default function ErrorBoundary({ children }: IErrorBoundary) {
     // #endregion STATE --> ////////////////////////////////////
 
     // #region HOOKS --> ///////////////////////////////////////
+    const AppCtx = useContext(AppContext);
     // #endregion HOOKS --> ////////////////////////////////////
 
     // #region METHODS --> /////////////////////////////////////
@@ -23,12 +24,7 @@ export default function ErrorBoundary({ children }: IErrorBoundary) {
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <ReactErrorBoundary
-            fallback={<Error />}
-            onReset={() => {
-                // Optionally reset any state here
-            }}
-        >
+        <ReactErrorBoundary fallback={<Error />} onReset={() => AppCtx.setError(null)}>
             <ErrorHandler>{children}</ErrorHandler>
         </ReactErrorBoundary>
     );

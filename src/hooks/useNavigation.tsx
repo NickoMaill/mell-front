@@ -1,6 +1,6 @@
 import { ParsedUrlQuery } from 'querystring';
 import { useState } from 'react';
-import { Location, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Location, Path, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { AppError, ErrorTypeEnum } from '~/core/appError';
 import navigationResources from '~/resources/navigationResources';
 import { RecursiveKeyOf } from '~/core/types/custom';
@@ -26,7 +26,9 @@ export default function useNavigation(): IUseNavigation {
             // if (pathname === routesData.path) {
             //     throw new AppError(ErrorTypeEnum.Functional, `navigation guard activate due to duplicate navigation to ${pathname}`, 'duplicate_navigation');
             // }
-            navigateTo(params && isParamsCompatible ? routesData.path.split(':')[0] + params : routesData.path, replace ? { replace } : null);
+            //const route: Path = params && isParamsCompatible ? routesData.path.split(':')[0] + params : routesData.path;
+            const route: Path = { pathname: routesData.path, search: params, hash: null }
+            navigateTo(route, { replace: replace, relative: "path" });
         } else {
             throw new AppError(ErrorTypeEnum.Functional, 'wrong routes', 'wrong_routes');
         }

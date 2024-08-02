@@ -73,7 +73,7 @@ export type ActionsType = 'view' | 'delete' | 'update';
 //#endregion
 
 //#region Main Function
-export default function AppTable<T>({ columns, rows, isTableLoading = true, isRowsCheckable = false, onSort, rowsPerPage = 50, onPaginationChange, onPageChange, currentPage = 0, actions, onExportClick, entity, onAllRowSelect, isAllRowSelected, onRowSelect }: IAppTable<T>) {
+export default function AppTable<T>({ sx, columns, rows, isTableLoading = true, isRowsCheckable = false, onSort, rowsPerPage = 50, onPaginationChange, onPageChange, currentPage = 0, actions, onExportClick, entity, onAllRowSelect, isAllRowSelected, onRowSelect }: IAppTable<T>) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 
@@ -180,7 +180,7 @@ export default function AppTable<T>({ columns, rows, isTableLoading = true, isRo
     // #region RENDER --> //////////////////////////////////////
     // minWidth: { xs: '1400px', md: '1600px', lg: '100%' },
     return (
-        <Box sx={[{ mt: 2, overflowX: 'auto' }, isTableLoading || rows.totalRecords === 0 ? { height: 400 } : null]}>
+        <Box sx={[{ mt: 2, overflowX: 'auto', width: "100%" }, isTableLoading || rows.totalRecords === 0 ? { height: 400 } : null]}>
             <DataGrid
                 sx={{
                     '.MuiDataGrid-cell:focus': {
@@ -204,6 +204,7 @@ export default function AppTable<T>({ columns, rows, isTableLoading = true, isRo
                         overflow: 'auto',
                     },
                     padding: 0,
+                    ...sx
                 }}
                 rows={!isTableLoading ? rows.records : []}
                 columns={mapToGridColDef(columns.colStruct)}
@@ -276,6 +277,7 @@ interface IAppTable<T> {
     onRowSelect?: (ids: GridRowSelectionModel) => void;
     isAllRowSelected?: boolean;
     actions?: (ActionsType | CustomActionsDef)[];
+    sx?: SxProps;
 }
 
 export type CustomActionsDef = {

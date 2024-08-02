@@ -71,7 +71,11 @@ export type FormMakerContentType<T extends FormMakerPartEnum> = {
     /**
      * @description icon of the panel
      */
-    icon?: T extends FormMakerPartEnum.PANEL ? IconNameType : null;
+    icon?: IconNameType;
+     /**
+     * @description hide content or not
+     */
+    hide?: boolean;
 };
 
 export interface IFormMakerPanel {
@@ -79,6 +83,10 @@ export interface IFormMakerPanel {
      * @description title of FormMaker Panel
      */
     title: string;
+    /**
+     * @description icon of the title
+     */
+    icon?: IconNameType;
     /**
      * @description content of FormMaker Panel
      */
@@ -124,7 +132,7 @@ export interface InputBaseType {
 
 export type AutoCompleteType = 'on' | 'off' | 'given-name' | 'family-name' | 'email' | 'address-line1' | 'country' | 'country-name' | 'bday';
 export type AutoCapitalizeType = 'off' | 'on' | 'words' | 'characters';
-export type InputType = 'button' | 'email' | 'hidden' | 'number' | 'password' | 'reset' | 'search' | 'tel' | 'text' | 'url' | 'select' | 'checkbox' | 'radio' | 'tokenmultiple' | 'autocomplete' | 'textarea' | 'date' | 'color' | 'switch' | 'htmlContent' | 'file' | 'range' | 'value' | "dateTime";
+export type InputType = 'button' | 'email' | 'hidden' | 'number' | 'password' | 'reset' | 'search' | 'tel' | 'text' | 'url' | 'select' | 'checkbox' | 'radio' | 'tokenmultiple' | 'autocomplete' | 'textarea' | 'date' | 'color' | 'switch' | 'htmlContent' | 'file' | 'range' | 'value' | "dateTime" | "time";
 export type InputModeType = 'decimal' | 'email' | 'search' | 'tel' | 'text' | 'url' | 'none' | 'numeric';
 
 export type SelectOptionsType = {

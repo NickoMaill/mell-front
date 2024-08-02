@@ -21,11 +21,13 @@
         "start": "serve -l 3001 -s dist"
     },
     "dependencies": {
+        "@date-io/moment": "^3.0.0",
         "@emotion/react": "^11.11.4",
         "@emotion/styled": "^11.11.5",
         "@fontsource/roboto": "^5.0.13",
         "@geoapify/geocoder-autocomplete": "^2.0.1",
         "@geoapify/react-geocoder-autocomplete": "^2.0.0",
+        "@material-ui/pickers": "^3.3.11",
         "@mkyy/mui-search-bar": "^0.5.2",
         "@mui/icons-material": "^5.15.18",
         "@mui/lab": "^5.0.0-alpha.170",

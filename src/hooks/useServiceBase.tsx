@@ -30,7 +30,7 @@ export default function useServiceBase(): IUseServiceBase {
      * @returns
      */
     const asServicePromise = async <T,>(request: Promise<T>) => {
-        if (!gotSession()) await refreshSession();
+        //if (!gotSession()) await refreshSession();
         return await request.then(
             (apiResponse) => Promise.resolve<T>(apiResponse),
             (error) => reject<T>(error as unknown)

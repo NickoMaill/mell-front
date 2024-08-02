@@ -1,7 +1,8 @@
 // #region IMPORTS -> /////////////////////////////////////
-import React from 'react'
+import React, { useEffect } from 'react'
 import { IFormMakerInput, InputBaseType } from '~/core/types/FormMakerCoreTypes';
 import InputBase from './InputBase';
+import { Input } from '@mui/material';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -18,11 +19,13 @@ export default function InputHidden ({ sx, style, disabled, required, onChange, 
     // #endregion METHODS --> //////////////////////////////////
 
     // #region USEEFFECT --> ///////////////////////////////////
+    useEffect(() => {}, [value]);
     // #endregion USEEFFECT --> ////////////////////////////////
 
     // #region RENDER --> //////////////////////////////////////
     return (
-            <input type="hidden" onChange={onChange} defaultValue={value as string | number} />
+        //<input type="hidden" id={id} name={id} onChange={onChange} defaultValue={value as string | number} />
+        <Input type="hidden" id={id} name={id} onChange={onChange} defaultValue={value} />
     );
     // #endregion RENDER --> ///////////////////////////////////
 }

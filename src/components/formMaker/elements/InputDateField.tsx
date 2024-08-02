@@ -1,10 +1,12 @@
 // #region IMPORTS -> /////////////////////////////////////
 import { InputBaseType } from '~/core/types/FormMakerCoreTypes';
 import InputBase from './InputBase';
-import { DatePicker, DateTimePicker, DateView, LocalizationProvider } from '@mui/x-date-pickers';
+import { DatePicker, DateTimePicker, DateView, LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
+import { deDE } from '@mui/x-date-pickers/locales';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { useState } from 'react';
 import moment from 'moment';
+import 'moment/locale/de';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -19,6 +21,7 @@ export default function InputDateField({ id, label, disabled, required, format =
     // #endregion HOOKS --> ////////////////////////////////////
 
     // #region METHODS --> /////////////////////////////////////
+    moment.locale('de');
     // #endregion METHODS --> //////////////////////////////////
 
     // #region USEEFFECT --> ///////////////////////////////////
@@ -26,16 +29,18 @@ export default function InputDateField({ id, label, disabled, required, format =
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={"fr"}>
-            <InputBase size={size} id={id} label={label} disabled={disabled} helpText={helpText} error={error} errorMessage={errorMessage} required={required}>
+        <InputBase size={size} id={id} label={label} disabled={disabled} helpText={helpText} error={error} errorMessage={errorMessage} required={required}>
+            <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={'de'} localeText={deDE.components.MuiLocalizationProvider.defaultProps.localeText}>
                 {mode === 'date' ? (
                     <DatePicker slotProps={{ textField: { required: required } }} defaultValue={!date ? null : moment(date)} onChange={(e) => setDate(moment(e).format('YYYY-MM-DD'))} openTo={openTo} format={format} views={views} />
-                ) : (
+                ) : mode === 'dateTime' ? (
                     <DateTimePicker slotProps={{ textField: { required: required } }} defaultValue={!date ? null : moment(date)} onChange={(e) => setDate(moment(e).format('YYYY-MM-DD hh:mm:ss'))} format="DD/MM/YYYY hh:mm:ss" />
+                ) : (
+                    <TimePicker />
                 )}
                 <input type="hidden" id={id} name={id} value={date ? date : ''} onChange={onChange} />
-            </InputBase>
-        </LocalizationProvider>
+            </LocalizationProvider>
+        </InputBase>
     );
     // #endregion RENDER --> ///////////////////////////////////
 }
@@ -45,6 +50,6 @@ interface IInputDateField extends InputBaseType {
     format?: string;
     views?: DateView[];
     openTo?: DateView;
-    mode?: 'date' | 'time';
+    mode?: 'date' | 'dateTime' | 'time';
 }
 // #endregion IPROPS --> //////////////////////////////////

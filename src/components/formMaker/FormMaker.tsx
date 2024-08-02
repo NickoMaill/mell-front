@@ -1,5 +1,5 @@
 // #region IMPORTS -> /////////////////////////////////////
-import { Box, Button, Container } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { FormEvent, useEffect, useState } from 'react';
 import InputSubmit from './elements/InputSubmit';
 import { FormMakerContentType, FormMakerPartEnum, IFormMakerInput, IFormMakerPanel, InputBaseType } from '~/core/types/FormMakerCoreTypes';
@@ -16,14 +16,14 @@ import InputTextAreaField from './elements/InputTextAreaField';
 import InputDateField from './elements/InputDateField';
 import InputColorField from './elements/InputColorField';
 import InputSwitchField from './elements/InputSwitchField';
+import InputHidden from './elements/InputHidden';
+import InputAutoComplete from './elements/InputAutoComplete';
+import RangeInput from './elements/RangeInput';
+import InputFileField from './elements/InputFileField';
 import { AppError, ErrorTypeEnum } from '~/core/appError';
 import appTool from '~/helpers/appTool';
-import InputFileField from './elements/InputFileField';
 import { useSearchParams } from 'react-router-dom';
-import RangeInput from './elements/RangeInput';
-import InputAutoComplete from './elements/InputAutoComplete';
 import moment from 'moment';
-import InputHidden from './elements/InputHidden';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -71,7 +71,7 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
             const tabGlobalContent: JSX.Element[][] = [];
             let tabContent: JSX.Element[] = [];
 
-            structure.forEach((tab: FormMakerContentType<FormMakerPartEnum>) => {
+            structure.filter(s => !s.hide).forEach((tab: FormMakerContentType<FormMakerPartEnum>) => {
                 tabTitles.push(tab.title);
                 tab.content.forEach((panel, i) => {
                     tabContent.push(buildPanelContent(panel, i));
@@ -82,7 +82,7 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
 
             return <TabsView tabTitles={tabTitles} content={tabGlobalContent} />;
         } else {
-            return <>{structure.map((s, i) => buildPanelContent(s, i))}</>;
+            return <>{structure.filter(s => !s.hide).map((s, i) => buildPanelContent(s, i))}</>;
         }
     };
 
@@ -195,7 +195,7 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
             label: element.label,
             required: element.required,
             disabled: element.disabled,
-            value: data ? data[element.id] : element.value ? element.value : null,
+            value: element.value ? element.value : data ? data[element.id] : null,
             errorMessage: element.errorMessage,
             error: focusOnError.includes(element.id.toLowerCase()) || element.error,
             isLoading: element.isLoading,
@@ -271,6 +271,8 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
             case 'date':
                 return <InputDateField {...baseProps} key={i} format={element.dateFormat} views={element.dateViews} openTo={element.dateOpenTo} />;
             case "dateTime":
+                return <InputDateField {...baseProps} key={i} mode="dateTime" format={element.dateFormat} views={element.dateViews} openTo={element.dateOpenTo} />;
+            case "time":
                 return <InputDateField {...baseProps} key={i} mode="time" format={element.dateFormat} views={element.dateViews} openTo={element.dateOpenTo} />;
             case 'color':
                 return <InputColorField {...baseProps} key={i} />;
@@ -395,8 +397,7 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
                 window.removeEventListener('beforeunload', handleBeforeUnload);
             };
         }
-    }, []); // Empty dependency array to ensure the effect runs only once on component mount
-
+    }, []);
     // #endregion USEEFFECT --> ////////////////////////////////
 
     // #region RENDER --> //////////////////////////////////////
