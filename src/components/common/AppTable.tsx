@@ -73,7 +73,7 @@ export type ActionsType = 'view' | 'delete' | 'update';
 //#endregion
 
 //#region Main Function
-export default function AppTable<T>({ onRowClick = () => {}, sx, columns, rows, isTableLoading = true, isRowsCheckable = false, onSort, rowsPerPage = 50, onPaginationChange, onPageChange, currentPage = 0, actions, onExportClick, entity, onAllRowSelect = () => {}, isAllRowSelected, onRowSelect = () => {} }: IAppTable<T>) {
+export default function AppTable<T>({ onRowClick = () => {}, sx, columns, rows, isTableLoading = true, isRowsCheckable = false, onSort, rowsPerPage = 50, onPaginationChange, onPageChange, currentPage = 0, actions, onExportClick, entity, onAllRowSelect = () => {}, isAllRowSelected, onRowSelect = null }: IAppTable<T>) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 
@@ -257,7 +257,8 @@ export default function AppTable<T>({ onRowClick = () => {}, sx, columns, rows, 
                 pageSizeOptions={[5, 10, 25, 50]}
                 onPaginationModelChange={onPaginationChange}
                 checkboxSelection={isRowsCheckable}
-                onRowSelectionModelChange={(e) => onRowSelect(e)}
+                rowSelection={isRowsCheckable}
+                onRowSelectionModelChange={onRowSelect ? (e) => onRowSelect(e) : null}
             />
         </Box>
     );

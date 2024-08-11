@@ -28,6 +28,12 @@ export type TranslationResourcesType = {
         filter;
         filters;
         details;
+        toBook;
+        specifiers: {
+            fem;
+            masc;
+            plural;
+        };
         table: {
             columns: {
                 showAll;
@@ -132,6 +138,44 @@ export type TranslationResourcesType = {
             please;
             expired;
             login;
+        };
+    };
+    shows: {
+        singular;
+        plural;
+        table: {
+            title;
+            startDate;
+            endDate;
+            schedule;
+        };
+        form: {
+            tab: {
+                info;
+                visual;
+            };
+            panel: {
+                info;
+                content;
+                visual;
+            };
+            field: {
+                title;
+                city;
+                addedAt;
+                place;
+                address;
+                postalCode;
+                country;
+                startedAt;
+                endDate;
+                schedule;
+                subDescription;
+                description;
+                showOnLanding;
+                areaLink;
+                ticketLink;
+            };
         };
     };
 };

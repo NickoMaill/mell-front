@@ -19,6 +19,7 @@ import CenterBase from './CenterBase';
 import SessionContext from '~/context/sessionContext';
 import useResources from '~/hooks/useResources';
 import NavigationResource from '~/resources/navigationResources';
+import { Box, Link } from '@mui/material';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -417,9 +418,44 @@ export default function AppCenter<T>(props: ICenter<T>) {
                     onAllRowSelect={(e) => updateIs('isAllRowSelected', e)}
                     onRowSelect={(e) => setBulkSelection(e)}
                     onExportClick={() => null}
-                    onRowClick={(e) => (props.listStruct.actions.length === 1 && props.listStruct.actions[0] === 'view' ? Nav.navigateByPath(`${NavigationResource.routesPath.center}?Table=${props.entity}&ID=${e.id}&action=view`) : Nav.navigateByPath(`${NavigationResource.routesPath.center}?Table=${props.entity}&ID=${e.id}&action=update`))}
+                    onRowClick={(e) =>
+                        props.listStruct.actions.length === 1 && props.listStruct.actions[0] === 'view'
+                            ? Nav.navigateByPath(`${NavigationResource.routesPath.center}?Table=${props.entity}&ID=${e.id}&action=view`)
+                            : Nav.navigateByPath(`${NavigationResource.routesPath.center}?Table=${props.entity}&ID=${e.id}&action=update`)
+                    }
                 />
             </CenterBase>
+        );
+    };
+
+    const renderMiniTable = () => {
+        return (
+            <Box>
+
+                <AppTable
+                    entity={props.entity}
+                    actions={props.listStruct.actions}
+                    onSort={(e) => setSort(e)}
+                    onPaginationChange={handleRowsPerPage}
+                    onPageChange={(e) => setCurrentPage(e)}
+                    currentPage={currentPage}
+                    rowsPerPage={rowsPerPage}
+                    rows={datas}
+                    columns={props.listStruct}
+                    isTableLoading={loaders.isLoading}
+                    isRowsCheckable={props.bulkUpdate}
+                    isAllRowSelected={is.isAllRowSelected}
+                    onAllRowSelect={(e) => updateIs('isAllRowSelected', e)}
+                    onRowSelect={(e) => setBulkSelection(e)}
+                    onExportClick={() => null}
+                    onRowClick={(e) =>
+                        props.listStruct.actions.length === 1 && props.listStruct.actions[0] === 'view'
+                            ? Nav.navigateByPath(`${NavigationResource.routesPath.center}?Table=${props.entity}&ID=${e.id}&action=view`)
+                            : Nav.navigateByPath(`${NavigationResource.routesPath.center}?Table=${props.entity}&ID=${e.id}&action=update`)
+                    }
+                />
+                <Link component="a">{Resources.translate("common.add")} {props.grammar.singular.toLowerCase()}</Link>
+            </Box>
         );
     };
     // #endregion
@@ -470,6 +506,8 @@ export default function AppCenter<T>(props: ICenter<T>) {
                     if (props.allowDelete) return renderDelete();
                     else App.setIsNoAccess(true);
                     break;
+                case 'miniTable':
+                    return renderMiniTable();
                 default:
                     return renderTable();
             }

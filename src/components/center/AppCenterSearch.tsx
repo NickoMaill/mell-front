@@ -10,6 +10,7 @@ import FormMaker from '../formMaker/FormMaker';
 import AppFullPageModal from '../common/AppFullPageModal';
 import useResources from '~/hooks/useResources';
 import { CenterGrammarType, GenericActionEnum } from '~/core/types/centerTypes';
+import moment from 'moment';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -53,6 +54,7 @@ export default function AppCenterSearch<T>({ searchFormStruct, onSubmitSearchFor
                     field: el,
                     fieldName: searchFormStruct[0].content[index].label,
                     values: f[el],
+                    formattedValue: searchFormStruct[0].content[index].type === "date" ? moment(f[el]).format("DD/MM/YYYY") : f[el]
                 });
             }
         });
@@ -64,7 +66,7 @@ export default function AppCenterSearch<T>({ searchFormStruct, onSubmitSearchFor
     const formatFiltersView = () => {
         if (Search.filters) {
             const searchString = Search.filters.map((filter) => {
-                return `${filter.fieldName} : ${filter.values}`;
+                return `${filter.fieldName} : ${filter.formattedValue}`;
             });
             return searchString.join(', ');
         } else {

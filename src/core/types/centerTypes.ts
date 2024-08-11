@@ -133,6 +133,7 @@ export interface ICenter<T> {
     allowUpdate?: boolean;
     allowAdd?: boolean;
     getData?: (data: any) => void;
+    isMini?: boolean;
 }
 
 export interface ICenterBase {
@@ -189,6 +190,7 @@ export enum GenericActionEnum {
     DELETE = 'delete',
     VIEW = 'view',
     TABLE = 'table',
+    MINITABLE = 'miniTable',
 }
 
 export type CenterSpecifierType = {

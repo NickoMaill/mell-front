@@ -28,6 +28,12 @@
         "filter": "Filtre",
         "filters": "Filtres",
         "details": "Détails",
+        "toBook": "Réserver",
+        "specifiers": {
+            "fem": "la",
+            "masc": "le",
+            "plural": "les"
+        },
         "table": {
             "columns": {
                 "showAll": "Afficher tout",
@@ -132,6 +138,44 @@
             "please": "Merci d'utiliser les options disponibles dans le menu.",
             "expired": "Il est également possible que votre session soit <b>expirée</b>.",
             "login": "Dans ce cas, veuillez vous <link>identifier</link> à nouveau."
+        }
+    },
+    "shows": {
+        "singular": "Spectacle",
+        "plural": "Spectacles",
+        "table": {
+            "title": "Titre",
+            "startDate": "Commence le",
+            "endDate": "Se termine le",
+            "schedule": "Horaire"
+        },
+        "form": {
+            "tab": {
+                "info": "Information générale",
+                "visual": "Visuels"
+            },
+            "panel": {
+                "info": "Informations",
+                "content": "Contenu",
+                "visual": "Gestion des visuels"
+            },
+            "field": {
+                "title": "Titre",
+                "city": "Ville",
+                "addedAt": "Date & heure",
+                "place": "Lieu de l'évènement",
+                "address": "Adresse",
+                "postalCode": "Code postal",
+                "country": "Pays",
+                "startedAt": "Commence le",
+                "endDate": "Se termine le",
+                "schedule": "Horaires",
+                "subDescription": "Description sommaire",
+                "description": "Description",
+                "showOnLanding": "Mettre en avant sur la page d'accueil ?",
+                "areaLink": "Lien de la salle",
+                "ticketLink": "Lien des tickets"
+            }
         }
     }
 }

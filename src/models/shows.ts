@@ -1,3 +1,5 @@
+import { Media } from "./medias";
+
 export type ShowApiModel = {
     id: number;
     title: string;
@@ -11,8 +13,18 @@ export type ShowApiModel = {
     startDate: Date;
     endDate: Date;
     schedule: Date;
+    ticketLink: string;
+    areaLink: string;
+    subDescription: string;
+    description: string;
     addedAt: Date;
     updatedAt: Date;
+}
+
+export type FullShow = ShowApiModel & {
+    media: Media[];
+    cover: Media;
+    comments: Comment[];
 }
 
 export type ShowPayloadType = {

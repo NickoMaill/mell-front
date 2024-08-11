@@ -2,16 +2,17 @@
 import AppCenter from '../center/AppCenter';
 import AppTable, { AppTableStructure } from '../common/AppTable';
 import moment from 'moment';
-import { ChangeEvent, FormEvent, FormEventHandler, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, FormEventHandler, useContext, useEffect, useState } from 'react';
 import { FormMakerContentType, FormMakerPartEnum, SelectOptionsType } from '~/core/types/FormMakerCoreTypes';
 import useMapService from '~/hooks/services/useMapService';
 import { MapType } from '~/models/map';
 import { ShowApiModel } from '~/models/shows';
 import { QueryResult } from '~/core/types/serverCoreType';
-import { Box, Button, Container, Grid, IconButton, Link, Paper, Typography } from '@mui/material';
-import { Bold, Italic } from '../common/Text';
+import { Box, Button, Container, Grid, IconButton, Link, Paper, setRef, Typography } from '@mui/material';
+import { Bold, Italic, Regular } from '../common/Text';
 import AppFullPageModal from '../common/AppFullPageModal';
 import ImagePlaceHolder from '~/assets/pictures/image_placeholder.webp';
+import LoaderPlaceHolder from '~/assets/pictures/loader_visu_placeholder.gif';
 import { MuiFileInput } from 'mui-file-input';
 import AppIcon from '../common/AppIcon';
 import { Media, MediaGroupEnum, MediaPayloadType, MediaStatus } from '~/models/medias';
@@ -21,6 +22,9 @@ import useNotification from '~/hooks/useNotification';
 import { AppError, ErrorTypeEnum } from '~/core/appError';
 import useModal from '~/hooks/useModal';
 import useMediasService from '~/hooks/services/useMediasService';
+import ModalContext from '~/context/modalContext';
+import { LoadingButton } from '@mui/lab';
+import useResources from '~/hooks/useResources';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -38,50 +42,19 @@ export default function Shows({ id, action }) {
     const [lat, setLat] = useState<number>(null);
     const [long, setLong] = useState<number>(null);
     // #region STATE --> ///////////////////////////////////////
+    const Resources = useResources();
+    
     const col: AppTableStructure<ShowApiModel> = {
         defaultSort: { field: 'startDate', sort: 'desc' },
         actions: ['view', 'update', 'delete'],
         colStruct: [
-            {
-                headerField: 'id',
-                headerLabel: 'ID',
-                sortable: true,
-                type: 'number',
-                width: 90,
-            },
-            {
-                headerField: 'title',
-                headerLabel: 'Titre',
-                sortable: true,
-                type: 'string',
-                width: 200,
-            },
-            {
-                headerField: 'startDate',
-                headerLabel: 'Commence le',
-                sortable: true,
-                type: 'date',
-                width: 100,
-                valueFormatter: (e) => moment(e).format('DD/MM/YYYY hh:mm:ss'),
-            },
-            {
-                headerField: 'endDate',
-                headerLabel: 'Se termine le',
-                sortable: true,
-                type: 'dateTime',
-                defaultSorted: true,
-                defaultSortedOrder: 'desc',
-                width: 150,
-                valueFormatter: (e) => moment(e).format('DD/MM/YYYY hh:mm:ss'),
-            },
-            {
-                headerField: 'schedule',
-                headerLabel: 'Horaire',
-                sortable: true,
-                type: 'date',
-                width: 400,
-                valueFormatter: (e) => moment(e).format('hh:mm'),
-            },
+            { headerField: 'id', headerLabel: 'ID', sortable: true, type: 'number', width: 90 },
+            { headerField: 'title', headerLabel: Resources.translate("shows.form.field.title"), sortable: true, type: 'string', width: 200 },
+            { headerField: 'startDate', headerLabel: Resources.translate("shows.form.field.startedAt"), sortable: true, defaultSorted: true, defaultSortedOrder: "desc", type: 'date', width: 150, valueFormatter: (e) => moment(e).format('DD/MM/YYYY') },
+            { headerField: 'endDate', headerLabel: Resources.translate("shows.form.field.endDate"), sortable: true, type: 'dateTime', width: 150, valueFormatter: (e) => moment(e).format('DD/MM/YYYY') },
+            { headerField: "place", headerLabel: "Salle", sortable: true, type: "string" },
+            { headerField: "country", headerLabel: "Pays", sortable: true, type: "string" },
+            { headerField: "city", headerLabel: "Ville", sortable: true, type: "string" }
         ],
     };
 
@@ -91,21 +64,21 @@ export default function Shows({ id, action }) {
             content: [
                 {
                     id: 'title',
-                    label: 'Titre',
+                    label: Resources.translate("shows.form.field.title"),
                     index: 1,
                     type: 'text',
                     size: 12,
                 },
                 {
                     id: 'city',
-                    label: 'Ville',
+                    label: Resources.translate("shows.form.field.city"),
                     index: 1,
                     type: 'text',
                     size: 12,
                 },
                 {
                     id: 'addedAt',
-                    label: 'Date & heure',
+                    label: Resources.translate("shows.form.field.addedAt"),
                     index: 1,
                     type: 'date',
                     size: 12,
@@ -116,16 +89,16 @@ export default function Shows({ id, action }) {
 
     const formStructure: FormMakerContentType<FormMakerPartEnum.TAB>[] = [
         {
-            title: 'Informations générales',
+            title: Resources.translate("shows.form.tab.info"),
             type: FormMakerPartEnum.TAB,
             content: [
                 {
-                    title: 'Informations',
+                    title: Resources.translate("shows.form.panel.info"),
                     icon: 'FormatListBulleted',
                     content: [
                         {
                             id: 'title',
-                            label: 'Titre',
+                            label: Resources.translate("shows.form.field.title"),
                             index: 1,
                             type: 'text',
                             size: 12,
@@ -134,7 +107,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'place',
-                            label: "Lieu de l'évènement",
+                            label: Resources.translate("shows.form.field.place"),
                             index: 1,
                             type: 'text',
                             size: 6,
@@ -143,7 +116,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'address',
-                            label: 'Adresse',
+                            label: Resources.translate("shows.form.field.address"),
                             index: 2,
                             type: 'autocomplete',
                             size: 6,
@@ -159,7 +132,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'postalCode',
-                            label: 'Code postal',
+                            label: Resources.translate("shows.form.field.postalCode"),
                             index: 1,
                             type: 'text',
                             size: 2,
@@ -168,7 +141,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'city',
-                            label: 'Ville',
+                            label: Resources.translate("shows.form.field.city"),
                             index: 2,
                             type: 'text',
                             size: 2,
@@ -177,7 +150,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'country',
-                            label: 'Pays',
+                            label: Resources.translate("shows.form.field.country"),
                             index: 3,
                             type: 'text',
                             size: 2,
@@ -186,7 +159,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'startDate',
-                            label: 'Commence le',
+                            label: Resources.translate("shows.form.field.startedAt"),
                             index: 4,
                             type: 'date',
                             size: 2,
@@ -194,7 +167,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'endDate',
-                            label: 'Fini le',
+                            label: Resources.translate("shows.form.field.endDate"),
                             index: 5,
                             type: 'date',
                             size: 2,
@@ -202,7 +175,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'schedule',
-                            label: 'Horaires',
+                            label: Resources.translate("shows.form.field.schedule"),
                             index: 6,
                             type: 'time',
                             size: 2,
@@ -210,7 +183,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'subDescription',
-                            label: 'Description sommaire',
+                            label: Resources.translate("shows.form.field.subDescription"),
                             index: 1,
                             type: 'textarea',
                             size: 12,
@@ -218,7 +191,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'description',
-                            label: 'Description',
+                            label: Resources.translate("shows.form.field.description"),
                             index: 1,
                             type: 'textarea',
                             size: 12,
@@ -226,18 +199,18 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'showOnLanding',
-                            label: "Mettre en avant sur la page d'accueil ?",
+                            label: Resources.translate("shows.form.field.showOnLanding"),
                             index: 1,
                             type: 'radio',
                             size: 3,
                             radioOptions: [
-                                { label: 'Oui', value: true },
-                                { label: 'Non', value: false },
+                                { label: Resources.translate("common.yes"), value: true },
+                                { label: Resources.translate("common.no"), value: false },
                             ],
                         },
                         {
                             id: 'areaLink',
-                            label: 'Lien de la salle',
+                            label: Resources.translate("shows.form.field.areaLink"),
                             index: 2,
                             type: 'url',
                             size: 3,
@@ -245,7 +218,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'ticketLink',
-                            label: 'Lien des tickets',
+                            label: Resources.translate("shows.form.field.ticketLink"),
                             index: 3,
                             type: 'url',
                             size: 3,
@@ -272,13 +245,13 @@ export default function Shows({ id, action }) {
             ],
         },
         {
-            title: 'Visuels',
+            title: Resources.translate("shows.form.tab.visual"),
             icon: 'InsertPhoto',
             type: FormMakerPartEnum.TAB,
             hide: action === 'new',
             content: [
                 {
-                    title: 'Gestion des visuels',
+                    title: Resources.translate("shows.form.panel.visual"),
                     icon: 'InsertPhoto',
                     content: [
                         {
@@ -348,8 +321,8 @@ export default function Shows({ id, action }) {
                 id={id}
                 genericAction={action}
                 entity="Shows"
-                grammar={{ plural: 'Spectacles', singular: 'Spectacle', isFem: false }}
-                specifiers={{ singular: 'le', plural: 'les' }}
+                grammar={{ plural: Resources.translate("shows.plural"), singular: Resources.translate("shows.singular"), isFem: false }}
+                specifiers={{ singular: Resources.translate("common.specifiers.masc"), plural: Resources.translate("common.specifiers.plural") }}
                 listStruct={col}
                 icon="TheaterComedy"
                 actions={['view', 'update', 'delete']}
@@ -372,22 +345,38 @@ function PicturesImport({ showId }: IPicturesImport) {
     const Modal = useModal();
     const MediaService = useMediasService();
 
-    const handleCloseOpen = (id?: number) => {
-        Modal.openModal("Ajouter un visuel", <PhotoForm showId={showId} id={id} />, "sm", "body", false, true);
+    const handleCloseOpen = (id?: number, del: boolean = false) => {
+        Modal.openModal(id ? (del ? 'Supprimer le visuel' : 'Modifier le visuel') : 'Ajouter un visuel', <PhotoForm showId={showId} id={id} onSubmitted={() => fetchPhotos()} mode={id ? (del ? 'delete' : 'update') : 'new'} />, 'sm', 'body', false, true);
     };
 
     const fetchPhotos = async () => {
         setIsLoading(true);
         await MediaService.getShowPic(showId)
-        .then((res) => setRows(res))
-        .finally(() => setIsLoading(false));
+            .then((res) => setRows(res))
+            .finally(() => setIsLoading(false));
     };
-    const header: AppTableStructure<any, any> = {
+    const header: AppTableStructure<Media, any> = {
         colStruct: [
             { headerField: 'id', headerLabel: 'ID', width: 90, type: 'number', sortable: false },
-            { headerField: 'url', headerLabel: 'Aperçu', type: 'string', sortable: false },
-            { headerField: 'isVideo', headerLabel: 'Type', type: 'string', sortable: false },
-            { headerField: 'addedAt', headerLabel: 'Ajouté le', type: 'date', sortable: false },
+            { headerField: 'url', headerLabel: 'Aperçu', width: 90, type: 'custom', sortable: false, valueFormatter: (e) => <Box component="img" src={e} width={40} /> },
+            { headerField: 'isVideo', headerLabel: 'Catégorie', width: 100, type: 'boolean', sortable: false, valueFormatter: (e) => ((e as boolean).toString() === 'true' ? 'Vidéo' : 'Image') },
+            { headerField: 'isMain', headerLabel: 'Visuel de couverture', type: 'boolean', sortable: false, valueFormatter: (e) => ((e as boolean).toString() === 'true' ? <AppIcon name="Check" color="success" /> : <></>) },
+            { headerField: 'height', headerLabel: 'Dimension (hauteur)', type: 'number', sortable: false, valueFormatter: (e) => `${e}px` },
+            { headerField: 'width', headerLabel: 'Dimension (largeur)', type: 'number', sortable: false, valueFormatter: (e) => `${e}px` },
+            { headerField: 'type', headerLabel: 'Format', type: 'string', sortable: false },
+            { headerField: 'addedAt', headerLabel: 'Ajouté le', type: 'date', sortable: false, valueFormatter: (e) => moment(e).format('DD/MM/YYYY') },
+        ],
+        actions: [
+            {
+                title: 'Modifier',
+                icon: 'CreateRounded',
+                onClick: (e) => handleCloseOpen(e.row.id),
+            },
+            {
+                title: 'Supprimer',
+                icon: 'Delete',
+                onClick: (e) => handleCloseOpen(e.row.id, true),
+            },
         ],
     };
 
@@ -399,10 +388,6 @@ function PicturesImport({ showId }: IPicturesImport) {
         <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', flexGrow: 1, alignItems: 'center' }}>
             <AppTable
                 entity="Medias"
-                // actions={props.listStruct.actions}
-                // onSort={(e) => setSort(e)}
-                // onPaginationChange={handleRowsPerPage}
-                
                 onPageChange={(e) => setCurrentPage(e)}
                 currentPage={currentPage}
                 rowsPerPage={5}
@@ -410,15 +395,13 @@ function PicturesImport({ showId }: IPicturesImport) {
                 columns={header}
                 isTableLoading={isLoading}
                 onExportClick={() => null}
+                isRowsCheckable={false}
                 onRowClick={(e) => handleCloseOpen(e.row.id)}
-                
+                actions={header.actions}
             />
             <Link component="a" onClick={() => handleCloseOpen()} role={'button'} sx={{ mt: 2, cursor: 'pointer' }}>
                 <Bold>Ajouter visuel</Bold>
             </Link>
-            {/* <AppFullPageModal modalTitle="Ajouter un visuel" isOpen={isModalOpen} onClose={handleCloseOpen}>
-                <PhotoForm />
-            </AppFullPageModal> */}
         </Container>
     );
 }
@@ -426,47 +409,50 @@ function PicturesImport({ showId }: IPicturesImport) {
 interface IPicturesImport {
     showId: number;
     id?: number;
+    onSubmitted?: () => void;
+    mode?: 'new' | 'update' | 'delete';
 }
 
-function PhotoForm({ showId, id }: IPicturesImport) {
-    const [imageSrc, setImageSrc] = useState<string>(ImagePlaceHolder);
+function PhotoForm({ showId, id, onSubmitted, mode }: IPicturesImport) {
+    const [imageSrc, setImageSrc] = useState<string>(id ? LoaderPlaceHolder : ImagePlaceHolder);
     const [imageValue, setImageValue] = useState<File>(null);
     const [isError, setIsError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>(null);
-    const [isMain, setIsMain] = useState<boolean>(false);
+    const [isMain, setIsMain] = useState<string>('false');
+    const [isBtnLoading, setIsBtnLoading] = useState<boolean>(false);
 
     const Notification = useNotification();
     const MediaService = useMediasService();
+    const ModalCtx = useContext(ModalContext);
 
     const typeSelOptions: SelectOptionsType[] = [
-        { value: true, label: "Oui" },
-        { value: false, label: "Non" },
-    ]
-    const types = ["image/png", "image/jpg", "image/webp"];
+        { value: 'true', label: 'Oui' },
+        { value: 'false', label: 'Non' },
+    ];
+    const types = ['image/png', 'image/jpg', 'image/webp', 'image/jpeg'];
 
     const handleChangeInput = (e: File) => {
         if (!types.includes(e.type.toLowerCase())) {
             setIsError(true);
-            setErrorMessage("Votre fichier doit être au format .jpg, .jpeg, .png, ou .webp");
+            setErrorMessage('Votre fichier doit être au format .jpg, .jpeg, .png, ou .webp');
         } else if (e.size > 2000000) {
             setIsError(true);
-            setErrorMessage("Votre fichier doit faire moins de 2mo");
+            setErrorMessage('Votre fichier doit faire moins de 2mo');
         } else {
             setImageValue(e);
             setIsError(false);
             setErrorMessage(null);
-        } 
+        }
     };
 
     const fetchVisu = async () => {
         if (id) {
-            await MediaService.getPic(id)
-            .then(res => {
+            await MediaService.getPic(id).then((res) => {
                 setImageSrc(res.records[0].url);
-                setIsMain(res.records[0].isMain);
-            })
+                setIsMain(res.records[0].isMain.toString());
+            });
         }
-    }
+    };
 
     const monitorImage = () => {
         if (imageValue) {
@@ -479,32 +465,79 @@ function PhotoForm({ showId, id }: IPicturesImport) {
 
     const deleteImg = () => {
         setImageValue(null);
+        setIsError(false);
+        setErrorMessage(null);
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const form = new FormData(e.currentTarget);
+
+        setIsBtnLoading(true);
+        switch (mode) {
+            case 'new':
+                await create(form);
+                break;
+            case 'delete':
+                await del();
+                break;
+            case 'update':
+                await update(form);
+                break;
+            default:
+                throw new AppError(ErrorTypeEnum.Functional, 'unknown mode', 'unknown_mode');
+        }
+    };
+
+    const update = async (form: FormData) => {
+        await MediaService.updatePic(id, form)
+            .then((res) => {
+                if (res) {
+                    onSubmitted();
+                    ModalCtx.setIsOpen(false);
+                }
+            })
+            .finally(() => setIsBtnLoading(false));
+    };
+    const del = async () => {
+        await MediaService.deletePic(id)
+            .then((res) => {
+                if (res) {
+                    onSubmitted();
+                    ModalCtx.setIsOpen(false);
+                }
+            })
+            .finally(() => setIsBtnLoading(false));
+    };
+    const create = async (form: FormData) => {
         if (isError || imageValue === null) {
-            Notification.error("Veuillez fournir une image valide pour continuer");
+            Notification.error('Veuillez fournir une image valide pour continuer');
             setIsError(true);
-            throw new AppError(ErrorTypeEnum.Functional, "Veuillez fournir une image valide pour continuer", "invalid_file");
+            throw new AppError(ErrorTypeEnum.Functional, 'Veuillez fournir une image valide pour continuer', 'invalid_file');
         }
 
         const payload: MediaPayloadType = {
-            type: "image",
-            isVideo: false, 
+            type: 'image',
+            isVideo: false,
             status: MediaStatus.SHOWS,
             sortOrder: 1,
             mediaGroupId: showId,
             mediaGroup: MediaGroupEnum.SHOWS,
-            name: ""
-        }
-        const form = new FormData(e.currentTarget);
+            name: '',
+        };
 
         for (const p in payload) {
-            form.append(p, payload[p])
+            form.append(p, payload[p]);
         }
-        await MediaService.addPic(form);
-    }
+        await MediaService.addPic(form)
+            .then((res) => {
+                if (res) {
+                    onSubmitted();
+                    ModalCtx.setIsOpen(false);
+                }
+            })
+            .finally(() => setIsBtnLoading(false));
+    };
 
     useEffect(() => {
         monitorImage();
@@ -520,19 +553,35 @@ function PhotoForm({ showId, id }: IPicturesImport) {
     }, []);
 
     return (
-        <Container sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', position: "relative", height: "80vh" }}>
-            <Grid container spacing={2} alignItems="center" sx={{ margin: "auto" }}>
-                {/* Input Column */}
-                <Grid item lg={6}>
-                        <Container onSubmit={handleSubmit} component={"form"} id="visualForm" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: "column", width: "fit-content" }}>
-                            <InputSelectField value={isMain} size={12} sx={{ width: "100%" }} required options={typeSelOptions} label='Visuel principal ?' helpText='Si "Oui", ce visuel sera utilisé en tant que visuel de couverture' id='isMain' />
-                                <InputBase error={isError} errorMessage={errorMessage} id='pic' label='Importer votre visuel' size={12} helpText="pour importer votre visuel cliquez sur le champs ci-dessous">
+        <Container sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', position: 'relative', height: '80vh' }}>
+            <Grid container spacing={2} alignItems="center" sx={{ margin: 'auto', justifyContent: { xs: 'center' } }}>
+                <Grid item lg={6} sx={{ marginBottom: 2 }}>
+                    <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Paper sx={{ width: 'fit-content', padding: 2 }}>{imageSrc && <Box component="img" src={imageSrc} alt="Selected" sx={{ maxWidth: '100%', maxHeight: '100%' }} />}</Paper>
+                    </Container>
+                </Grid>
+                <Grid item lg={6} sx={{ marginBottom: { xs: 2 } }}>
+                    <Container onSubmit={handleSubmit} component={'form'} id="visualForm" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: 'fit-content' }}>
+                        {mode === 'delete' && (
+                            <Box>
+                                <Regular display={'flex'} alignItems={'center'} justifyContent={'center'} textAlign={'center'}>
+                                    <AppIcon sx={{ mr: 1 }} name="WarningRounded" color="warning" />
+                                    <b>Attention, vous êtes sur le point du supprimer ce visuel</b>
+                                    <AppIcon sx={{ ml: 1 }} name="WarningRounded" color="warning" />.
+                                </Regular>
+                                <Regular textAlign={'center'}>Si celui est un couverture pour votre spectacle, n'oubliez d'en assigner une nouvelle</Regular>
+                            </Box>
+                        )}
+                        {mode !== 'delete' && <InputSelectField value={isMain} size={12} sx={{ width: '100%' }} required options={typeSelOptions} label="Visuel principal ?" helpText='Si "Oui", ce visuel sera utilisé en tant que visuel de couverture' id="isMain" />}
+                        {mode === 'new' && (
+                            <>
+                                <InputBase error={isError} errorMessage={errorMessage} id="pic" label="Importer votre visuel" size={12} helpText="pour importer votre visuel cliquez sur le champs ci-dessous">
                                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         <MuiFileInput
                                             value={imageValue}
                                             onChange={handleChangeInput}
                                             id="pic"
-                                            name='file'
+                                            name="file"
                                             multiple={false}
                                             variant="outlined"
                                             error={isError}
@@ -550,18 +599,28 @@ function PhotoForm({ showId, id }: IPicturesImport) {
                                         )}
                                     </Box>
                                 </InputBase>
-                                <Italic fontSize={12} marginTop={2} textAlign="center">Votre visuel doit faire moins de 2mo<br/>Privilégiez le format <b>.webp</b> (optimisé pour le web),<br/> voici une <Link component="a" title="lien vers Online Image Tool" target='_blank' rel="noreferrer" href='https://www.onlineimagetool.com/fr/convert-png-jpg-webp-gif'>plateforme</Link> qui vous aidera convertir vos fichier</Italic>
-                            <Button type="submit" variant="contained" sx={{ marginTop: 2 }}>Enregistrer la photo</Button>
-                        </Container>
-                </Grid>
-
-                {/* Image Display Column */}
-                <Grid item lg={6}>
-                    <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <Paper sx={{ width: 'fit-content' }}>{imageSrc && <Box component="img" src={imageSrc} alt="Selected" sx={{ maxWidth: '100%', maxHeight: '100%' }} />}</Paper>
+                                <Italic fontSize={12} marginTop={2} textAlign="center">
+                                    Votre visuel doit faire moins de 2mo
+                                    <br />
+                                    Privilégiez le format <b>.webp</b> (optimisé pour le web),
+                                    <br /> voici une{' '}
+                                    <Link component="a" title="lien vers Online Image Tool" target="_blank" rel="noreferrer" href="https://www.onlineimagetool.com/fr/convert-png-jpg-webp-gif">
+                                        plateforme
+                                    </Link>{' '}
+                                    qui vous aidera convertir vos fichier
+                                </Italic>
+                            </>
+                        )}
+                        <LoadingButton loading={isBtnLoading} type="submit" variant="contained" sx={{ marginTop: 2 }}>
+                            {mode === 'delete' ? 'Supprimer le visuel' : mode === 'update' ? 'Modifier le visuel' : 'Ajouter le visuel'}
+                        </LoadingButton>
                     </Container>
                 </Grid>
             </Grid>
         </Container>
     );
+}
+
+function CommentsTable() {
+    
 }

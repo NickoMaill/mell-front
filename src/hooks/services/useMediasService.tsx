@@ -1,5 +1,4 @@
 // #region IMPORTS -> /////////////////////////////////////
-import React from 'react'
 import { QueryResult } from '~/core/types/serverCoreType';
 import { Media } from '~/models/medias';
 import useServiceBase from '../useServiceBase';
@@ -33,13 +32,21 @@ export default function useMediasService(): IUseMediasService {
         const response = await asServicePromise<QueryResult<Media>>(Service.get(`medias/${id}`));
         return response;
     }
+    const updatePic = async (id: number, form: FormData): Promise<boolean> => {
+        await asServicePromise(Service.put(`medias/${id}`, null, form));
+        return true;
+    }
+    const deletePic = async (id: number) => {
+        await asServicePromise(Service.del(`medias/${id}`));
+        return true;
+    }
     // #endregion METHODS --> //////////////////////////////////
 
     // #region USEEFFECT --> ///////////////////////////////////
     // #endregion USEEFFECT --> ////////////////////////////////
 
     // #region RENDER --> //////////////////////////////////////
-    return { getShowPic, addPic, getPic };
+    return { getShowPic, addPic, getPic, updatePic, deletePic };
     // #endregion RENDER --> ///////////////////////////////////
 }
 
@@ -48,5 +55,7 @@ interface IUseMediasService {
     getShowPic: (showId: number) => Promise<QueryResult<Media>>
     addPic: (form: FormData) => Promise<boolean>;
     getPic: (id: number) => Promise<QueryResult<Media>>;
+    updatePic: (id: number, form: FormData) => Promise<boolean>
+    deletePic: (id: number) => Promise<boolean>;
 }
 // #enderegion IPROPS --> //////////////////////////////////

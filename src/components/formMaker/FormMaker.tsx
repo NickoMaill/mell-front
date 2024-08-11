@@ -242,7 +242,7 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
                 default:
                     break;
             }
-            element.type = "value";
+            if (element.type !== "htmlContent") element.type = "value";
         }
         switch (element.type) {
             case 'email':
@@ -304,6 +304,8 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
                 return "Modifier";
             case "delete":
                 return "Supprimer";
+            case "table":
+                return "Rechercher";
             default:
                 return 'Ajouter';
         }
