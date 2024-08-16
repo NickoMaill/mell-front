@@ -8,6 +8,7 @@ class ConfigManager {
             NODE_ENV: import.meta.env.MODE,
             API_BASEURL: import.meta.env.VITE_API_BASEURL,
             APP_BASEURL: import.meta.env.VITE_APP_BASEURL,
+            APP_MAINTENANCE: import.meta.env.VITE_APP_MAINTENANCE === 'true',
         };
     }
 
@@ -32,6 +33,15 @@ class ConfigManager {
         for (const key in this.__env) {
             const parsed = parseInt(this.__env[key], 10);
             res[key] = isNaN(parsed) ? this.__env[key] : parsed;
+        }
+        return res;
+    }
+
+    public get configAsBoolean() {
+        const res: IConfigEnv = null;
+        for (const key in this.__env) {
+            const parsed = this.__env[key].toLowerCase() === 'true';
+            res[key] = parsed;
         }
         return res;
     }

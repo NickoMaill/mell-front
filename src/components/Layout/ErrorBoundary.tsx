@@ -2,6 +2,7 @@
 import React, { ReactNode, useContext, useEffect } from 'react';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import AppContext from '~/context/appContext';
+import configManager from '~/managers/configManager';
 import Error from '~/pages/Error';
 // #endregion IMPORTS -> //////////////////////////////////
 

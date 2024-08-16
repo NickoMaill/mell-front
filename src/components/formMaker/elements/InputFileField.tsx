@@ -4,8 +4,6 @@ import InputBase from './InputBase';
 import { MuiFileInput } from 'mui-file-input';
 import { useEffect, useState } from 'react';
 import useService from '~/hooks/useService';
-import appTool from '~/helpers/appTool';
-import { AppError, ErrorTypeEnum } from '~/core/appError';
 import { Box, CircularProgress } from '@mui/material';
 // #endregion IMPORTS -> //////////////////////////////////
 
@@ -24,7 +22,7 @@ export default function InputFileField({ disabled, id, onChange, value = '', siz
 
     // #region METHODS --> /////////////////////////////////////
     const getFileData = async () => {
-        const filePath = (value as string).split('/');
+        const filePath = value as string;
         const request = await Service.getFile(value as string)
             .catch((err) => console.error(err))
             .finally(() => setIsFileLoading(false));
@@ -57,6 +55,7 @@ export default function InputFileField({ disabled, id, onChange, value = '', siz
         <InputBase sx={sx} showLabel={showLabel} disabled={disabled || isFileLoading || isLoading} required={required} id={id} error={error} label={label} errorMessage={errorMessage} helpText={helpText} size={size}>
             <MuiFileInput
                 error={error}
+                sx={{ marginTop: '8px', marginBottom: '4px' }}
                 InputProps={{
                     endAdornment: (isLoading || isFileLoading) && (
                         <Box sx={{ display: 'flex' }}>
@@ -64,14 +63,14 @@ export default function InputFileField({ disabled, id, onChange, value = '', siz
                         </Box>
                     ),
                 }}
-                // value={file}
+                value={file}
                 onChange={handleChange}
                 disabled={disabled || isFileLoading || isLoading}
                 id={id}
                 name={id}
             />
-            <input hidden type="hidden" name={id + 'Old'} defaultValue={value as string} />
-            <input hidden type="hidden" name={id + 'Path'} defaultValue={file ? file.name : ''} />
+            {/* <input hidden type="hidden" name={id + 'Old'} defaultValue={value as string} />
+            <input hidden type="hidden" name={id + 'Path'} defaultValue={file ? file.name : ''} /> */}
         </InputBase>
     );
     // #endregion RENDER --> ///////////////////////////////////

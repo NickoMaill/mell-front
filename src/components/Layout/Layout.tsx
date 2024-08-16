@@ -37,10 +37,10 @@ export default function Layout({ children, primaryBg = false, error = false }: I
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <Box sx={{ backgroundColor: primaryBg ? "#ce8b71" : "#ffffff" }} className="page-wrapper">
+        <Box className={`page-wrapper ${primaryBg ? 'bg-primary' : 'bg-white'}`}>
             <Header />
-            {(pathname === '/' && !error) && <LandingPic />}
-            <Container sx={{ backgroundColor: "transparent" }} id="mainContainer" className='container' component="main">
+            {pathname === '/' && !error && <LandingPic />}
+            <Container id="mainContainer" className="container bg-transparent" component="main">
                 <NoAccessLayout>{children}</NoAccessLayout>
             </Container>
             <Footer />

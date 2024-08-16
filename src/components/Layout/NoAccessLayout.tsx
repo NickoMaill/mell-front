@@ -1,6 +1,6 @@
 // #region IMPORTS -> /////////////////////////////////////
 import { Box, Button } from '@mui/material';
-import React, { useContext, useEffect } from 'react';
+import { ReactNode, useContext, useEffect } from 'react';
 import AppCard from '../common/AppCard';
 import { Bold, Regular } from '../common/Text';
 import { Link } from 'react-router-dom';
@@ -12,7 +12,7 @@ import { Trans } from 'react-i18next';
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function NoAccessLayout({ children }) {
+export default function NoAccessLayout({ children }: INoAccessLayout) {
     // #region STATE --> ///////////////////////////////////////
     const App = useContext(AppContext);
     const Navigation = useNavigation();
@@ -36,8 +36,8 @@ export default function NoAccessLayout({ children }) {
     return (
         <>
             {App.isNoAccess ? (
-                <Box display="flex" alignItems="center" flexDirection="column">
-                    <AppCard title="Accès Refusé" sx={{ width: '100%' }} icon="Lock">
+                <Box className="d-flex align-items-center flex-column">
+                    <AppCard title="Accès Refusé" className="w-100" icon="Lock">
                         <Bold>
                             <Trans i18nKey="error.noAccess.intro" />
                         </Bold>
@@ -66,5 +66,7 @@ export default function NoAccessLayout({ children }) {
 }
 
 // #region IPROPS -->  /////////////////////////////////////
-interface INoAccessLayout {}
+interface INoAccessLayout {
+    children: ReactNode;
+}
 // #enderegion IPROPS --> //////////////////////////////////

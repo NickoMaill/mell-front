@@ -20,6 +20,7 @@ import SessionContext from './context/sessionContext';
 import { UserAccessLevel } from './models/users';
 import configManager from './managers/configManager';
 import { AppError } from './core/appError';
+import Maintenance from './pages/Maintenance';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -74,7 +75,7 @@ export default function App() {
         isNoAccess,
         setIsNoAccess,
         error,
-        setError
+        setError,
     };
     // #endregion STATE --> ////////////////////////////////////
 
@@ -99,16 +100,14 @@ export default function App() {
             <SessionContext.Provider value={sessionValue}>
                 <SearchContext.Provider value={searchValue}>
                     <AppContext.Provider value={appValue}>
-                            <StyledEngineProvider injectFirst>
-                                <ThemeProvider theme={stylesResources.theme}>
-                                    <CssBaseline />
-                                    <SnackbarProvider>
-                                        <ModalProvider>
-                                            <AppRouter />
-                                        </ModalProvider>
-                                    </SnackbarProvider>
-                                </ThemeProvider>
-                            </StyledEngineProvider>
+                        <StyledEngineProvider injectFirst>
+                            <ThemeProvider theme={stylesResources.theme}>
+                                <CssBaseline />
+                                <SnackbarProvider>
+                                    <ModalProvider>{configManager.getConfig.APP_MAINTENANCE ? <Maintenance /> : <AppRouter />}</ModalProvider>
+                                </SnackbarProvider>
+                            </ThemeProvider>
+                        </StyledEngineProvider>
                     </AppContext.Provider>
                 </SearchContext.Provider>
             </SessionContext.Provider>

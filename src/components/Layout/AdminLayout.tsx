@@ -14,8 +14,10 @@ export default function AdminLayout({ children, title, subtitle = '' }: IAdminLa
     const Session = useSessionService();
 
     const disconnect = async () => {
-        setIsLoading(true)
-        await Session.logout().then(res => router.goToHomePage()).finally(() => setIsLoading(false));
+        setIsLoading(true);
+        await Session.logout()
+            .then((res) => router.goToHomePage())
+            .finally(() => setIsLoading(false));
     };
 
     return (
@@ -23,11 +25,11 @@ export default function AdminLayout({ children, title, subtitle = '' }: IAdminLa
             <Box position="relative" className="mt-4">
                 <Box right={0} className="position-absolute mt-2">
                     {router.pathname !== navigationResources.routesPath.admin ? (
-                        <Button variant="outlined" startIcon={<ArrowBack />} sx={{ marginLeft: 3 }}>
+                        <Button variant="outlined" startIcon={<ArrowBack />} className="ms-4">
                             Accueil
                         </Button>
                     ) : (
-                        <LoadingButton loading={isLoading} variant="outlined" onClick={disconnect} startIcon={<PersonOff />} sx={{ marginLeft: 3 }}>
+                        <LoadingButton loading={isLoading} variant="outlined" onClick={disconnect} startIcon={<PersonOff />} className="ms-4">
                             Déconnexion
                         </LoadingButton>
                     )}
@@ -37,7 +39,7 @@ export default function AdminLayout({ children, title, subtitle = '' }: IAdminLa
                     <Typography variant="body1">{subtitle}</Typography>
                 </Box>
                 <Container>
-                    <Divider className='m-0' variant="middle" />
+                    <Divider className="m-0" variant="middle" />
                 </Container>
             </Box>
             <>{children}</>

@@ -7,10 +7,10 @@ import { Box, Link } from '@mui/material';
 
 // #region SINGLETON --> ////////////////////////////////////
 const img = [
-    { width: 20, title: "Instagram", element: Insta },
-    { width: 20, title: "Facebook", element: Facebook },
-    { width: 27, title: "Youtube", element: Youtube },
-]
+    { width: 20, title: 'Instagram', element: Insta },
+    { width: 20, title: 'Facebook', element: Facebook },
+    { width: 27, title: 'Youtube', element: Youtube },
+];
 // #endregion SINGLETON --> /////////////////////////////////
 
 export default function SocialMedia() {
@@ -28,11 +28,11 @@ export default function SocialMedia() {
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <Box display={"flex"} alignItems={"center"}>
+        <Box className="d-flex align-items-center">
             {img.map((SvgIcon, i) => {
                 return (
-                    <Link key={i} sx={{ cursor: "pointer" }} marginInline={1}>
-                        <img className='header-icon' src={SvgIcon.element} width={SvgIcon.width} title={SvgIcon.title} />
+                    <Link key={i} className="cursor-pointer" marginInline={1}>
+                        <img className="header-icon" src={SvgIcon.element} width={SvgIcon.width} title={SvgIcon.title} />
                     </Link>
                 );
             })}

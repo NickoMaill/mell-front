@@ -1,5 +1,5 @@
 // #region IMPORTS -> /////////////////////////////////////
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { IFormMakerInput, InputBaseType } from '~/core/types/FormMakerCoreTypes';
 import InputBase from './InputBase';
 import { Input } from '@mui/material';
@@ -8,7 +8,7 @@ import { Input } from '@mui/material';
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function InputHidden ({ sx, style, disabled, required, onChange, error, id, icon, autoComplete, autoCapitalize, label, helpText, errorMessage, size = 3, value, isLoading, success, warning, placeholder }: IInputHidden) {
+export default function InputHidden({ sx, style, disabled, required, onChange, error, id, icon, autoComplete, autoCapitalize, label, helpText, errorMessage, size = 3, value, isLoading, success, warning, placeholder }: IInputHidden) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 

@@ -7,6 +7,7 @@ import useService from './useService';
 import { useContext } from 'react';
 import SessionContext from '~/context/sessionContext';
 import configManager from '~/managers/configManager';
+import AppContext from '~/context/appContext';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -20,6 +21,7 @@ export default function useServiceBase(): IUseServiceBase {
     const Modal = useModal();
     const Service = useService();
     const Session = useContext(SessionContext);
+    const AppCtx = useContext(AppContext);
     // const SessionService = useSessionService();
     // #endregion HOOKS --> ////////////////////////////////////
 
@@ -30,11 +32,29 @@ export default function useServiceBase(): IUseServiceBase {
      * @returns
      */
     const asServicePromise = async <T,>(request: Promise<T>) => {
-        //if (!gotSession()) await refreshSession();
-        return await request.then(
-            (apiResponse) => Promise.resolve<T>(apiResponse),
-            (error) => reject<T>(error as unknown)
-        );
+        const maxRetries = 3;
+        let attempt = 0;
+        while (attempt < maxRetries && !AppCtx.error) {
+            try {
+                // Tente la requête
+                const apiResponse = await request;
+                return Promise.resolve<T>(apiResponse);
+            } catch (error) {
+                const errorCode = fetchDispatcher(error.message);
+
+                // Si c'est une "failed_request", on réessaie
+                if (errorCode === 'failed_request') {
+                    attempt++;
+                    if (attempt >= maxRetries) {
+                        console.warn(`Attempt ${attempt} failed.`);
+                        return reject<T>(error as unknown);
+                    }
+                    console.warn(`Attempt ${attempt} failed. Retrying...`);
+                } else {
+                    return reject<T>(error as unknown);
+                }
+            }
+        }
     };
     /**
      * @description hooks that reject a promise fetch call
@@ -44,9 +64,13 @@ export default function useServiceBase(): IUseServiceBase {
     const reject = <TResult,>(error): Promise<TResult> => {
         if (error && error.type) return Promise.reject(error);
 
-        if (!error.status) return Promise.reject(new AppError(ErrorTypeEnum.Undefined, error.message, fetchDispatcher(error.message)));
+        if (!error.status) {
+            const err = new AppError(ErrorTypeEnum.Undefined, error.message, fetchDispatcher(error.message));
+            AppCtx.setError(err);
+            return Promise.reject(err);
+        }
 
-        let type = ErrorTypeEnum.Undefined;
+        let type: ErrorTypeEnum;
 
         switch (error.status) {
             case ResultStatusEnum.Forbidden:
@@ -71,7 +95,7 @@ export default function useServiceBase(): IUseServiceBase {
         return Promise.reject(new AppError(type, apiError.message, apiError.code, apiError.data));
     };
     /**
-     * @description method that return a fetch message error 
+     * @description method that return a fetch message error
      * @param {string} str
      * @returns fetch error message
      */
@@ -94,7 +118,7 @@ export default function useServiceBase(): IUseServiceBase {
         }
     };
     /**
-     * 
+     *
      * @returns boolean true if got session or false if got no session
      */
     const refreshSession = async (): Promise<boolean> => {
@@ -104,10 +128,10 @@ export default function useServiceBase(): IUseServiceBase {
                 switch ((request as ApiErrorType).code) {
                     case 'no_session':
                     case 'session_expired':
-                        window.location.href = configManager.getConfig.API_BASEURL + "/" + "login"
-                        throw new AppError(ErrorTypeEnum.Technical, 'got no session or expired session', 'no_session');    
+                        window.location.href = configManager.getConfig.API_BASEURL + '/' + 'login';
+                        throw new AppError(ErrorTypeEnum.Technical, 'got no session or expired session', 'no_session');
                     case 'need_mfa':
-                        window.location.href = configManager.getConfig.API_BASEURL + "/" + "login/mfa"
+                        window.location.href = configManager.getConfig.API_BASEURL + '/' + 'login/mfa';
                         throw new AppError(ErrorTypeEnum.Technical, 'need to re-auth mfa', 'need_mfa');
                     default:
                         throw new AppError(ErrorTypeEnum.Technical, 'an Error happened', 'error_happened');
@@ -121,7 +145,7 @@ export default function useServiceBase(): IUseServiceBase {
     };
 
     const gotSession = (): boolean => {
-        if (!window.location.pathname.startsWith("/admin")) {
+        if (!window.location.pathname.startsWith('/admin')) {
             return true;
         } else if (Session.token && Session.token !== '' && (Session.tokenExpire ?? new Date(Date.now())).getTime() > Date.now()) {
             return true;

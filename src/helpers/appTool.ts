@@ -1,5 +1,6 @@
 import { SearchField } from '~/context/searchContext';
 import { FormMakerContentType, FormMakerPartEnum } from '~/core/types/FormMakerCoreTypes';
+import { ArticleAttachementTypeEnum } from '~/models/articles';
 
 class AppTool {
     constructor() {}
@@ -55,7 +56,6 @@ class AppTool {
         return totalMilliseconds;
     }
 
-
     public BuildSearchURL(filters: SearchField[], start: string = '&'): string {
         let url = start;
         filters.forEach((f) => {
@@ -81,6 +81,59 @@ class AppTool {
             }
         });
         return searchField;
+    }
+
+    public articleTypeTranslater(type: ArticleAttachementTypeEnum) {
+        switch (type) {
+            case ArticleAttachementTypeEnum.AUDIO:
+                return 'Audio';
+            case ArticleAttachementTypeEnum.VIDEO:
+                return 'Vidéo';
+            case ArticleAttachementTypeEnum.YOUTUBE:
+                return 'YouTube';
+            default:
+                return 'Aucun';
+        }
+    }
+
+    public getWidth(height: number, width: number, newHeight: number): number {
+        const newWidth: number = Math.floor((width / height) * newHeight);
+        return newWidth;
+    }
+
+    public getUploadSize(pictureResult: string): Promise<{ height: number; width: number }> {
+        const image = new Image();
+        image.src = pictureResult;
+        return new Promise((resolve) => {
+            image.onload = () => {
+                const sizes = { height: image.height / 5, width: image.width / 5 };
+                resolve(sizes);
+            };
+        });
+    }
+
+    public adapteSize(width: number, height: number) {
+        if (width > height) {
+            if (width > 1200) {
+                width = width / 3;
+                height = height / 3;
+            }
+        } else if (width < height) {
+            if (height > 1500) {
+                width = width / 3;
+                height = height / 3;
+            }
+        } else if (width === height) {
+            if (height > 800) {
+                width = width / 2;
+                height = height / 2;
+            }
+        }
+
+        return {
+            width,
+            height,
+        };
     }
     // public --> end region ///////////////////////////////////////////////
 

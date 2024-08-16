@@ -11,9 +11,9 @@ import { AppError, ErrorTypeEnum } from '~/core/appError';
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function TabsView({ width = 100, containerStyle, tabTitles, content }: ITab) {
+export default function TabsView({ width = 100, containerStyle, tabTitles, content, startIndex = '0' }: ITab) {
     // #region STATE --> ///////////////////////////////////////
-    const [currentIndex, setCurrentIndex] = useState<string>('0');
+    const [currentIndex, setCurrentIndex] = useState<string>(startIndex);
     const nav = useNavigation();
     // #endregion STATE --> ////////////////////////////////////
 
@@ -50,7 +50,7 @@ export default function TabsView({ width = 100, containerStyle, tabTitles, conte
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <TabList onChange={handleChange} aria-label="lab API tabs example">
                         {tabTitles.map((titles, i) => {
-                            return <Tab key={i} label={titles} value={i.toString()} />;
+                            return <Tab key={i} label={titles} sx={{ fontWeight: 'bolder' }} value={i.toString()} />;
                         })}
                     </TabList>
                 </Box>
@@ -83,5 +83,6 @@ interface ITab {
     containerStyle?: SxProps<Theme>;
     tabTitles: string[];
     content: ReactNode[];
+    startIndex?: string;
 }
 // #endregion IPROPS --> //////////////////////////////////

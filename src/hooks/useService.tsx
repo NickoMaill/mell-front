@@ -53,7 +53,6 @@ export default function useService(): IUseServiceApi {
 
         if (response.errorCode) {
             //Modal.openModal('Erreur', <StandardError error={response} />);
-            console.log(response.errorCode);
             throw new AppError(ErrorTypeEnum.Functional, response.message, response.errorCode);
         }
 
@@ -160,7 +159,7 @@ export default function useService(): IUseServiceApi {
             credentials: 'include',
             signal: AbortSignal.timeout(HTTP_TIMEOUT * 10),
             headers,
-            body: formData ? formDataContainsFile(formData) ? formData : formDataToUrlEncoded(formData) : JSON.stringify(body),
+            body: formData ? (formDataContainsFile(formData) ? formData : formDataToUrlEncoded(formData)) : JSON.stringify(body),
         };
         const url = `${apiHost}/${route}`;
         const request = await fetch(url, options);
@@ -204,7 +203,7 @@ export default function useService(): IUseServiceApi {
             credentials: 'include',
             signal: AbortSignal.timeout(HTTP_TIMEOUT * 2),
             headers,
-            body: formData ? formDataContainsFile(formData) ? formData : formDataToUrlEncoded(formData) : JSON.stringify(body),
+            body: formData ? (formDataContainsFile(formData) ? formData : formDataToUrlEncoded(formData)) : JSON.stringify(body),
         };
 
         const url = `${apiHost}/${route}`;
@@ -273,20 +272,20 @@ export default function useService(): IUseServiceApi {
 }
 const formDataContainsFile = (formData) => {
     for (let entry of formData.entries()) {
-      const [key, value] = entry;
-      if (value instanceof File) {
-        return true;
-      }
+        const [key, value] = entry;
+        if (value instanceof File) {
+            return true;
+        }
     }
     return false;
-  };
-  const formDataToUrlEncoded = (formData) => {
+};
+const formDataToUrlEncoded = (formData) => {
     const params = new URLSearchParams();
     formData.forEach((value, key) => {
-      params.append(key, value);
+        params.append(key, value);
     });
     return params.toString();
-  };
+};
 // #region IPROPS -->  /////////////////////////////////////
 interface IUseServiceApi {
     get: <T>(url: string, headers?: HeadersInit) => Promise<T>;

@@ -2,9 +2,11 @@
 import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon from '~/components/common/AppIcon';
+import { Bold } from '~/components/common/Text';
 import CurrentShow from '~/components/home/CurrentShow';
 import Instagram from '~/components/home/Instagram';
 import LandingPic from '~/components/home/LandingPic';
+import NewsPapers from '~/components/home/NewsPapers';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -30,10 +32,13 @@ export default function Homepage() {
     return (
         <Box>
             <Box component="section">
-                <CurrentShow/>
+                <CurrentShow />
             </Box>
             <Box component="section">
-                <Instagram/>
+                <Instagram />
+            </Box>
+            <Box component="section">
+                <NewsPapers />
             </Box>
         </Box>
     );

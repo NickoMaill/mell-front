@@ -1,4 +1,4 @@
-import { Media } from "./medias";
+import { Media } from './medias';
 
 export type ShowApiModel = {
     id: number;
@@ -19,13 +19,13 @@ export type ShowApiModel = {
     description: string;
     addedAt: Date;
     updatedAt: Date;
-}
+};
 
 export type FullShow = ShowApiModel & {
     media: Media[];
     cover: Media;
     comments: Comment[];
-}
+};
 
 export type ShowPayloadType = {
     title: string;
@@ -40,7 +40,13 @@ export type ShowPayloadType = {
     endDate: Date;
     schedule: Date;
     showUrl: string;
-}
+    showOnLanding: boolean;
+    description: string;
+    subDescription: string;
+    areaLink: string;
+    ticketLink: string;
+    [key: string]: any;
+};
 
 export type Comment = {
     id: number;
@@ -51,7 +57,7 @@ export type Comment = {
     description: string;
     addedAt: Date;
     updatedAt: Date;
-}
+};
 
 export type CommentPayload = {
     showId: number;
@@ -60,4 +66,4 @@ export type CommentPayload = {
     rating: number;
     description: string;
     date: Date;
-}
+};

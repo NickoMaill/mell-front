@@ -24,8 +24,10 @@ export default function Links() {
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <Box display={'flex'}>
-            {NavigationResource.headerLinks.map((hl, i) => <HeaderLink key={i} {...hl} />)}
+        <Box className="d-flex">
+            {NavigationResource.headerLinks.map((hl, i) => (
+                <HeaderLink key={i} {...hl} />
+            ))}
         </Box>
     );
     // #endregion RENDER --> ///////////////////////////////////

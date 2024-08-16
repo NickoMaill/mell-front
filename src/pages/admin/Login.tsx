@@ -35,7 +35,7 @@ export default function Login() {
     // #endregion STATE --> ////////////////////////////////////
 
     // #region HOOKS --> ///////////////////////////////////////
-     const SessionService = useAuthSession();
+    const SessionService = useAuthSession();
     const Navigation = useNavigation();
     const Ses = useContext(SessionContext);
     const Resources = useResources();
@@ -53,7 +53,7 @@ export default function Login() {
         await SessionService.login(data)
             .then((isLoginOk) => {
                 if (isLoginOk) {
-                    Navigation.navigate("Admin");
+                    Navigation.navigate('Admin');
                     // setIsError(false);
                     // setMessageError(null);
                     // setShowAlert(true);
@@ -97,7 +97,7 @@ export default function Login() {
             SessionService.refreshSession()
                 .then((res) => {
                     if (res) {
-                        Navigation.navigateByPath("/admin");
+                        Navigation.navigateByPath('/admin');
                     }
                 })
                 .catch((err: AppError) => {
@@ -111,7 +111,7 @@ export default function Login() {
         if (resetMode) {
             setTitle(Resources.translate('login.resetTitle'));
         } else {
-            setTitle("Connexion");
+            setTitle('Connexion');
         }
     }, [resetMode]);
     // #endregion USEEFFECT --> ////////////////////////////////
@@ -130,11 +130,7 @@ export default function Login() {
                             </Bold>
                             {isLoading && <CircularProgress sx={{ marginLeft: 2 }} />}
                         </Box>
-                        {resetMode ? ( 
-                            <ResetForm />
-                        ) : (
-                            <LoginForm isError={isError} showError={showAlert} onCloseAlert={hideAlert} messageError={messageError} onSubmit={handleSubmitLogin} isLoading={isLoading} />
-                        )}
+                        {resetMode ? <ResetForm /> : <LoginForm isError={isError} showError={showAlert} onCloseAlert={hideAlert} messageError={messageError} onSubmit={handleSubmitLogin} isLoading={isLoading} />}
                     </Box>
                 </Container>
             )}

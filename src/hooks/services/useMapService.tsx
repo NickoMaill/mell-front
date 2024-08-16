@@ -1,5 +1,5 @@
 // #region IMPORTS -> /////////////////////////////////////
-import React from 'react'
+import React from 'react';
 import useService from '../useService';
 import useServiceBase from '../useServiceBase';
 import { MapType } from '~/models/map';
@@ -21,7 +21,7 @@ export default function useMapService(): IUseMapService {
     const search = async (query: string): Promise<MapType[]> => {
         const address = await asServicePromise<MapType[]>(Service.get(`map/search?q=${query}`));
         return address;
-    }
+    };
     // #endregion METHODS --> //////////////////////////////////
 
     // #region USEEFFECT --> ///////////////////////////////////
@@ -34,6 +34,6 @@ export default function useMapService(): IUseMapService {
 
 // #region IPROPS -->  /////////////////////////////////////
 interface IUseMapService {
-    search: (query: string) => Promise<MapType[]>
+    search: (query: string) => Promise<MapType[]>;
 }
 // #enderegion IPROPS --> //////////////////////////////////

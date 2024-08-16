@@ -43,18 +43,18 @@ export default function Shows({ id, action }) {
     const [long, setLong] = useState<number>(null);
     // #region STATE --> ///////////////////////////////////////
     const Resources = useResources();
-    
+
     const col: AppTableStructure<ShowApiModel> = {
         defaultSort: { field: 'startDate', sort: 'desc' },
         actions: ['view', 'update', 'delete'],
         colStruct: [
             { headerField: 'id', headerLabel: 'ID', sortable: true, type: 'number', width: 90 },
-            { headerField: 'title', headerLabel: Resources.translate("shows.form.field.title"), sortable: true, type: 'string', width: 200 },
-            { headerField: 'startDate', headerLabel: Resources.translate("shows.form.field.startedAt"), sortable: true, defaultSorted: true, defaultSortedOrder: "desc", type: 'date', width: 150, valueFormatter: (e) => moment(e).format('DD/MM/YYYY') },
-            { headerField: 'endDate', headerLabel: Resources.translate("shows.form.field.endDate"), sortable: true, type: 'dateTime', width: 150, valueFormatter: (e) => moment(e).format('DD/MM/YYYY') },
-            { headerField: "place", headerLabel: "Salle", sortable: true, type: "string" },
-            { headerField: "country", headerLabel: "Pays", sortable: true, type: "string" },
-            { headerField: "city", headerLabel: "Ville", sortable: true, type: "string" }
+            { headerField: 'title', headerLabel: Resources.translate('shows.form.field.title'), sortable: true, type: 'string', width: 200 },
+            { headerField: 'startDate', headerLabel: Resources.translate('shows.form.field.startedAt'), sortable: true, defaultSorted: true, defaultSortedOrder: 'desc', type: 'date', width: 150, valueFormatter: (e) => moment(e).format('DD/MM/YYYY') },
+            { headerField: 'endDate', headerLabel: Resources.translate('shows.form.field.endDate'), sortable: true, type: 'dateTime', width: 150, valueFormatter: (e) => moment(e).format('DD/MM/YYYY') },
+            { headerField: 'place', headerLabel: 'Salle', sortable: true, type: 'string' },
+            { headerField: 'country', headerLabel: 'Pays', sortable: true, type: 'string' },
+            { headerField: 'city', headerLabel: 'Ville', sortable: true, type: 'string' },
         ],
     };
 
@@ -64,21 +64,21 @@ export default function Shows({ id, action }) {
             content: [
                 {
                     id: 'title',
-                    label: Resources.translate("shows.form.field.title"),
+                    label: Resources.translate('shows.form.field.title'),
                     index: 1,
                     type: 'text',
                     size: 12,
                 },
                 {
                     id: 'city',
-                    label: Resources.translate("shows.form.field.city"),
+                    label: Resources.translate('shows.form.field.city'),
                     index: 1,
                     type: 'text',
                     size: 12,
                 },
                 {
                     id: 'addedAt',
-                    label: Resources.translate("shows.form.field.addedAt"),
+                    label: Resources.translate('shows.form.field.addedAt'),
                     index: 1,
                     type: 'date',
                     size: 12,
@@ -89,16 +89,16 @@ export default function Shows({ id, action }) {
 
     const formStructure: FormMakerContentType<FormMakerPartEnum.TAB>[] = [
         {
-            title: Resources.translate("shows.form.tab.info"),
+            title: Resources.translate('shows.form.tab.info'),
             type: FormMakerPartEnum.TAB,
             content: [
                 {
-                    title: Resources.translate("shows.form.panel.info"),
+                    title: Resources.translate('shows.form.panel.info'),
                     icon: 'FormatListBulleted',
                     content: [
                         {
                             id: 'title',
-                            label: Resources.translate("shows.form.field.title"),
+                            label: Resources.translate('shows.form.field.title'),
                             index: 1,
                             type: 'text',
                             size: 12,
@@ -107,7 +107,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'place',
-                            label: Resources.translate("shows.form.field.place"),
+                            label: Resources.translate('shows.form.field.place'),
                             index: 1,
                             type: 'text',
                             size: 6,
@@ -116,7 +116,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'address',
-                            label: Resources.translate("shows.form.field.address"),
+                            label: Resources.translate('shows.form.field.address'),
                             index: 2,
                             type: 'autocomplete',
                             size: 6,
@@ -132,7 +132,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'postalCode',
-                            label: Resources.translate("shows.form.field.postalCode"),
+                            label: Resources.translate('shows.form.field.postalCode'),
                             index: 1,
                             type: 'text',
                             size: 2,
@@ -141,7 +141,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'city',
-                            label: Resources.translate("shows.form.field.city"),
+                            label: Resources.translate('shows.form.field.city'),
                             index: 2,
                             type: 'text',
                             size: 2,
@@ -150,7 +150,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'country',
-                            label: Resources.translate("shows.form.field.country"),
+                            label: Resources.translate('shows.form.field.country'),
                             index: 3,
                             type: 'text',
                             size: 2,
@@ -159,7 +159,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'startDate',
-                            label: Resources.translate("shows.form.field.startedAt"),
+                            label: Resources.translate('shows.form.field.startedAt'),
                             index: 4,
                             type: 'date',
                             size: 2,
@@ -167,7 +167,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'endDate',
-                            label: Resources.translate("shows.form.field.endDate"),
+                            label: Resources.translate('shows.form.field.endDate'),
                             index: 5,
                             type: 'date',
                             size: 2,
@@ -175,7 +175,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'schedule',
-                            label: Resources.translate("shows.form.field.schedule"),
+                            label: Resources.translate('shows.form.field.schedule'),
                             index: 6,
                             type: 'time',
                             size: 2,
@@ -183,7 +183,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'subDescription',
-                            label: Resources.translate("shows.form.field.subDescription"),
+                            label: Resources.translate('shows.form.field.subDescription'),
                             index: 1,
                             type: 'textarea',
                             size: 12,
@@ -191,7 +191,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'description',
-                            label: Resources.translate("shows.form.field.description"),
+                            label: Resources.translate('shows.form.field.description'),
                             index: 1,
                             type: 'textarea',
                             size: 12,
@@ -199,18 +199,18 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'showOnLanding',
-                            label: Resources.translate("shows.form.field.showOnLanding"),
+                            label: Resources.translate('shows.form.field.showOnLanding'),
                             index: 1,
                             type: 'radio',
                             size: 3,
                             radioOptions: [
-                                { label: Resources.translate("common.yes"), value: true },
-                                { label: Resources.translate("common.no"), value: false },
+                                { label: Resources.translate('common.yes'), value: true },
+                                { label: Resources.translate('common.no'), value: false },
                             ],
                         },
                         {
                             id: 'areaLink',
-                            label: Resources.translate("shows.form.field.areaLink"),
+                            label: Resources.translate('shows.form.field.areaLink'),
                             index: 2,
                             type: 'url',
                             size: 3,
@@ -218,7 +218,7 @@ export default function Shows({ id, action }) {
                         },
                         {
                             id: 'ticketLink',
-                            label: Resources.translate("shows.form.field.ticketLink"),
+                            label: Resources.translate('shows.form.field.ticketLink'),
                             index: 3,
                             type: 'url',
                             size: 3,
@@ -245,13 +245,13 @@ export default function Shows({ id, action }) {
             ],
         },
         {
-            title: Resources.translate("shows.form.tab.visual"),
+            title: Resources.translate('shows.form.tab.visual'),
             icon: 'InsertPhoto',
             type: FormMakerPartEnum.TAB,
             hide: action === 'new',
             content: [
                 {
-                    title: Resources.translate("shows.form.panel.visual"),
+                    title: Resources.translate('shows.form.panel.visual'),
                     icon: 'InsertPhoto',
                     content: [
                         {
@@ -321,8 +321,8 @@ export default function Shows({ id, action }) {
                 id={id}
                 genericAction={action}
                 entity="Shows"
-                grammar={{ plural: Resources.translate("shows.plural"), singular: Resources.translate("shows.singular"), isFem: false }}
-                specifiers={{ singular: Resources.translate("common.specifiers.masc"), plural: Resources.translate("common.specifiers.plural") }}
+                grammar={{ plural: Resources.translate('shows.plural'), singular: Resources.translate('shows.singular'), isFem: false }}
+                specifiers={{ singular: Resources.translate('common.specifiers.masc'), plural: Resources.translate('common.specifiers.plural') }}
                 listStruct={col}
                 icon="TheaterComedy"
                 actions={['view', 'update', 'delete']}
@@ -386,19 +386,7 @@ function PicturesImport({ showId }: IPicturesImport) {
 
     return (
         <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', flexGrow: 1, alignItems: 'center' }}>
-            <AppTable
-                entity="Medias"
-                onPageChange={(e) => setCurrentPage(e)}
-                currentPage={currentPage}
-                rowsPerPage={5}
-                rows={rows}
-                columns={header}
-                isTableLoading={isLoading}
-                onExportClick={() => null}
-                isRowsCheckable={false}
-                onRowClick={(e) => handleCloseOpen(e.row.id)}
-                actions={header.actions}
-            />
+            <AppTable entity="Medias" onPageChange={(e) => setCurrentPage(e)} currentPage={currentPage} rowsPerPage={5} rows={rows} columns={header} isTableLoading={isLoading} onExportClick={() => null} isRowsCheckable={false} onRowClick={(e) => handleCloseOpen(e.row.id)} actions={header.actions} />
             <Link component="a" onClick={() => handleCloseOpen()} role={'button'} sx={{ mt: 2, cursor: 'pointer' }}>
                 <Bold>Ajouter visuel</Bold>
             </Link>
@@ -621,6 +609,4 @@ function PhotoForm({ showId, id, onSubmitted, mode }: IPicturesImport) {
     );
 }
 
-function CommentsTable() {
-    
-}
+function CommentsTable() {}

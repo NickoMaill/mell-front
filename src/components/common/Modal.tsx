@@ -8,7 +8,7 @@ import { Theme } from '@emotion/react';
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function Modal({ sxContent, children, modalTitle, isOpen, onClose, modalAction, closable, modalActionLabel, isModalActionLoading, dismissLabel, maxWidth = 'md', persistant = false, scroll = 'paper' }: IModal) {
+export default function Modal({ sxContent, children, modalTitle, isOpen, onClose, modalAction, closable, modalActionLabel, isModalActionLoading, dismissLabel, maxWidth = 'md', persistant = false, scroll = 'paper', noLayout = false, fullWidth = true }: IModal) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 
@@ -24,38 +24,46 @@ export default function Modal({ sxContent, children, modalTitle, isOpen, onClose
     // #region RENDER --> //////////////////////////////////////
     return (
         <>
-            <Dialog scroll={scroll} maxWidth={maxWidth} onClose={persistant ? null : onClose} fullWidth aria-labelledby="customized-dialog-title" open={isOpen}>
-                <Box display={'flex'} justifyContent={modalTitle ? 'space-between' : 'end'}>
-                    {modalTitle && (
-                        <DialogTitle id="customized-dialog-title" sx={{ m: 0, p: 1.3 }}>
-                            {modalTitle}
-                        </DialogTitle>
-                    )}
-                    {closable && (
-                        <IconButton
-                            aria-label="close"
-                            onClick={onClose}
-                            sx={{
-                                position: 'absolute',
-                                right: 8,
-                                top: 8,
-                                color: (theme) => theme.palette.grey[500],
-                            }}
-                        >
-                            <AppIcon name="Close" />
-                        </IconButton>
-                    )}
-                </Box>
-                <DialogContent sx={sxContent} dividers>{children}</DialogContent>
-                {modalAction && (
-                    <DialogActions>
-                        <Button autoFocus color="secondary" onClick={onClose}>
-                            {dismissLabel}
-                        </Button>
-                        <Button autoFocus onClick={modalAction}>
-                            {isModalActionLoading ? <CircularProgress /> : modalActionLabel}
-                        </Button>
-                    </DialogActions>
+            <Dialog scroll={scroll} maxWidth={maxWidth} onClose={persistant ? null : onClose} fullWidth={fullWidth} aria-labelledby="customized-dialog-title" open={isOpen}>
+                {noLayout ? (
+                    children
+                ) : (
+                    <>
+                        <Box display={'flex'} justifyContent={modalTitle ? 'space-between' : 'end'}>
+                            {modalTitle && (
+                                <DialogTitle id="customized-dialog-title" sx={{ m: 0, p: 1.3 }}>
+                                    {modalTitle}
+                                </DialogTitle>
+                            )}
+                            {closable && (
+                                <IconButton
+                                    aria-label="close"
+                                    onClick={onClose}
+                                    sx={{
+                                        position: 'absolute',
+                                        right: 8,
+                                        top: 8,
+                                        color: (theme) => theme.palette.grey[500],
+                                    }}
+                                >
+                                    <AppIcon name="Close" />
+                                </IconButton>
+                            )}
+                        </Box>
+                        <DialogContent sx={sxContent} dividers>
+                            {children}
+                        </DialogContent>
+                        {modalAction && (
+                            <DialogActions>
+                                <Button autoFocus color="secondary" onClick={onClose}>
+                                    {dismissLabel}
+                                </Button>
+                                <Button autoFocus onClick={modalAction}>
+                                    {isModalActionLoading ? <CircularProgress /> : modalActionLabel}
+                                </Button>
+                            </DialogActions>
+                        )}
+                    </>
                 )}
             </Dialog>
         </>
@@ -78,5 +86,7 @@ interface IModal {
     persistant?: boolean;
     scroll?: DialogProps['scroll'];
     sxContent?: SxProps<Theme>;
+    noLayout?: boolean;
+    fullWidth?: boolean;
 }
 // #endregion IPROPS --> //////////////////////////////////

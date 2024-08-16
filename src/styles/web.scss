@@ -1,8 +1,14 @@
+@mixin displayCenter($justify) {
+    display: flex;
+    justify-content: $justify;
+    align-items: center;
+}
+
 html,
 body {
     // height: 100%;
     margin: 0;
-    background-color: #CB9277;
+    background-color: #cb9277;
 }
 
 .page-wrapper {
@@ -48,7 +54,7 @@ main {
     padding-bottom: 2px;
 
     &:after {
-        content: "";
+        content: '';
         position: absolute;
         width: 100%;
         transform: scaleX(0);
@@ -135,8 +141,14 @@ main {
 
 .card-scroller {
     position: relative;
-    height: 150px;
+    height: 22vh;
     overflow: hidden;
+}
+
+@media screen and (max-width: 767px) {
+    .card-scroller {
+        height: 30vh;
+    }
 }
 
 .card-part {
@@ -161,6 +173,7 @@ main {
     28% {
         transform: translateX(-858px);
     }
+
     100% {
         transform: translateX(-858px);
     }
@@ -227,5 +240,52 @@ main {
     to {
         padding: 1rem;
         background-color: #ffffff;
+    }
+}
+
+/* Caroussel */
+.img-gallery-container {
+    z-index: 1;
+    display: flex;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    background-color: #000;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.picture-gallery {
+    width: max-content;
+    margin: 0.1rem;
+    transition: 100ms;
+    &:hover {
+        filter: sepia(20);
+    }
+}
+
+.img-modal-gallery {
+    display: flex;
+    align-items: center;
+}
+
+.left-right-arrow {
+    z-index: 2;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 0.7rem;
+    transition: 100ms;
+    display: flex;
+    align-items: center;
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.8);
+        svg {
+            transform: scale(1.3);
+        }
+    }
+    &:active {
+        svg {
+            transform: scale(0.9);
+        }
     }
 }

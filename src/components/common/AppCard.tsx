@@ -12,7 +12,7 @@ import stylesResources from '~/resources/stylesResources';
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function AppCard({ children, title, icon, sx }: IAppCard) {
+export default function AppCard({ children, title, icon, sx, className }: IAppCard) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 
@@ -27,7 +27,7 @@ export default function AppCard({ children, title, icon, sx }: IAppCard) {
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <Card sx={{ paddingBottom: 3, marginBlock: 2, ...sx }}>
+        <Card className={className} sx={{ paddingBottom: 3, marginBlock: 2, ...sx }}>
             <CardHeader title={title} style={{ backgroundColor: stylesResources.theme.palette.primary.main, color: 'white', padding: 10 }} titleTypographyProps={{ fontSize: 22 }} avatar={icon && <AppIcon name={icon} sx={{ fontSize: 26 }} />} />
             <CardContent sx={{ padding: 3 }}>{children}</CardContent>
         </Card>
@@ -41,5 +41,6 @@ interface IAppCard {
     title: string;
     icon?: IconNameType;
     sx?: SxProps<Theme>;
+    className?: string;
 }
 // #endregion IPROPS --> //////////////////////////////////

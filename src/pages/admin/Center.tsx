@@ -1,8 +1,9 @@
 // #region IMPORTS -> /////////////////////////////////////
 import { Container } from '@mui/material';
-import { ReactNode, Suspense, useEffect, useState } from 'react';
+import { ReactNode, Suspense, useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import AppFullPageLoader from '~/components/common/AppFullPageLoader';
+import AppContext from '~/context/appContext';
 import { AppError, ErrorTypeEnum } from '~/core/appError';
 // #endregion IMPORTS -> //////////////////////////////////
 
@@ -15,6 +16,7 @@ export default function Center() {
     // #endregion STATE --> ////////////////////////////////////
 
     // #region HOOKS --> ///////////////////////////////////////
+    const AppCtx = useContext(AppContext);
     const [params] = useSearchParams();
     // #endregion HOOKS --> ////////////////////////////////////
 
@@ -26,8 +28,8 @@ export default function Center() {
             const componentProps = { id: params.has('ID') ? params.get('ID') : '', action: params.has('action') ? params.get('action') : 'table' };
             return <DynamicComponent {...componentProps} />;
         } catch (error) {
-            console.error(error);
-            throw new AppError(ErrorTypeEnum.Technical, 'error while loading main component', 'loading_error');
+            const err = new AppError(ErrorTypeEnum.Technical, 'error while loading main component', 'loading_error');
+            AppCtx.setError(err);
         }
     };
     // #endregion METHODS --> //////////////////////////////////
@@ -47,7 +49,7 @@ export default function Center() {
     // #region RENDER --> //////////////////////////////////////
     return (
         <Container sx={{ '@media (min-width: 1200px)': { maxWidth: null } }}>
-            <Suspense fallback={<AppFullPageLoader isLoading/>}>{component}</Suspense>
+            <Suspense fallback={<AppFullPageLoader isLoading />}>{component}</Suspense>
         </Container>
     );
     // #endregion RENDER --> ///////////////////////////////////

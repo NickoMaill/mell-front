@@ -112,7 +112,7 @@ export default function useSessionService(): IUseSessionService {
                         return false;
                 }
             }
-            throw new AppError(ErrorTypeEnum.Functional, "une erreur est survenue", "error_happened");
+            throw new AppError(ErrorTypeEnum.Functional, 'une erreur est survenue', 'error_happened');
         }
         return true;
     };

@@ -13,7 +13,7 @@ export type Media = {
     sortOrder: number;
     addedAt: Date;
     updatedAt: Date;
-}
+};
 
 export interface MediaPayloadType {
     name?: string;
@@ -24,7 +24,8 @@ export interface MediaPayloadType {
     mediaGroup: MediaGroupEnum;
     mediaGroupId: number;
     isMain?: boolean;
-};
+    [key: string]: any;
+}
 
 export enum MediaType {
     JPEG = 'jpeg',
@@ -39,6 +40,7 @@ export enum MediaStatus {
 }
 
 export enum MediaGroupEnum {
-    SHOWS = "show",
-    CARROUSEL = "carrousel"
+    SHOWS = 'show',
+    CARROUSEL = 'carrousel',
+    NEWSPAPERS = 'newsPaper',
 }

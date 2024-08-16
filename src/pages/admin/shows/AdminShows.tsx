@@ -17,20 +17,20 @@ const tableStruct: AppTableStructure<ShowApiModel> = {
         },
         {
             headerLabel: 'Titre',
-            headerField: "title",
-            type: "string",
+            headerField: 'title',
+            type: 'string',
             sortable: true,
         },
         {
             headerLabel: 'Commence le',
-            headerField: "startDate",
-            type: "date",
+            headerField: 'startDate',
+            type: 'date',
             sortable: true,
         },
         {
             headerLabel: 'Se termine le',
-            headerField: "endDate",
-            type: "date",
+            headerField: 'endDate',
+            type: 'date',
             sortable: true,
         },
     ],
@@ -49,15 +49,15 @@ export default function AdminShows() {
 
     // #region METHODS --> /////////////////////////////////////
     const getShows = async () => {
-        const data = await ShowService.getShowsList().finally(() => setIsLoading(false))
+        const data = await ShowService.getShowsList().finally(() => setIsLoading(false));
         setShows(data);
-    }
+    };
     // #endregion METHODS --> //////////////////////////////////
 
     // #region USEEFFECT --> ///////////////////////////////////
     useEffect(() => {
         getShows();
-    }, [])
+    }, []);
     // #endregion USEEFFECT --> ////////////////////////////////
 
     // #region RENDER --> //////////////////////////////////////

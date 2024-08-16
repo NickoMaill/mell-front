@@ -10,4 +10,4 @@ export type PostApiModel = {
     sortOrder?: number;
     addedAt: Date;
     updatedAt: Date;
-}
+};

@@ -6,12 +6,12 @@ interface IAppContext {
     isNoAccess: boolean;
     setIsNoAccess?: Dispatch<SetStateAction<boolean>>;
     error: AppError;
-    setError?: Dispatch<SetStateAction<AppError>>
+    setError?: Dispatch<SetStateAction<AppError>>;
 }
 
 const initialContext: IAppContext = {
     isNoAccess: false,
-    error: null
+    error: null,
 };
 
 export type AlertContextType = {

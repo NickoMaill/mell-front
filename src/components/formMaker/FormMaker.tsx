@@ -71,18 +71,20 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
             const tabGlobalContent: JSX.Element[][] = [];
             let tabContent: JSX.Element[] = [];
 
-            structure.filter(s => !s.hide).forEach((tab: FormMakerContentType<FormMakerPartEnum>) => {
-                tabTitles.push(tab.title);
-                tab.content.forEach((panel, i) => {
-                    tabContent.push(buildPanelContent(panel, i));
+            structure
+                .filter((s) => !s.hide)
+                .forEach((tab: FormMakerContentType<FormMakerPartEnum>) => {
+                    tabTitles.push(tab.title);
+                    tab.content.forEach((panel, i) => {
+                        tabContent.push(buildPanelContent(panel, i));
+                    });
+                    tabGlobalContent.push(tabContent);
+                    tabContent = [];
                 });
-                tabGlobalContent.push(tabContent);
-                tabContent = [];
-            });
 
             return <TabsView tabTitles={tabTitles} content={tabGlobalContent} />;
         } else {
-            return <>{structure.filter(s => !s.hide).map((s, i) => buildPanelContent(s, i))}</>;
+            return <>{structure.filter((s) => !s.hide).map((s, i) => buildPanelContent(s, i))}</>;
         }
     };
 
@@ -208,41 +210,41 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
         };
         if (isView) {
             let founded = null;
-            switch(element.type) {
-                case "select":
+            switch (element.type) {
+                case 'select':
                     if (baseProps.value) {
-                        founded = element.selectOptions.find(e => e.value === baseProps.value);
+                        founded = element.selectOptions.find((e) => e.value === baseProps.value);
                         if (founded) {
                             baseProps.value = founded.label;
                         }
                     }
                     break;
-                case "radio":
+                case 'radio':
                     founded = null;
                     if (baseProps.value) {
-                        founded = element.radioOptions.find(e => e.value === baseProps.value);
+                        founded = element.radioOptions.find((e) => e.value === baseProps.value);
                         if (founded) {
                             baseProps.value = founded.label;
                         }
                     }
                     break;
-                case "checkbox":
+                case 'checkbox':
                     founded = null;
                     if (baseProps.value) {
-                        founded = element.checkboxOptions.find(e => e.value === baseProps.value);
+                        founded = element.checkboxOptions.find((e) => e.value === baseProps.value);
                         if (founded) {
                             baseProps.value = founded.label;
                         }
                     }
                     break;
-                case "date":
-                    const date = moment(baseProps.value).format("DD/MM/yyyy")
+                case 'date':
+                    const date = moment(baseProps.value).format('DD/MM/yyyy');
                     baseProps.value = date;
                     break;
                 default:
                     break;
             }
-            if (element.type !== "htmlContent") element.type = "value";
+            if (element.type !== 'htmlContent') element.type = 'value';
         }
         switch (element.type) {
             case 'email':
@@ -250,10 +252,10 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
             case 'search':
             case 'url':
             case 'text':
-            case "value":
+            case 'value':
                 return <InputTextField {...baseProps} key={i} type={element.type} />;
-            case "hidden":
-                return <InputHidden {...baseProps} key={i} />
+            case 'hidden':
+                return <InputHidden {...baseProps} key={i} />;
             case 'checkbox':
                 return <InputCheckBoxField {...baseProps} key={i} options={element.checkboxOptions} />;
             case 'select':
@@ -270,9 +272,9 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
                 return <InputTextAreaField {...baseProps} key={i} limit={element.limit} rows={element.rows} />;
             case 'date':
                 return <InputDateField {...baseProps} key={i} format={element.dateFormat} views={element.dateViews} openTo={element.dateOpenTo} />;
-            case "dateTime":
+            case 'dateTime':
                 return <InputDateField {...baseProps} key={i} mode="dateTime" format={element.dateFormat} views={element.dateViews} openTo={element.dateOpenTo} />;
-            case "time":
+            case 'time':
                 return <InputDateField {...baseProps} key={i} mode="time" format={element.dateFormat} views={element.dateViews} openTo={element.dateOpenTo} />;
             case 'color':
                 return <InputColorField {...baseProps} key={i} />;
@@ -281,7 +283,11 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
             case 'range':
                 return <RangeInput {...baseProps} key={i} />;
             case 'htmlContent':
-                return <Container sx={{ width: "100%" }} key={i}>{element.htmlContent}</Container>;
+                return (
+                    <Container sx={{ width: '100%' }} key={i}>
+                        {element.htmlContent}
+                    </Container>
+                );
             case 'file':
                 return (
                     <InputFileField
@@ -300,12 +306,12 @@ export default function FormMaker<T>({ onSubmit, structure, data, outputType = '
 
     const getActionLabel = (str: string) => {
         switch (str.toLowerCase()) {
-            case "update":
-                return "Modifier";
-            case "delete":
-                return "Supprimer";
-            case "table":
-                return "Rechercher";
+            case 'update':
+                return 'Modifier';
+            case 'delete':
+                return 'Supprimer';
+            case 'table':
+                return 'Rechercher';
             default:
                 return 'Ajouter';
         }

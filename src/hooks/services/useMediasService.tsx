@@ -21,25 +21,25 @@ export default function useMediasService(): IUseMediasService {
     const getShowPic = async (showId: number): Promise<QueryResult<Media>> => {
         const response = await asServicePromise<QueryResult<Media>>(Service.get(`medias?groupId=${showId}&mediaGroup=show`));
         return response;
-    }
+    };
 
     const addPic = async (form: FormData): Promise<boolean> => {
         await asServicePromise(Service.post(`medias`, null, form));
         return true;
-    }
+    };
 
     const getPic = async (id: number): Promise<QueryResult<Media>> => {
         const response = await asServicePromise<QueryResult<Media>>(Service.get(`medias/${id}`));
         return response;
-    }
+    };
     const updatePic = async (id: number, form: FormData): Promise<boolean> => {
         await asServicePromise(Service.put(`medias/${id}`, null, form));
         return true;
-    }
+    };
     const deletePic = async (id: number) => {
         await asServicePromise(Service.del(`medias/${id}`));
         return true;
-    }
+    };
     // #endregion METHODS --> //////////////////////////////////
 
     // #region USEEFFECT --> ///////////////////////////////////
@@ -52,10 +52,10 @@ export default function useMediasService(): IUseMediasService {
 
 // #region IPROPS -->  /////////////////////////////////////
 interface IUseMediasService {
-    getShowPic: (showId: number) => Promise<QueryResult<Media>>
+    getShowPic: (showId: number) => Promise<QueryResult<Media>>;
     addPic: (form: FormData) => Promise<boolean>;
     getPic: (id: number) => Promise<QueryResult<Media>>;
-    updatePic: (id: number, form: FormData) => Promise<boolean>
+    updatePic: (id: number, form: FormData) => Promise<boolean>;
     deletePic: (id: number) => Promise<boolean>;
 }
 // #enderegion IPROPS --> //////////////////////////////////

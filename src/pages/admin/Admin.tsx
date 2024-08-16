@@ -23,10 +23,12 @@ export default function Admin() {
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <AdminLayout title={"Bienvenue !"} subtitle='Gérer le contenu de votre site comme bon vous semble'>
+        <AdminLayout title={'Bienvenue !'} subtitle="Gérer le contenu de votre site comme bon vous semble">
             <Box className="d-flex justify-content-center">
                 <Box className="d-flex flex-wrap justify-content-center align-items-center my-3">
-                    {NavigationResource.adminLinks.map((l, i) => <AppMiniCard key={i} cardData={l} />)}
+                    {NavigationResource.adminLinks.map((l, i) => (
+                        <AppMiniCard key={i} cardData={l} />
+                    ))}
                 </Box>
             </Box>
         </AdminLayout>

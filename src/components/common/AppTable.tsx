@@ -73,7 +73,25 @@ export type ActionsType = 'view' | 'delete' | 'update';
 //#endregion
 
 //#region Main Function
-export default function AppTable<T>({ onRowClick = () => {}, sx, columns, rows, isTableLoading = true, isRowsCheckable = false, onSort, rowsPerPage = 50, onPaginationChange, onPageChange, currentPage = 0, actions, onExportClick, entity, onAllRowSelect = () => {}, isAllRowSelected, onRowSelect = null }: IAppTable<T>) {
+export default function AppTable<T>({
+    onRowClick = () => {},
+    sx,
+    columns,
+    rows,
+    isTableLoading = true,
+    isRowsCheckable = false,
+    onSort,
+    rowsPerPage = 50,
+    onPaginationChange,
+    onPageChange,
+    currentPage = 0,
+    actions,
+    onExportClick,
+    entity,
+    onAllRowSelect = () => {},
+    isAllRowSelected,
+    onRowSelect = null,
+}: IAppTable<T>) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 
@@ -147,12 +165,12 @@ export default function AppTable<T>({ onRowClick = () => {}, sx, columns, rows, 
                 headerName: 'Actions',
                 renderHeader: () => <strong>{'Actions'}</strong>,
                 getActions: (e) => {
-                    return actions.map((a) => {
+                    return actions.map((a, i) => {
                         if (typeof a === 'string') {
-                            return <ActionTable type={a} entity={entity} id={e.row.id} />;
+                            return <ActionTable key={i} type={a} entity={entity} id={e.row.id} />;
                         } else {
                             return (
-                                <Tooltip title={a.title}>
+                                <Tooltip key={i} title={a.title}>
                                     <GridActionsCellItem icon={<AppIcon name={a.icon} />} label={a.title} onClick={() => a.onClick(e)} color="inherit" />
                                 </Tooltip>
                             );
@@ -180,7 +198,7 @@ export default function AppTable<T>({ onRowClick = () => {}, sx, columns, rows, 
     // #region RENDER --> //////////////////////////////////////
     // minWidth: { xs: '1400px', md: '1600px', lg: '100%' },
     return (
-        <Box sx={{ mt: 2, overflowX: 'auto', width: "100%" }}>
+        <Box sx={{ mt: 2, overflowX: 'auto', width: '100%' }}>
             <DataGrid
                 sx={{
                     '.MuiDataGrid-cell:focus': {
@@ -204,7 +222,7 @@ export default function AppTable<T>({ onRowClick = () => {}, sx, columns, rows, 
                         overflow: 'auto',
                     },
                     padding: 0,
-                    ...sx
+                    ...sx,
                 }}
                 rows={!isTableLoading ? rows.records : []}
                 columns={mapToGridColDef(columns.colStruct)}
@@ -253,7 +271,7 @@ export default function AppTable<T>({ onRowClick = () => {}, sx, columns, rows, 
                         },
                     },
                 }}
-                paginationMode='server'
+                paginationMode="server"
                 pageSizeOptions={[5, 10, 25, 50]}
                 onPaginationModelChange={onPaginationChange}
                 checkboxSelection={isRowsCheckable}
@@ -318,7 +336,7 @@ function CustomNoRowsOverlay() {
         },
     }));
     return (
-        <StyledGridOverlay className='my-3'>
+        <StyledGridOverlay className="my-3">
             <svg width="120" height="70" viewBox="0 0 184 152" aria-hidden focusable="false">
                 <g fill="none" fillRule="evenodd">
                     <g transform="translate(24 31.67)">

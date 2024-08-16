@@ -23,16 +23,17 @@ export default function InputSelectField({ disabled, size, id, value = '', onCha
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <InputBase sx={sx} size={size} disabled={disabled} id={id} helpText={helpText} label={label} error={error} errorMessage={errorMessage}>
+        <InputBase sx={sx} size={size} disabled={disabled} id={id} required={required} helpText={helpText} label={label} error={error} errorMessage={errorMessage}>
             {options && options.length > 0 ? (
                 <Select
+                    required={required}
                     disabled={disabled}
                     displayEmpty={!required}
-                    sx={{ marginTop: 1, backgroundColor: disabled ? '#e8e5e5' : 'transparent' }}
+                    sx={{ marginTop: '8px', marginBottom: '4px', backgroundColor: disabled ? '#e8e5e5' : 'transparent' }}
                     color={success ? 'success' : warning ? 'warning' : null}
                     id={id}
                     name={id}
-                    defaultValue={required && !value ? options[0].value ?? '' : !value ? '' : value}
+                    defaultValue={required && !value ? (options[0].value ?? '') : !value ? '' : value}
                     onChange={onChange}
                     error={error}
                     fullWidth

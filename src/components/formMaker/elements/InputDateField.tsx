@@ -32,11 +32,11 @@ export default function InputDateField({ id, label, disabled, required, format =
         <InputBase size={size} id={id} label={label} disabled={disabled} helpText={helpText} error={error} errorMessage={errorMessage} required={required}>
             <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={'de'} localeText={deDE.components.MuiLocalizationProvider.defaultProps.localeText}>
                 {mode === 'date' ? (
-                    <DatePicker slotProps={{ textField: { required: required } }} defaultValue={!date ? null : moment(date)} onChange={(e) => setDate(moment(e).format('YYYY-MM-DD'))} openTo={openTo} format={format} views={views} />
+                    <DatePicker sx={{ marginTop: '8px', marginBottom: '4px' }} slotProps={{ textField: { required: required } }} defaultValue={!date ? null : moment(date)} onChange={(e) => setDate(moment(e).format('YYYY-MM-DD'))} openTo={openTo} format={format} views={views} />
                 ) : mode === 'dateTime' ? (
-                    <DateTimePicker slotProps={{ textField: { required: required } }} defaultValue={!date ? null : moment(date)} onChange={(e) => setDate(moment(e).format('YYYY-MM-DD hh:mm:ss'))} format="DD/MM/YYYY hh:mm:ss" />
+                    <DateTimePicker sx={{ marginTop: '8px', marginBottom: '4px' }} slotProps={{ textField: { required: required } }} defaultValue={!date ? null : moment(date)} onChange={(e) => setDate(moment(e).format('YYYY-MM-DD hh:mm:ss'))} format="DD/MM/YYYY hh:mm:ss" />
                 ) : (
-                    <TimePicker />
+                    <TimePicker sx={{ marginTop: '8px', marginBottom: '4px' }} />
                 )}
                 <input type="hidden" id={id} name={id} value={date ? date : ''} onChange={onChange} />
             </LocalizationProvider>

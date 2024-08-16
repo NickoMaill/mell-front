@@ -21,9 +21,11 @@ export default function Footer() {
 
     // render --> start region ///////////////////////////////////
     return (
-        <Box display={{ md: "block", sm: "none" }} sx={{ backgroundColor: stylesResources.theme.palette.primary.main }} component="footer">
+        <Box className="bg-primary" display={{ md: 'block', sm: 'none' }} component="footer">
             <Container className="p-3 d-flex justify-content-between align-items-center container">
-                {NavigationResource.footerLink.map((fl, i) => <HeaderLink key={i} {...fl} />)}
+                {NavigationResource.footerLink.map((fl, i) => (
+                    <HeaderLink key={i} {...fl} />
+                ))}
                 <SocialMedia />
             </Container>
         </Box>

@@ -169,7 +169,6 @@ export default function AppCenter<T>(props: ICenter<T>) {
      * @returns
      */
     const centerNew = async (e: FormData): Promise<void> => {
-        e.set('GenericAction', props.genericAction);
         updateLoaders('isSubmitLoading', true);
         updateIs('isAlertVisible', false);
         setFocusOnError([]);
@@ -431,7 +430,6 @@ export default function AppCenter<T>(props: ICenter<T>) {
     const renderMiniTable = () => {
         return (
             <Box>
-
                 <AppTable
                     entity={props.entity}
                     actions={props.listStruct.actions}
@@ -454,7 +452,9 @@ export default function AppCenter<T>(props: ICenter<T>) {
                             : Nav.navigateByPath(`${NavigationResource.routesPath.center}?Table=${props.entity}&ID=${e.id}&action=update`)
                     }
                 />
-                <Link component="a">{Resources.translate("common.add")} {props.grammar.singular.toLowerCase()}</Link>
+                <Link component="a">
+                    {Resources.translate('common.add')} {props.grammar.singular.toLowerCase()}
+                </Link>
             </Box>
         );
     };

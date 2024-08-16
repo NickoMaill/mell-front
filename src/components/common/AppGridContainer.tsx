@@ -23,7 +23,7 @@ export default function AppGridContainer({ children, spacing = 5, width = '100%'
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <Grid container wrap="wrap" sx={{...sx, marginLeft: 0}} flexWrap="wrap" alignItems={'center'} width={width} spacing={spacing}>
+        <Grid container wrap="wrap" sx={{ ...sx, marginLeft: 0 }} flexWrap="wrap" alignItems={'center'} width={width} spacing={spacing}>
             {children}
         </Grid>
     );

@@ -5,7 +5,7 @@ export type User = {
     email: string;
     mobile: string;
     token: string;
-}
+};
 
 export enum UserAccessLevel {
     ADMIN = 0,

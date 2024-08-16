@@ -1,11 +1,11 @@
 // #region IMPORTS -> /////////////////////////////////////
-import React from 'react'
+import React from 'react';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function Subscribe ({}: ISubscribe) {
+export default function Subscribe({}: ISubscribe) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 

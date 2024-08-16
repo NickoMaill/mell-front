@@ -1,5 +1,5 @@
 import { ParsedUrlQuery } from 'querystring';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Location, Path, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { AppError, ErrorTypeEnum } from '~/core/appError';
 import navigationResources from '~/resources/navigationResources';
@@ -10,7 +10,7 @@ import NotFound from '~/pages/ NotFound';
 const urlRegex = /^(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)|http:\/\/localhost:\d+)$/i;
 
 export default function useNavigation(): IUseNavigation {
-    const [currentRoute] = useState<RouterDescription | null>(null);
+    const [currentRoute, setCurrentRoute] = useState<RouterDescription | null>(null);
     const navigateTo = useNavigate();
     const [queryString] = useSearchParams();
     const location = useLocation();
@@ -27,15 +27,15 @@ export default function useNavigation(): IUseNavigation {
             //     throw new AppError(ErrorTypeEnum.Functional, `navigation guard activate due to duplicate navigation to ${pathname}`, 'duplicate_navigation');
             // }
             //const route: Path = params && isParamsCompatible ? routesData.path.split(':')[0] + params : routesData.path;
-            const route: Path = { pathname: routesData.path, search: params, hash: null }
-            navigateTo(route, { replace: replace, relative: "path" });
+            const route: Path = { pathname: routesData.path, search: params, hash: null };
+            navigateTo(route, { replace: replace, relative: 'path' });
         } else {
             throw new AppError(ErrorTypeEnum.Functional, 'wrong routes', 'wrong_routes');
         }
     };
 
     const navigateByPath = (path: string, replace?: boolean) => {
-        navigateTo(path, { replace, relative: "path" });
+        navigateTo(path, { replace, relative: 'path' });
     };
 
     const externalNavigate = (url: string, blank?: boolean) => {
@@ -63,7 +63,7 @@ export default function useNavigation(): IUseNavigation {
         if (route) {
             return route;
         } else {
-            return { name: "NotFound", element: NotFound, path: "*", title: "Ressource introuvable", isAuthRequired: false } as RouterDescription
+            return { name: 'NotFound', element: NotFound, path: '*', title: 'Ressource introuvable', isAuthRequired: false } as RouterDescription;
             // throw new AppError(ErrorTypeEnum.Functional, 'wrong routes', 'wrong_routes');
         }
     };
@@ -84,6 +84,10 @@ export default function useNavigation(): IUseNavigation {
         console.log(route);
         console.groupEnd();
     };
+
+    useEffect(() => {
+        setCurrentRoute(getPathDescription());
+    }, [pathname]);
 
     return { navigate, navigateByPath, externalNavigate, goBack, goToHomePage, pathname, getPathDescription, currentRoute, logCurrentRoute, query, location };
 }

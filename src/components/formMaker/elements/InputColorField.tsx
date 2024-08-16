@@ -25,7 +25,7 @@ export default function InputColorField({ disabled, value = '', error, onChange,
     // #region RENDER --> //////////////////////////////////////
     return (
         <InputBase required={required} disabled={disabled} id={id} label="Couleur" size={size}>
-            <MuiColorInput disabled={disabled} value={color} sx={{ marginTop: 1.95, backgroundColor: disabled ? '#e8e5e5' : 'transparent', borderRadius: 1 }} onChange={(v) => setColor(v)} error={error} format="hex" /*required={required}*/ />
+            <MuiColorInput disabled={disabled} value={color} sx={{ marginTop: '8px', marginBottom: '4px', backgroundColor: disabled ? '#e8e5e5' : 'transparent', borderRadius: 1 }} onChange={(v) => setColor(v)} error={error} format="hex" /*required={required}*/ />
             <input id={id} name={id} disabled={disabled} type="hidden" value={color} onChange={onChange} />
         </InputBase>
     );

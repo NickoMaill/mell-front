@@ -1,29 +1,10 @@
 import { Link } from 'react-router-dom';
-// import { AppBar, Box, Container, Toolbar } from '@mui/material';
 import logo from '~/assets/pictures/logo.webp';
 import Links from './Links';
 import SocialMedia from './SocialMedia';
-
-// export default function Header() {
-//     return (
-//         <AppBar position="relative" sx={{ zIndex: 1 }}>
-//             <Toolbar disableGutters>
-//                 <Container sx={{ flexWrap: 'wrap', position: "relative", padding: 1.7 }} className="d-flex justify-content-between align-items-center w-100 container">
-//                     <SocialMedia />
-//                     <Link className='logo-header-container' to={'/'}>
-//                         <img src={logo} width={50} className="logo-header" />
-//                     </Link>
-//                     <Links />
-//                 </Container>
-//             </Toolbar>
-//         </AppBar>
-//     );
-// }
-
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
@@ -35,7 +16,7 @@ import Button from '@mui/material/Button';
 import stylesResources from '~/resources/stylesResources';
 import NavigationResource from '~/resources/navigationResources';
 import HeaderLink from '../common/HeaderLink';
-import { ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { ListItem, ListItemButton } from '@mui/material';
 
 const drawerWidth = 300;
 
@@ -47,14 +28,12 @@ export default function Header() {
     };
 
     const drawer = (
-        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-            <Typography sx={{ my: 2 }}>
-                <Link to={'/'}>
-                    <Button variant='text'>
-                        <img src={logo} width={50} className="logo-header" />
-                    </Button>
-                </Link>
-            </Typography>
+        <Box onClick={handleDrawerToggle} className="text-center">
+            <Link className="my-3" to={'/'}>
+                <Button variant="text">
+                    <img src={logo} width={50} className="logo-header" />
+                </Button>
+            </Link>
             <Divider />
             <List>
                 {[...NavigationResource.headerLinks, ...NavigationResource.footerLink].map((hl, i) => (
@@ -69,10 +48,10 @@ export default function Header() {
     );
 
     return (
-        <Box sx={{ display: 'flex' }}>
-            <AppBar component="nav" position='relative' sx={{ padding: 1.5, zIndex: 1 }}>
+        <Box className="d-flex">
+            <AppBar component="nav" position="relative" className="position-relative p-3 z-1">
                 <Toolbar className="d-flex justify-content-between align-items-center">
-                    <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { md: 'none' } }}>
+                    <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} className="me-3" sx={{ mr: 2, display: { md: 'none' } }}>
                         <MenuIcon />
                     </IconButton>
                     <Typography component="div" sx={{ flexGrow: 1, display: { xs: 'none', md: 'block' } }}>
@@ -80,7 +59,7 @@ export default function Header() {
                     </Typography>
                     <Box className="logo-header-container">
                         <Link to={'/'}>
-                            <Button variant="text" color="secondary" sx={{ padding: 0.3 }}>
+                            <Button variant="text" color="secondary" className="p-2">
                                 <img src={logo} width={40} className="logo-header" />
                             </Button>
                         </Link>
@@ -90,7 +69,7 @@ export default function Header() {
                     </Box>
                 </Toolbar>
             </AppBar>
-            <nav>
+            <Box component="nav">
                 <Drawer
                     variant="temporary"
                     open={mobileOpen}
@@ -100,7 +79,7 @@ export default function Header() {
                 >
                     {drawer}
                 </Drawer>
-            </nav>
+            </Box>
         </Box>
     );
 }

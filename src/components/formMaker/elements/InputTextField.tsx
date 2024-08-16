@@ -69,7 +69,7 @@ export default function InputTextField({ sx, style, inputStyle, disabled, requir
                     name={id}
                     id={id}
                     className={success ? 'text-field-success' : warning ? 'text-field-warning' : null}
-                    //required={required}
+                    required={required}
                     margin="dense"
                     fullWidth
                     onChange={onChange}

@@ -70,18 +70,23 @@ export default function CenterBase(props: ICenterBase) {
     }, [isTemplateDisabled]);
 
     return (
-        <Container className='my-4'>
-            <Box display="flex" alignItems="center" marginBottom={2}>
-                {props.icon && <AppIcon name={props.icon} sx={{ fontSize: '3.3rem' }} className="me-2" color="primary" />}
-                <Typography variant="h3" color={stylesResources.theme.palette.primary.main} component="h2">
-                    {props.prefix ? props.prefix + ' ' + props.grammar.singular : props.grammar.plural}
-                </Typography>
+        <Container className="my-4">
+            <Box display="flex" justifyContent={'space-between'} alignItems="center" marginBottom={2}>
+                <Box display={'flex'} alignItems="center">
+                    {props.icon && <AppIcon name={props.icon} sx={{ fontSize: '3.3rem' }} className="me-2" color="primary" />}
+                    <Typography variant="h3" color={stylesResources.theme.palette.primary.main} component="h2">
+                        {props.prefix ? props.prefix + ' ' + props.grammar.singular : props.grammar.plural}
+                    </Typography>
+                </Box>
+                <Button href={NavigationResource.routesPath.admin} startIcon={<AppIcon name="House" />} variant="outlined">
+                    Accueil
+                </Button>
             </Box>
             {props.action === GenericActionEnum.TABLE && (
                 <Box marginBottom={2}>
                     <Box display={'flex'} marginBottom={{ xs: 1, md: 0 }} flexWrap={'wrap'} justifyContent={'space-between'}>
                         <AppCenterSearch grammar={props.grammar} onSubmitSearchForm={props.onSubmitSearchForm} searchFormStruct={props.searchForm} needToQuery={props.needToQuery} />
-                        {(props.bulkNew || props.bulkUpdate) ? (
+                        {props.bulkNew || props.bulkUpdate ? (
                             <Box marginBlock={2} display={'flex'}>
                                 {props.bulkNew && (
                                     <Button onClick={onClickBulkNew} sx={{ marginRight: props.bulkUpdate ? 2 : 0 }} variant="outlined">
@@ -96,13 +101,13 @@ export default function CenterBase(props: ICenterBase) {
                             </Box>
                         ) : null}
                     </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Link component="a" href={`${NavigationResource.routesPath.center}?Table=${props.entity}&action=new`}>
-                                <Bold>
-                                    {Resources.translate('common.add')} {props.grammar.singular.toLowerCase()}
-                                </Bold>
-                            </Link>
-                        </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Link component="a" href={`${NavigationResource.routesPath.center}?Table=${props.entity}&action=new`}>
+                            <Bold>
+                                {Resources.translate('common.add')} {props.grammar.singular.toLowerCase()}
+                            </Bold>
+                        </Link>
+                    </Box>
                     <Modal
                         modalTitle={Resources.translate('center.bulk.bulkTitle', { grammar: props.grammar.plural.toLowerCase(), action: bulkType === 'new' ? Resources.translate('common.add') : Resources.translate('common.update') })}
                         closable
@@ -148,7 +153,7 @@ function SubmitSubFooter() {
     return (
         <Box display="flex" justifyContent="center">
             <Button variant="contained" className="ms-3" color="secondary" onClick={() => navigation.goBack()}>
-                {Resources.translate("common.back")}
+                {Resources.translate('common.back')}
             </Button>
         </Box>
     );

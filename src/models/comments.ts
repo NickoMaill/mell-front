@@ -7,7 +7,7 @@ export type Comment = {
     description: string;
     addedAt: Date;
     updatedAt: Date;
-}
+};
 
 export type CommentPayload = {
     showId: number;
@@ -17,4 +17,4 @@ export type CommentPayload = {
     description: string;
     date: Date;
     rawDate: string;
-}
+};

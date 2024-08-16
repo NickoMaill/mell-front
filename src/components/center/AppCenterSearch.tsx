@@ -54,7 +54,7 @@ export default function AppCenterSearch<T>({ searchFormStruct, onSubmitSearchFor
                     field: el,
                     fieldName: searchFormStruct[0].content[index].label,
                     values: f[el],
-                    formattedValue: searchFormStruct[0].content[index].type === "date" ? moment(f[el]).format("DD/MM/YYYY") : f[el]
+                    formattedValue: searchFormStruct[0].content[index].type === 'date' ? moment(f[el]).format('DD/MM/YYYY') : f[el],
                 });
             }
         });

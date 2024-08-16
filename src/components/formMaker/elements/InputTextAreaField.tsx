@@ -42,6 +42,7 @@ export default function InputTextAreaField({ disabled, id, onChange, value = '',
                 disabled={disabled}
                 id={id}
                 name={id}
+                sx={{ marginTop: '8px', marginBottom: '4px' }}
                 error={isOutOfLimit || error}
                 color={success ? 'success' : warning ? 'warning' : null}
                 type="text"

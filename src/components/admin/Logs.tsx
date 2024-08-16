@@ -14,7 +14,7 @@ import { FormMakerContentType, FormMakerPartEnum } from '~/core/types/FormMakerC
 export default function Logs({ id, action }) {
     // #region STATE --> ///////////////////////////////////////
     const col: AppTableStructure<LogsApiModel> = {
-        defaultSort: { field: "addedAt", sort: 'desc' },
+        defaultSort: { field: 'addedAt', sort: 'desc' },
         actions: ['view'],
         colStruct: [
             {
@@ -25,7 +25,7 @@ export default function Logs({ id, action }) {
                 width: 90,
             },
             {
-                headerField: "userId",
+                headerField: 'userId',
                 headerLabel: 'Utilisateur',
                 sortable: true,
                 type: 'string',
@@ -39,17 +39,17 @@ export default function Logs({ id, action }) {
                 width: 100,
             },
             {
-                headerField: "addedAt",
+                headerField: 'addedAt',
                 headerLabel: 'Date & Heure',
                 sortable: true,
-                type: "dateTime",
+                type: 'dateTime',
                 defaultSorted: true,
                 defaultSortedOrder: 'desc',
                 width: 150,
                 valueFormatter: (e) => moment(e).format('DD/MM/YYYY'),
             },
             {
-                headerField: "description",
+                headerField: 'description',
                 headerLabel: 'Détails',
                 sortable: false,
                 type: 'string',
@@ -65,29 +65,29 @@ export default function Logs({ id, action }) {
             // type: FormMakerPartEnum.SEARCH,
             content: [
                 {
-                    id: "userId",
-                    label: "Utilisateur",
+                    id: 'userId',
+                    label: 'Utilisateur',
                     index: 1,
-                    type: "number",
-                    size: 12
-                },
-                {
-                    id: "action",
-                    label: "Action",
-                    index: 1,
-                    type: "text",
+                    type: 'number',
                     size: 12,
                 },
                 {
-                    id: "addedAt",
-                    label: "Date & heure",
+                    id: 'action',
+                    label: 'Action',
                     index: 1,
-                    type: "date",
-                    size: 12
-                }
-            ]
-        }
-    ]
+                    type: 'text',
+                    size: 12,
+                },
+                {
+                    id: 'addedAt',
+                    label: 'Date & heure',
+                    index: 1,
+                    type: 'date',
+                    size: 12,
+                },
+            ],
+        },
+    ];
     // #endregion STATE --> ////////////////////////////////////
 
     // #region HOOKS --> ///////////////////////////////////////
@@ -121,34 +121,34 @@ export default function Logs({ id, action }) {
 function LogView({ data }: { data: LogsApiModel }) {
     const content: { label: string; value: keyof LogsApiModel }[] = [
         { label: 'ID', value: 'id' },
-        { label: 'Utilisateur', value: "userId" },
-        { label: 'Date & Heure', value: "addedAt" },
-        { label: 'Adresse IP', value: "ipAddress" },
+        { label: 'Utilisateur', value: 'userId' },
+        { label: 'Date & Heure', value: 'addedAt' },
+        { label: 'Adresse IP', value: 'ipAddress' },
         { label: 'Action', value: 'action' },
-        { label: 'Détails', value: "description" },
+        { label: 'Détails', value: 'description' },
     ];
 
     const renderContent = (element: { label: string; value: keyof LogsApiModel }) => {
         switch (element.value) {
-            case "addedAt":
+            case 'addedAt':
                 return (
                     <Regular>
                         <b>{element.label}</b> : {moment(data[element.value]).format('DD/MM/YYYY HH:mm:ss')}
                     </Regular>
                 );
-            case "description":
+            case 'description':
                 return (
                     <Box display={'flex'}>
                         <Regular marginRight={0.6}>
                             <b>{element.label}</b> :{' '}
                         </Regular>
-                        <Regular>{data[element.value] ?? ""}</Regular>
+                        <Regular>{data[element.value] ?? ''}</Regular>
                     </Box>
                 );
             default:
                 return (
                     <Regular>
-                        <b>{element.label}</b> : {(data[element.value] ?? "").toString()}
+                        <b>{element.label}</b> : {(data[element.value] ?? '').toString()}
                     </Regular>
                 );
         }

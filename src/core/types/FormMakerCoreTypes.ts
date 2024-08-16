@@ -55,7 +55,7 @@ export interface IFormMakerInput extends InputBaseType {
 /**
  * @description FormMaker structure Type
  */
-export type FormMakerContentType<T extends FormMakerPartEnum> = {
+export type FormMakerContentType<P extends FormMakerPartEnum, T = any> = {
     /**
      * @description title of tab if T = FormMakerPartEnum.TAB else title of PANEL
      */
@@ -63,16 +63,16 @@ export type FormMakerContentType<T extends FormMakerPartEnum> = {
     /**
      * @description determine what part of formMaker content property will be
      */
-    type?: T extends FormMakerPartEnum.TAB ? FormMakerPartEnum.TAB : T extends FormMakerPartEnum.PANEL ? FormMakerPartEnum.PANEL : FormMakerPartEnum.SEARCH;
+    type?: P extends FormMakerPartEnum.TAB ? FormMakerPartEnum.TAB : P extends FormMakerPartEnum.PANEL ? FormMakerPartEnum.PANEL : FormMakerPartEnum.SEARCH;
     /**
      * @description content of part
      */
-    content: T extends FormMakerPartEnum.TAB ? IFormMakerPanel[] : IFormMakerInput[];
+    content: P extends FormMakerPartEnum.TAB ? IFormMakerPanel[] : IFormMakerInput[];
     /**
      * @description icon of the panel
      */
     icon?: IconNameType;
-     /**
+    /**
      * @description hide content or not
      */
     hide?: boolean;
@@ -133,7 +133,32 @@ export interface InputBaseType {
 
 export type AutoCompleteType = 'on' | 'off' | 'given-name' | 'family-name' | 'email' | 'address-line1' | 'country' | 'country-name' | 'bday';
 export type AutoCapitalizeType = 'off' | 'on' | 'words' | 'characters';
-export type InputType = 'button' | 'email' | 'hidden' | 'number' | 'password' | 'reset' | 'search' | 'tel' | 'text' | 'url' | 'select' | 'checkbox' | 'radio' | 'tokenmultiple' | 'autocomplete' | 'textarea' | 'date' | 'color' | 'switch' | 'htmlContent' | 'file' | 'range' | 'value' | "dateTime" | "time";
+export type InputType =
+    | 'button'
+    | 'email'
+    | 'hidden'
+    | 'number'
+    | 'password'
+    | 'reset'
+    | 'search'
+    | 'tel'
+    | 'text'
+    | 'url'
+    | 'select'
+    | 'checkbox'
+    | 'radio'
+    | 'tokenmultiple'
+    | 'autocomplete'
+    | 'textarea'
+    | 'date'
+    | 'color'
+    | 'switch'
+    | 'htmlContent'
+    | 'file'
+    | 'range'
+    | 'value'
+    | 'dateTime'
+    | 'time';
 export type InputModeType = 'decimal' | 'email' | 'search' | 'tel' | 'text' | 'url' | 'none' | 'numeric';
 
 export type SelectOptionsType = {

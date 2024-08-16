@@ -1,4 +1,3 @@
-
 export type LogsApiModel = {
     id: number;
     action: string;
@@ -9,4 +8,4 @@ export type LogsApiModel = {
     ipAddress: string;
     addedAt: Date;
     updatedAt: Date;
-}
+};

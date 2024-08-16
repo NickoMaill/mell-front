@@ -9,7 +9,31 @@ import AppIcon from '~/components/common/AppIcon';
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function InputAutoComplete({ sx, style, disabled, required, onChange, onSelectAutocompleteInput, error, id, icon, autoComplete, autoCapitalize, label, helpText, errorMessage, size = 3, value, isLoading, success, warning, placeholder, options, showLabel, ssr = false }: IInputAutoComplete) {
+export default function InputAutoComplete({
+    sx,
+    style,
+    disabled,
+    required,
+    onChange,
+    onSelectAutocompleteInput,
+    error,
+    id,
+    icon,
+    autoComplete,
+    autoCapitalize,
+    label,
+    helpText,
+    errorMessage,
+    size = 3,
+    value,
+    isLoading,
+    success,
+    warning,
+    placeholder,
+    options,
+    showLabel,
+    ssr = false,
+}: IInputAutoComplete) {
     // #region STATE --> ///////////////////////////////////////
     // #endregion STATE --> ////////////////////////////////////
 
@@ -30,7 +54,7 @@ export default function InputAutoComplete({ sx, style, disabled, required, onCha
                 disabled={disabled}
                 options={options}
                 defaultValue={value}
-                onChange={onSelectAutocompleteInput ? (e,v) => onSelectAutocompleteInput(e,v) : null}
+                onChange={onSelectAutocompleteInput ? (e, v) => onSelectAutocompleteInput(e, v) : null}
                 fullWidth
                 className={error ? 'autocomplete-error' : success ? 'autocomplete-success' : warning ? 'autocomplete-warning' : null}
                 renderInput={(params) => (
@@ -39,11 +63,11 @@ export default function InputAutoComplete({ sx, style, disabled, required, onCha
                         disabled={disabled}
                         variant="outlined"
                         onChange={onChange}
-                        sx={{ backgroundColor: disabled ? '#e8e5e5' : 'transparent', borderRadius: 1 }}
+                        sx={{ marginTop: '4px', marginBottom: '4px', backgroundColor: disabled ? '#e8e5e5' : 'transparent', borderRadius: 1 }}
                         {...params}
                         InputProps={{
                             ...params.InputProps,
-                            className: "autocomplete-textfield-override",
+                            className: 'autocomplete-textfield-override',
                             style: style,
                             startAdornment: icon && (
                                 <InputAdornment position="start">
@@ -55,8 +79,8 @@ export default function InputAutoComplete({ sx, style, disabled, required, onCha
                             //         <CircularProgress size={25} />
                             //     </Box>
                             // ),
-                            sx: { 
-                                backgroundColor: disabled ? '#e8e5e5' : 'transparent' ,
+                            sx: {
+                                backgroundColor: disabled ? '#e8e5e5' : 'transparent',
                             },
                         }}
                     />

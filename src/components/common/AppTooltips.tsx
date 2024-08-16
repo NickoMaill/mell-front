@@ -1,7 +1,7 @@
 // #region IMPORTS -> /////////////////////////////////////
 import { Box, Popover } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, ReactNode, useState } from 'react';
 import { Regular } from './Text';
 import stylesResources from '~/resources/stylesResources';
 // #endregion IMPORTS -> //////////////////////////////////
@@ -9,7 +9,7 @@ import stylesResources from '~/resources/stylesResources';
 // #region SINGLETON --> ////////////////////////////////////
 // #endregion SINGLETON --> /////////////////////////////////
 
-export default function ToolTips({ textContent }: IToolTips) {
+export default function ToolTips({ textContent, children }: IToolTips) {
     // #region STATE --> ///////////////////////////////////////
     const [anchorEl, setAnchorEl] = useState<HTMLElement>(null);
     // #endregion STATE --> ////////////////////////////////////
@@ -32,8 +32,8 @@ export default function ToolTips({ textContent }: IToolTips) {
 
     // #region RENDER --> //////////////////////////////////////
     return (
-        <Box paddingLeft={0.5} component="div" aria-owns={anchorEl ? 'mouse-over-popover' : null} aria-haspopup="true" onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>
-            <InfoOutlinedIcon color="primary" />
+        <Box paddingLeft={0.5} sx={{ marginBottom: -1 }} className="position-relative" component="div" aria-owns={anchorEl ? 'mouse-over-popover' : null} aria-haspopup="true" onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>
+            {children ? children : <InfoOutlinedIcon sx={{ position: 'relative', top: '-2px' }} color="primary" />}
             <Popover
                 id="mouse-over-popover"
                 sx={{
@@ -52,7 +52,7 @@ export default function ToolTips({ textContent }: IToolTips) {
                 onClose={handlePopoverClose}
                 disableRestoreFocus
             >
-                <Regular sx={{ p: 1 }}>{textContent}</Regular>
+                <Regular dangerouslySetInnerHTML={{ __html: textContent }} sx={{ p: 1 }} />
             </Popover>
         </Box>
     );
@@ -61,6 +61,7 @@ export default function ToolTips({ textContent }: IToolTips) {
 
 // #region IPROPS -->  /////////////////////////////////////
 interface IToolTips {
+    children?: ReactNode;
     textContent: string;
 }
 // #endregion IPROPS --> //////////////////////////////////

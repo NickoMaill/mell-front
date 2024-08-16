@@ -1,5 +1,5 @@
 // #region IMPORTS -> /////////////////////////////////////
-import React from 'react'
+import React from 'react';
 import useService from '../useService';
 import useServiceBase from '../useServiceBase';
 import { QueryResult } from '~/core/types/serverCoreType';
@@ -22,7 +22,7 @@ export default function useSocialMediaService(): IUseSocialMediaService {
     const getPosts = async (offset: number = 0): Promise<QueryResult<PostApiModel>> => {
         const posts = await asServicePromise<QueryResult<PostApiModel>>(Service.get(`social?offset=${offset}`));
         return posts;
-    }
+    };
     // #endregion METHODS --> //////////////////////////////////
 
     // #region USEEFFECT --> ///////////////////////////////////

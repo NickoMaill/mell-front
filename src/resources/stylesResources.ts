@@ -49,9 +49,9 @@ class StylesResources {
                             // textTransform: 'none',
                         },
                         containedPrimary: {
-                            "&:hover": {
-                                backgroundColor: "#b57f69"
-                            }
+                            '&:hover': {
+                                backgroundColor: '#b57f69',
+                            },
                         },
                         contained: {
                             boxShadow: 'none',
@@ -64,11 +64,11 @@ class StylesResources {
                 MuiAutocomplete: {
                     styleOverrides: {
                         root: {
-                            "&.MuiOutlinedInput-root .MuiAutocomplete-input": {
-                                padding: "0px!important"
-                            }
-                        }
-                    }
+                            '&.MuiOutlinedInput-root .MuiAutocomplete-input': {
+                                padding: '0px!important',
+                            },
+                        },
+                    },
                 },
                 MuiInput: {
                     styleOverrides: {

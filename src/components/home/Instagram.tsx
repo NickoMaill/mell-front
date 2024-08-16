@@ -18,6 +18,7 @@ import { CircularProgress, Divider } from '@mui/material';
 import AppFullPageLoader from '../common/AppFullPageLoader';
 import AppContext from '~/context/appContext';
 import { AppError, ErrorTypeEnum } from '~/core/appError';
+import { Italic, Regular } from '../common/Text';
 // #endregion IMPORTS -> //////////////////////////////////
 
 // #region SINGLETON --> ////////////////////////////////////
@@ -45,8 +46,8 @@ export default function Instagram({}: IInstagram) {
         try {
             const res = await SocialService.getPosts(visible);
             setPosts((prevState) => [...prevState, ...res.records]);
-        } catch (error) {
-            AppCtx.setError(new AppError(ErrorTypeEnum.Functional, "un erreur est survenue", "error"))
+            // } catch (error) {
+            //     AppCtx.setError(new AppError(ErrorTypeEnum.Functional, "un erreur est survenue", "error"))
         } finally {
             setIsLoading(false);
             setFirstLoading(false);
@@ -81,7 +82,11 @@ export default function Instagram({}: IInstagram) {
             </Box>
             <Box className="wrapper">
                 {firstLoading && posts.length === 0 ? (
-                    <CircularProgress/>
+                    // <CircularProgress/>
+                    <Box className="d-flex justify-content-center align-items-center flex-column" sx={{ height: '200px' }}>
+                        <CircularProgress size={60} />
+                        <Regular className="mt-4">Chargement du feed en cours...</Regular>
+                    </Box>
                 ) : (
                     posts.map((post, i) => (
                         <Box className="postContainer animate__animated animate__backInUp" key={i}>
@@ -95,22 +100,22 @@ export default function Instagram({}: IInstagram) {
                                     {post.likeCount > 0 && (
                                         <Box className="statPost">
                                             <img src={Heart} />
-                                            <Typography color="white" component="span">
+                                            <Regular className="text-white" component="span">
                                                 {post.likeCount}
-                                            </Typography>
+                                            </Regular>
                                         </Box>
                                     )}
                                     {post.commentCount > 0 && (
                                         <Box className="statPost">
                                             <img src={Comment} />
-                                            <Typography color="white" component="span">
+                                            <Regular className="text-white" component="span">
                                                 {post.commentCount}
-                                            </Typography>
+                                            </Regular>
                                         </Box>
                                     )}
                                 </Box>
                                 {post.postText.length > 0 && (
-                                    <Box component="p" color="white" className="postDetails">
+                                    <Box component="p" className="postDetails text-white">
                                         {post.postText.substring(0, 50)}...
                                     </Box>
                                 )}
@@ -125,9 +130,7 @@ export default function Instagram({}: IInstagram) {
                 </Button>
                 {endOfPost && (
                     <Box className="endMessage">
-                        <Typography component="span" style={{ fontStyle: 'italic' }}>
-                            Afficher plus de posts
-                        </Typography>
+                        <Italic component="span">Afficher plus de posts</Italic>
                     </Box>
                 )}
             </Box>
